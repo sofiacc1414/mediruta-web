@@ -1,32 +1,24 @@
-# React + TypeScript + Vite
+# MediRuta — Web
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Panel de administración de MediRuta (rol Administrador). React 18 + Vite 5 + TypeScript 5.8.
 
-Currently, two official plugins are available:
+## Contexto del proyecto
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Antes de tocar código, lee `context.md` en la raíz de este repo — es la fuente única de verdad del proyecto (sistema visual, arquitectura, reglas de trabajo). Si usas Cursor o Claude Code, ya se carga automáticamente.
 
-## React Compiler
+## Desarrollo local
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm install
+cp .env.example .env.local   # completa VITE_API_URL con la URL de mediruta-api
+npm run dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Build y despliegue
+
+```bash
+npm run build      # genera dist/
+npx vercel --prod   # despliega a producción (requiere sesión de Vercel)
+```
+
+Producción actual: https://mediruta-web-seven.vercel.app

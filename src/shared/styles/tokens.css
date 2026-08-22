@@ -1,0 +1,31 @@
+/**
+ * Design tokens — MediRuta
+ *
+ * Fuente única de verdad: DOCS/context.md (Parte A — Sistema Visual y UX/UI).
+ * NO agregues colores ni tipografías fuera de esta paleta. Si necesitas un
+ * nuevo token (spacing, radius, shadow), agrégalo aquí, nunca como valor
+ * suelto repetido en un componente.
+ */
+
+:root {
+  /* Paleta oficial (context.md Parte A, sección 3) */
+  --color-navy: #2f4156;
+  --color-teal: #567c8d;
+  --color-sky-blue: #c8d9e6;
+  --color-beige: #f5efeb;
+  --color-white: #ffffff;
+
+  /* Tipografía (context.md Parte A, sección 6) */
+  --font-heading: "Times New Roman MT Condensed", "Times New Roman", serif;
+  --font-body: "Poppins", system-ui, sans-serif;
+
+  /* Espaciado (context.md Parte A, sección 12) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+}

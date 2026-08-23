@@ -1,4 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { DomiciliarioDetallePage } from './features/domiciliarios/pages/DomiciliarioDetallePage';
+import { DomiciliariosPendientesPage } from './features/domiciliarios/pages/DomiciliariosPendientesPage';
 import { ProtectedRoute } from './features/usuarios/components/ProtectedRoute';
 import { AuthProvider } from './features/usuarios/hooks/AuthProvider';
 import { CambiarContrasenaPage } from './features/usuarios/pages/CambiarContrasenaPage';
@@ -30,6 +32,22 @@ function App() {
             element={
               <ProtectedRoute>
                 <PanelPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/domiciliarios"
+            element={
+              <ProtectedRoute>
+                <DomiciliariosPendientesPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/domiciliarios/:id"
+            element={
+              <ProtectedRoute>
+                <DomiciliarioDetallePage />
               </ProtectedRoute>
             }
           />

@@ -4,10 +4,8 @@ import { IconBadge } from '../../../shared/components/IconBadge';
 import { CheckCircleIcon } from '../../../shared/components/icons';
 import { useAuth } from '../hooks/useAuth';
 
-/** Placeholder post-login — todavía no hay más historias implementadas
- * (solicitudes/domiciliarios/pedidos-entrega). Sirve para probar G06/G07
- * desde una sesión real. Se reemplaza cuando se implemente la siguiente
- * historia de Administrador. */
+/** Panel post-login. Todavía no hay historias de solicitudes/pedidos-entrega
+ * implementadas — se agregan acá a medida que se completan. */
 export function PanelPage() {
   const { estado, logout } = useAuth();
   const navigate = useNavigate();
@@ -45,7 +43,10 @@ export function PanelPage() {
           Roles: {estado.usuario.roles.map((r) => `${r.codigo} (${r.estado})`).join(', ')}
         </p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)', width: '100%' }}>
-          <Button onClick={() => navigate('/cambiar-contrasena')}>Cambiar contraseña</Button>
+          <Button onClick={() => navigate('/domiciliarios')}>Validar domiciliarios</Button>
+          <Button variante="secondary" onClick={() => navigate('/cambiar-contrasena')}>
+            Cambiar contraseña
+          </Button>
           <Button
             variante="secondary"
             onClick={async () => {

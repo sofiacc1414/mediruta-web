@@ -14,11 +14,13 @@ export function Button({ variante = 'primary', style, disabled, ...resto }: Prop
   const base: CSSProperties = {
     fontFamily: 'var(--font-body)',
     fontSize: '1rem',
-    padding: 'var(--space-3) var(--space-6)',
-    borderRadius: 8,
+    fontWeight: 600,
+    width: '100%',
+    padding: '14px var(--space-6)',
+    borderRadius: 999,
     cursor: disabled ? 'not-allowed' : 'pointer',
     opacity: disabled ? 0.6 : 1,
-    border: '1px solid var(--color-navy)',
+    border: '1.5px solid var(--color-navy)',
     transition: 'opacity 0.15s ease',
   };
 

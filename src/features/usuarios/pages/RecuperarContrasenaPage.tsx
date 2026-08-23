@@ -2,7 +2,9 @@ import { useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Alert } from '../../../shared/components/Alert';
 import { Button } from '../../../shared/components/Button';
+import { IconBadge } from '../../../shared/components/IconBadge';
 import { Input } from '../../../shared/components/Input';
+import { KeyIcon, MailCheckIcon, MailIcon } from '../../../shared/components/icons';
 import { ApiError, ApiSinConexionError } from '../../../shared/lib/apiError';
 import { solicitarRecuperacionContrasena } from '../api/auth.api';
 
@@ -53,10 +55,11 @@ export function RecuperarContrasenaPage() {
           gap: 'var(--space-4)',
           background: 'var(--color-white)',
           padding: 'var(--space-8)',
-          borderRadius: 12,
+          borderRadius: 24,
           boxShadow: '0 4px 24px rgba(47, 65, 86, 0.12)',
         }}
       >
+        <IconBadge icon={solicitudEnviada ? <MailCheckIcon /> : <KeyIcon />} />
         <h1 style={{ fontSize: '1.5rem', textAlign: 'center' }}>Recuperar contraseña</h1>
 
         {error ? <Alert tono="error">{error}</Alert> : null}
@@ -79,8 +82,9 @@ export function RecuperarContrasenaPage() {
               Ingresa tu correo y te enviaremos un código para restablecer tu contraseña.
             </p>
             <Input
-              label="Correo"
+              label="Correo electrónico"
               type="email"
+              icon={<MailIcon />}
               autoComplete="email"
               required
               value={correo}

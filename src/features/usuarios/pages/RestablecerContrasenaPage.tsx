@@ -2,7 +2,9 @@ import { useState, type FormEvent } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Alert } from '../../../shared/components/Alert';
 import { Button } from '../../../shared/components/Button';
+import { IconBadge } from '../../../shared/components/IconBadge';
 import { Input } from '../../../shared/components/Input';
+import { LockIcon, MailCheckIcon, PinIcon } from '../../../shared/components/icons';
 import { ApiError, ApiSinConexionError } from '../../../shared/lib/apiError';
 import { validarPassword } from '../../../shared/lib/politicaContrasena';
 import { restablecerContrasena } from '../api/auth.api';
@@ -84,18 +86,22 @@ export function RestablecerContrasenaPage() {
           gap: 'var(--space-4)',
           background: 'var(--color-white)',
           padding: 'var(--space-8)',
-          borderRadius: 12,
+          borderRadius: 24,
           boxShadow: '0 4px 24px rgba(47, 65, 86, 0.12)',
         }}
       >
+        <IconBadge icon={<MailCheckIcon />} />
         <h1 style={{ fontSize: '1.5rem', textAlign: 'center' }}>Restablecer contraseña</h1>
-        <p style={{ color: 'var(--color-teal)', fontSize: '0.9rem' }}>Código enviado a {correo}</p>
+        <p style={{ color: 'var(--color-teal)', fontSize: '0.9rem', textAlign: 'center' }}>
+          Código enviado a {correo}
+        </p>
 
         {error ? <Alert tono="error">{error}</Alert> : null}
 
         <Input
           label="Código de 6 dígitos"
           inputMode="numeric"
+          icon={<PinIcon />}
           required
           value={codigo}
           onChange={(e) => setCodigo(e.target.value)}
@@ -103,7 +109,8 @@ export function RestablecerContrasenaPage() {
         />
         <Input
           label="Nueva contraseña"
-          type="password"
+          esPassword
+          icon={<LockIcon />}
           autoComplete="new-password"
           required
           value={nuevaPassword}

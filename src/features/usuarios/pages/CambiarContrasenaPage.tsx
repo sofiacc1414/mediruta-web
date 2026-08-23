@@ -2,7 +2,9 @@ import { useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Alert } from '../../../shared/components/Alert';
 import { Button } from '../../../shared/components/Button';
+import { IconBadge } from '../../../shared/components/IconBadge';
 import { Input } from '../../../shared/components/Input';
+import { LockResetIcon } from '../../../shared/components/icons';
 import { ApiError, ApiSinConexionError } from '../../../shared/lib/apiError';
 import { validarPassword } from '../../../shared/lib/politicaContrasena';
 import { cambiarContrasena } from '../api/auth.api';
@@ -64,17 +66,19 @@ export function CambiarContrasenaPage() {
           gap: 'var(--space-4)',
           background: 'var(--color-white)',
           padding: 'var(--space-8)',
-          borderRadius: 12,
+          borderRadius: 24,
           boxShadow: '0 4px 24px rgba(47, 65, 86, 0.12)',
         }}
       >
+        <IconBadge icon={<LockResetIcon />} />
         <h1 style={{ fontSize: '1.5rem', textAlign: 'center' }}>Cambiar contraseña</h1>
 
         {error ? <Alert tono="error">{error}</Alert> : null}
 
         <Input
           label="Contraseña actual"
-          type="password"
+          esPassword
+          icon={<LockResetIcon />}
           autoComplete="current-password"
           required
           value={passwordActual}
@@ -83,7 +87,8 @@ export function CambiarContrasenaPage() {
         />
         <Input
           label="Nueva contraseña"
-          type="password"
+          esPassword
+          icon={<LockResetIcon />}
           autoComplete="new-password"
           required
           value={nuevaPassword}

@@ -1,9 +1,16 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, type CSSProperties } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Alert } from '../../../shared/components/Alert';
 import { Button } from '../../../shared/components/Button';
 import { IconBadge } from '../../../shared/components/IconBadge';
-import { CheckCircleIcon, DocumentIcon, MopedIcon, XCircleIcon } from '../../../shared/components/icons';
+import { ImageLightbox } from '../../../shared/components/ImageLightbox';
+import {
+  CheckCircleIcon,
+  DocumentIcon,
+  MopedIcon,
+  XCircleIcon,
+  ZoomInIcon,
+} from '../../../shared/components/icons';
 import { ApiError, ApiSinConexionError } from '../../../shared/lib/apiError';
 import { useAuth } from '../../usuarios/hooks/useAuth';
 import {
@@ -14,6 +21,31 @@ import {
 } from '../api/domiciliariosApi';
 
 type Documento = { label: string; url: string | null };
+
+/** Miniatura de 44px de un documento — si la imagen no carga (URL
+ * firmada vencida, archivo corrupto, sin conexión) cae al ícono de
+ * documento en vez del cuadrito roto que arma el navegador por
+ * defecto. */
+function MiniaturaDocumento({ url }: { url: string }) {
+  const [fallo, setFallo] = useState(false);
+
+  if (fallo) {
+    return (
+      <div style={{ width: 22, height: 22, color: 'var(--color-teal)' }}>
+        <DocumentIcon />
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={url}
+      alt=""
+      onError={() => setFallo(true)}
+      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+    />
+  );
+}
 
 /** G05 — mismos 7 requisitos que valida `app.aprobar_domiciliario` en la
  * API, calculados acá para deshabilitar "Aprobar" preventivamente en vez
@@ -64,6 +96,7 @@ export function DomiciliarioDetallePage() {
   const [mostrarMotivo, setMostrarMotivo] = useState(false);
   const [motivo, setMotivo] = useState('');
   const [errorMotivo, setErrorMotivo] = useState<string | null>(null);
+  const [imagenAmpliada, setImagenAmpliada] = useState<Documento | null>(null);
 
   const cargar = useCallback(() => {
     if (estado.tipo !== 'autenticado' || !id) return;
@@ -198,45 +231,88 @@ export function DomiciliarioDetallePage() {
           }}
         >
           <h2 style={{ fontSize: '1rem', color: 'var(--color-navy)' }}>Documentos</h2>
-          {documentos.map((doc) => (
-            <a
-              key={doc.label}
-              href={doc.url ?? undefined}
-              target="_blank"
-              rel="noreferrer"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 'var(--space-3)',
-                textDecoration: 'none',
-                color: doc.url ? 'var(--color-navy)' : 'var(--color-teal)',
-                pointerEvents: doc.url ? 'auto' : 'none',
-              }}
-            >
-              <div
-                style={{
-                  width: 44,
-                  height: 44,
-                  borderRadius: 8,
-                  overflow: 'hidden',
-                  background: 'var(--color-beige)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0,
-                }}
-              >
-                {doc.url && !esPdf(doc.url) ? (
-                  <img src={doc.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                ) : (
-                  <div style={{ width: 22, height: 22 }}>
-                    <DocumentIcon />
+          {documentos.map((doc) => {
+            const contenido = (
+              <>
+                <div
+                  style={{
+                    width: 44,
+                    height: 44,
+                    borderRadius: 8,
+                    overflow: 'hidden',
+                    background: 'var(--color-beige)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                  }}
+                >
+                  {doc.url && !esPdf(doc.url) ? (
+                    <MiniaturaDocumento url={doc.url} />
+                  ) : (
+                    <div style={{ width: 22, height: 22 }}>
+                      <DocumentIcon />
+                    </div>
+                  )}
+                </div>
+                <span style={{ flex: 1 }}>
+                  {doc.label}
+                  {doc.url ? '' : ' — no subido'}
+                </span>
+                {doc.url ? (
+                  <div style={{ width: 20, height: 20, color: 'var(--color-teal)', flexShrink: 0 }}>
+                    <ZoomInIcon />
                   </div>
-                )}
-              </div>
-              <span>{doc.label}{doc.url ? '' : ' — no subido'}</span>
-            </a>
-          ))}
+                ) : null}
+              </>
+            );
+
+            const estiloFila: CSSProperties = {
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--space-3)',
+              width: '100%',
+              textAlign: 'left',
+              textDecoration: 'none',
+              border: 'none',
+              background: 'transparent',
+              padding: 0,
+              font: 'inherit',
+              color: doc.url ? 'var(--color-navy)' : 'var(--color-teal)',
+              cursor: doc.url ? 'pointer' : 'default',
+            };
+
+            if (!doc.url) {
+              return (
+                <div key={doc.label} style={estiloFila}>
+                  {contenido}
+                </div>
+              );
+            }
+
+            // Imágenes se ven en el visor propio, a lo grande, en vez de
+            // navegar a una pestaña nueva con la URL firmada pelada — es
+            // el "formato más amplio" que pidió el administrador. Un PDF
+            // ya lo abre bien el visor nativo del navegador.
+            if (!esPdf(doc.url)) {
+              return (
+                <button
+                  key={doc.label}
+                  type="button"
+                  onClick={() => setImagenAmpliada(doc)}
+                  style={estiloFila}
+                >
+                  {contenido}
+                </button>
+              );
+            }
+
+            return (
+              <a key={doc.label} href={doc.url} target="_blank" rel="noreferrer" style={estiloFila}>
+                {contenido}
+              </a>
+            );
+          })}
         </section>
 
         {esPendiente ? (
@@ -345,6 +421,14 @@ export function DomiciliarioDetallePage() {
           Volver a la lista
         </Button>
       </div>
+
+      {imagenAmpliada?.url ? (
+        <ImageLightbox
+          url={imagenAmpliada.url}
+          label={imagenAmpliada.label}
+          onClose={() => setImagenAmpliada(null)}
+        />
+      ) : null}
     </main>
   );
 }

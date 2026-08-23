@@ -124,6 +124,23 @@ export function XCircleIcon(props: IconProps) {
   );
 }
 
+export function CloseIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <path d="M6 6l12 12M18 6 6 18" />
+    </svg>
+  );
+}
+
+export function ZoomInIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <circle cx="10" cy="10" r="7" />
+      <path d="M10 7v6M7 10h6M21 21l-4.3-4.3" />
+    </svg>
+  );
+}
+
 export function EyeOffIcon(props: IconProps) {
   return (
     <svg {...base(props)}>

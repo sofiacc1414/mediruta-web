@@ -34,7 +34,7 @@ export function CambiarContrasenaPage() {
     try {
       if (estado.tipo !== 'autenticado') return;
       await cambiarContrasena(estado.accessToken, passwordActual, nuevaPassword);
-      navigate('/', { replace: true });
+      navigate('/admin', { replace: true });
     } catch (err) {
       if (err instanceof ApiError || err instanceof ApiSinConexionError) {
         setError(err.message);

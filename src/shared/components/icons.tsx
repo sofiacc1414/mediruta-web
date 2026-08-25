@@ -141,6 +141,24 @@ export function ZoomInIcon(props: IconProps) {
   );
 }
 
+export function DownloadIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <path d="M12 3v12m0 0 4-4m-4 4-4-4" />
+      <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
+    </svg>
+  );
+}
+
+export function ShieldIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <path d="M12 3 5 6v6c0 4.4 3 7.6 7 9 4-1.4 7-4.6 7-9V6z" />
+      <path d="m9 12 2 2 4-4" />
+    </svg>
+  );
+}
+
 export function EyeOffIcon(props: IconProps) {
   return (
     <svg {...base(props)}>

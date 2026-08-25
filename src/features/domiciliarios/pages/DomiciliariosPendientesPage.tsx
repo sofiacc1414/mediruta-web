@@ -106,7 +106,7 @@ export function DomiciliariosPendientesPage() {
           ))}
         </div>
 
-        <Button variante="secondary" onClick={() => navigate('/')}>
+        <Button variante="secondary" onClick={() => navigate('/admin')}>
           Volver al panel
         </Button>
       </div>

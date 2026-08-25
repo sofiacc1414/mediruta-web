@@ -17,7 +17,7 @@ export function LoginPage() {
 
   useEffect(() => {
     if (estado.tipo === 'autenticado') {
-      navigate('/', { replace: true });
+      navigate('/admin', { replace: true });
     }
   }, [estado.tipo, navigate]);
 

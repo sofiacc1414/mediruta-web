@@ -2,7 +2,6 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Alert } from '../../../shared/components/Alert';
 import { Button } from '../../../shared/components/Button';
-import { IconBadge } from '../../../shared/components/IconBadge';
 import { Input } from '../../../shared/components/Input';
 import { LockIcon, MailIcon } from '../../../shared/components/icons';
 import { useAuth } from '../hooks/useAuth';
@@ -55,7 +54,11 @@ export function LoginPage() {
           boxShadow: '0 4px 24px rgba(47, 65, 86, 0.12)',
         }}
       >
-        <IconBadge icon={<LockIcon />} />
+        <img
+          src="/logo-mediruta.png"
+          alt="MediRuta"
+          style={{ height: 40, width: 'auto', margin: '0 auto' }}
+        />
         <h1 style={{ fontSize: '1.5rem', textAlign: 'center' }}>Iniciar sesión</h1>
         <p style={{ textAlign: 'center', color: 'var(--color-teal)', marginTop: -8 }}>
           Bienvenido de nuevo a MediRuta

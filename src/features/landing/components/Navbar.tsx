@@ -18,8 +18,7 @@ export function Navbar() {
     <header className="lp-nav" id="inicio">
       <div className="lp-shell lp-nav-inner">
         <a href="#inicio" className="lp-logo">
-          <span className="lp-logo-mark" aria-hidden />
-          MediRuta
+          <img src="/logo-mediruta.png" alt="MediRuta" className="lp-logo-img" />
         </a>
 
         <nav className="lp-nav-links" aria-label="Navegación principal">

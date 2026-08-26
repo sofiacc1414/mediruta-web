@@ -10,9 +10,8 @@ export function Footer() {
   return (
     <footer className="lp-footer">
       <div className="lp-shell lp-footer-inner">
-        <a href="#inicio" className="lp-logo" style={{ fontSize: '1.15rem' }}>
-          <span className="lp-logo-mark" aria-hidden />
-          MediRuta
+        <a href="#inicio" className="lp-logo">
+          <img src="/logo-mediruta.png" alt="MediRuta" className="lp-logo-img" style={{ height: 24 }} />
         </a>
         <nav className="lp-footer-links" aria-label="Enlaces del pie de página">
           {LINKS.map((link) => (

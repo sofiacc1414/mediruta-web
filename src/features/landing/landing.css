@@ -175,23 +175,15 @@
 }
 
 .lp-logo {
-  font-family: var(--lp-heading);
-  font-size: 1.4rem;
-  font-weight: 600;
-  color: var(--color-navy);
   text-decoration: none;
   display: flex;
   align-items: center;
-  gap: 8px;
 }
 
-.lp-logo-mark {
-  width: 10px;
-  height: 10px;
-  border-radius: 3px;
-  background: var(--color-teal);
-  transform: rotate(45deg);
-  display: inline-block;
+.lp-logo-img {
+  height: 30px;
+  width: auto;
+  display: block;
 }
 
 .lp-nav-links {

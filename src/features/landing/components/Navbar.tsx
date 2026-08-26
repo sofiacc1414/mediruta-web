@@ -32,6 +32,7 @@ export function Navbar() {
         <div className="lp-nav-cta">
           <Button
             variante="secondary"
+            className="lp-nav-login-desktop"
             style={{ width: 'auto', padding: '10px 26px' }}
             onClick={() => navigate('/login')}
           >
@@ -64,6 +65,16 @@ export function Navbar() {
               {link.label}
             </a>
           ))}
+          <Button
+            variante="secondary"
+            style={{ marginTop: 4 }}
+            onClick={() => {
+              setAbierto(false);
+              navigate('/login');
+            }}
+          >
+            Iniciar sesión
+          </Button>
         </div>
       ) : null}
     </header>

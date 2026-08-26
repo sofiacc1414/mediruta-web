@@ -944,6 +944,10 @@
     display: inline-flex;
   }
 
+  .lp-nav-login-desktop {
+    display: none;
+  }
+
   .lp-hero-grid,
   .lp-about-grid,
   .lp-trust-section {

@@ -55,7 +55,8 @@ function calcularFaltantes(detalle: DetalleDomiciliario): string[] {
     ['Dirección de residencia', detalle.direccion],
     ['Tipo de vehículo', detalle.vehiculoTipo],
     ['Placa', detalle.vehiculoPlaca],
-    ['Cédula', detalle.cedulaUrl],
+    ['Cédula (frente)', detalle.cedulaFrenteUrl],
+    ['Cédula (reverso)', detalle.cedulaReversoUrl],
     ['Licencia de conducción', detalle.licenciaUrl],
     ['SOAT', detalle.soatUrl],
     ['Tecnomecánica', detalle.tecnicomecanicaUrl],
@@ -171,7 +172,8 @@ export function DomiciliarioDetallePage() {
   const faltantes = calcularFaltantes(detalle);
   const esPendiente = detalle.estado === 'pendiente_validacion';
   const documentos: Documento[] = [
-    { label: 'Cédula', url: detalle.cedulaUrl },
+    { label: 'Cédula (frente)', url: detalle.cedulaFrenteUrl },
+    { label: 'Cédula (reverso)', url: detalle.cedulaReversoUrl },
     { label: 'Licencia de conducción', url: detalle.licenciaUrl },
     { label: 'SOAT', url: detalle.soatUrl },
     { label: 'Tecnomecánica', url: detalle.tecnicomecanicaUrl },

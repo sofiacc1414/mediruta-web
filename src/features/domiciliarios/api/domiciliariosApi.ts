@@ -22,7 +22,8 @@ export type DetalleDomiciliario = {
   direccion: string | null;
   vehiculoTipo: string | null;
   vehiculoPlaca: string | null;
-  cedulaUrl: string | null;
+  cedulaFrenteUrl: string | null;
+  cedulaReversoUrl: string | null;
   licenciaUrl: string | null;
   soatUrl: string | null;
   tecnicomecanicaUrl: string | null;

@@ -1,15 +1,16 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MopedIcon, PackageIcon, PersonIcon, UsersIcon } from '../../shared/components/icons';
+import { AlertTriangleIcon, MopedIcon, PackageIcon, PersonIcon, UsersIcon } from '../../shared/components/icons';
 import { useAuth } from '../usuarios/hooks/useAuth';
 import './admin.css';
 import { Sidebar, type SidebarItem } from './components/Sidebar';
 import { DomiciliariosTab } from './tabs/DomiciliariosTab';
+import { NovedadesTab } from './tabs/NovedadesTab';
 import { PedidosTab } from './tabs/PedidosTab';
 import { PerfilTab } from './tabs/PerfilTab';
 import { UsuariosTab } from './tabs/UsuariosTab';
 
-type TabKey = 'domiciliarios' | 'pedidos' | 'usuarios' | 'perfil';
+type TabKey = 'pedidos' | 'novedades' | 'domiciliarios' | 'usuarios' | 'perfil';
 
 const ETIQUETAS_ROL: Record<string, string> = {
   ROOT: 'Root',
@@ -31,8 +32,8 @@ const ETIQUETAS_ROL: Record<string, string> = {
 export function AdminShell() {
   const { estado, logout } = useAuth();
   const navigate = useNavigate();
-  const [tab, setTab] = useState<TabKey>('domiciliarios');
-  const [visited, setVisited] = useState<Set<TabKey>>(() => new Set<TabKey>(['domiciliarios']));
+  const [tab, setTab] = useState<TabKey>('pedidos');
+  const [visited, setVisited] = useState<Set<TabKey>>(() => new Set<TabKey>(['pedidos']));
 
   if (estado.tipo !== 'autenticado') return null;
 
@@ -50,8 +51,9 @@ export function AdminShell() {
   }
 
   const items: SidebarItem<TabKey>[] = [
-    { key: 'domiciliarios', label: 'Domiciliarios', icon: <MopedIcon /> },
     { key: 'pedidos', label: 'Pedidos', icon: <PackageIcon /> },
+    { key: 'novedades', label: 'Novedades', icon: <AlertTriangleIcon /> },
+    { key: 'domiciliarios', label: 'Domiciliarios', icon: <MopedIcon /> },
     ...(esRoot ? [{ key: 'usuarios' as const, label: 'Usuarios', icon: <UsersIcon /> }] : []),
     { key: 'perfil', label: 'Mi perfil', icon: <PersonIcon /> },
   ];
@@ -68,11 +70,14 @@ export function AdminShell() {
       />
       <main className="admin-content">
         <div className="admin-content-inner">
-          <div style={{ display: tab === 'domiciliarios' ? 'block' : 'none' }}>
-            {visited.has('domiciliarios') ? <DomiciliariosTab /> : null}
-          </div>
           <div style={{ display: tab === 'pedidos' ? 'block' : 'none' }}>
             {visited.has('pedidos') ? <PedidosTab /> : null}
+          </div>
+          <div style={{ display: tab === 'novedades' ? 'block' : 'none' }}>
+            {visited.has('novedades') ? <NovedadesTab /> : null}
+          </div>
+          <div style={{ display: tab === 'domiciliarios' ? 'block' : 'none' }}>
+            {visited.has('domiciliarios') ? <DomiciliariosTab /> : null}
           </div>
           {esRoot ? (
             <div style={{ display: tab === 'usuarios' ? 'block' : 'none' }}>

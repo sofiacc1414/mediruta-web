@@ -141,11 +141,120 @@
 }
 
 .admin-content-inner {
-  max-width: 960px;
+  max-width: 1040px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-6);
+}
+
+.admin-page-header h1 {
+  margin-bottom: 2px;
+}
+
+.admin-page-header p {
+  color: var(--color-teal);
+}
+
+.admin-card {
+  background: var(--color-white);
+  border-radius: 18px;
+  padding: var(--space-5);
+  box-shadow: 0 2px 14px color-mix(in srgb, var(--color-navy) 8%, transparent);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.admin-card h2 {
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+.admin-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.admin-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background: transparent;
+  color: var(--color-teal);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 0;
+  align-self: flex-start;
+}
+
+.admin-back-link:hover {
+  color: var(--color-navy);
+}
+
+.admin-table-wrap {
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.admin-table th {
+  text-align: left;
+  padding: 10px var(--space-3);
+  color: var(--color-teal);
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1.5px solid var(--color-sky-blue);
+  white-space: nowrap;
+}
+
+.admin-table td {
+  padding: 12px var(--space-3);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-sky-blue) 60%, transparent);
+  color: var(--color-navy);
+  vertical-align: middle;
+}
+
+.admin-table tbody tr {
+  transition: background 0.12s ease;
+}
+
+.admin-table-row-button td:first-child {
+  border-radius: 10px 0 0 10px;
+}
+
+.admin-table-row-button td:last-child {
+  border-radius: 0 10px 10px 0;
+}
+
+tr.admin-table-row-clickable {
+  cursor: pointer;
+}
+
+tr.admin-table-row-clickable:hover {
+  background: color-mix(in srgb, var(--color-beige) 70%, transparent);
+}
+
+.admin-muted {
+  color: var(--color-teal);
+  font-size: 0.8rem;
+}
+
+.admin-empty {
+  text-align: center;
+  color: var(--color-teal);
+  padding: var(--space-6);
 }
 
 @media (max-width: 860px) {

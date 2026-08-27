@@ -28,3 +28,12 @@ export function actualizarDatosComunes(
     { accessToken },
   ) as Promise<{ message: string }>;
 }
+
+/** Foto de perfil (avatar), común a cualquier rol — ROOT/ADMINISTRADOR
+ * incluidos. */
+export function subirFotoPerfil(accessToken: string, archivo: File) {
+  return apiClient.postMultipart('/perfil/foto', archivo, { accessToken }) as Promise<{
+    message: string;
+    url: string;
+  }>;
+}

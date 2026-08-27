@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, type FormEvent } from 'react';
+import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
 import { Alert } from '../../../shared/components/Alert';
 import { Button } from '../../../shared/components/Button';
 import { Input } from '../../../shared/components/Input';
@@ -6,7 +6,12 @@ import { LockResetIcon, MailIcon, PersonIcon, PinIcon } from '../../../shared/co
 import { ApiError, ApiSinConexionError } from '../../../shared/lib/apiError';
 import { validarPassword } from '../../../shared/lib/politicaContrasena';
 import { cambiarContrasena } from '../../usuarios/api/auth.api';
-import { actualizarDatosComunes, obtenerPerfil, type Perfil } from '../../usuarios/api/perfil.api';
+import {
+  actualizarDatosComunes,
+  obtenerPerfil,
+  subirFotoPerfil,
+  type Perfil,
+} from '../../usuarios/api/perfil.api';
 import { useAuth } from '../../usuarios/hooks/useAuth';
 
 const ETIQUETAS_ROL: Record<string, string> = {
@@ -14,14 +19,18 @@ const ETIQUETAS_ROL: Record<string, string> = {
   ADMINISTRADOR: 'Administrador',
 };
 
-/** "Mi perfil" — datos comunes (nombre/teléfono) + cambio de
- * contraseña, los dos en una sola pantalla (antes el cambio de
+/** "Mi perfil" — foto, datos comunes (nombre/teléfono) y cambio de
+ * contraseña, todo en una sola pantalla (antes el cambio de
  * contraseña era su propia página aparte). */
 export function PerfilTab() {
   const { estado } = useAuth();
+  const inputArchivoRef = useRef<HTMLInputElement>(null);
 
   const [perfil, setPerfil] = useState<Perfil | null>(null);
   const [errorCarga, setErrorCarga] = useState<string | null>(null);
+  const [subiendoFoto, setSubiendoFoto] = useState(false);
+  const [errorFoto, setErrorFoto] = useState<string | null>(null);
+
   const [nombreCompleto, setNombreCompleto] = useState('');
   const [telefono, setTelefono] = useState('');
   const [guardandoDatos, setGuardandoDatos] = useState(false);
@@ -60,6 +69,27 @@ export function PerfilTab() {
 
   if (estado.tipo !== 'autenticado') return null;
   const accessToken = estado.accessToken;
+
+  async function onElegirFoto(evento: React.ChangeEvent<HTMLInputElement>) {
+    const archivo = evento.target.files?.[0];
+    evento.target.value = '';
+    if (!archivo) return;
+
+    setSubiendoFoto(true);
+    setErrorFoto(null);
+    try {
+      await subirFotoPerfil(accessToken, archivo);
+      cargar();
+    } catch (err) {
+      if (err instanceof ApiError || err instanceof ApiSinConexionError) {
+        setErrorFoto(err.message);
+      } else {
+        throw err;
+      }
+    } finally {
+      setSubiendoFoto(false);
+    }
+  }
 
   async function onGuardarDatos(evento: FormEvent) {
     evento.preventDefault();
@@ -106,12 +136,13 @@ export function PerfilTab() {
   }
 
   const rolPrincipal = estado.usuario.roles.find((r) => r.estado === 'habilitado')?.codigo;
+  const inicial = (perfil?.nombreCompleto ?? estado.usuario.correo).charAt(0).toUpperCase();
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
-      <div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
+      <div className="admin-page-header">
         <h1>Mi perfil</h1>
-        <p style={{ color: 'var(--color-teal)' }}>
+        <p>
           {estado.usuario.correo}
           {rolPrincipal ? ` · ${ETIQUETAS_ROL[rolPrincipal] ?? rolPrincipal}` : ''}
         </p>
@@ -119,30 +150,76 @@ export function PerfilTab() {
 
       {errorCarga ? <Alert tono="error">{errorCarga}</Alert> : null}
 
-      <form
-        onSubmit={onGuardarDatos}
-        style={{
-          background: 'var(--color-white)',
-          borderRadius: 16,
-          padding: 'var(--space-5)',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 'var(--space-4)',
-          maxWidth: 420,
-        }}
-      >
-        <h2 style={{ fontSize: '1rem', margin: 0 }}>Datos</h2>
+      <div className="admin-card" style={{ maxWidth: 420, alignItems: 'center' }}>
+        <div style={{ position: 'relative', width: 96, height: 96 }}>
+          <div
+            style={{
+              width: 96,
+              height: 96,
+              borderRadius: '50%',
+              background: 'var(--color-sky-blue)',
+              color: 'var(--color-navy)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontWeight: 700,
+              fontSize: '2rem',
+              overflow: 'hidden',
+            }}
+          >
+            {perfil?.fotoPerfilUrl ? (
+              <img
+                src={perfil.fotoPerfilUrl}
+                alt=""
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+            ) : (
+              inicial
+            )}
+          </div>
+          <button
+            type="button"
+            onClick={() => inputArchivoRef.current?.click()}
+            disabled={subiendoFoto}
+            aria-label="Cambiar foto de perfil"
+            title="Cambiar foto de perfil"
+            style={{
+              position: 'absolute',
+              bottom: -2,
+              right: -2,
+              width: 32,
+              height: 32,
+              borderRadius: '50%',
+              border: '2px solid var(--color-white)',
+              background: 'var(--color-navy)',
+              color: 'var(--color-white)',
+              cursor: subiendoFoto ? 'not-allowed' : 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '0.9rem',
+            }}
+          >
+            {subiendoFoto ? '…' : '📷'}
+          </button>
+          <input
+            ref={inputArchivoRef}
+            type="file"
+            accept="image/png,image/jpeg"
+            onChange={onElegirFoto}
+            style={{ display: 'none' }}
+          />
+        </div>
+        {errorFoto ? <Alert tono="error">{errorFoto}</Alert> : null}
+      </div>
+
+      <form onSubmit={onGuardarDatos} className="admin-card" style={{ maxWidth: 420 }}>
+        <h2>Datos</h2>
 
         {errorDatos ? <Alert tono="error">{errorDatos}</Alert> : null}
         {datosGuardados ? <Alert tono="exito">Datos actualizados.</Alert> : null}
 
-        <Input
-          label="Correo"
-          value={estado.usuario.correo}
-          icon={<MailIcon />}
-          disabled
-          readOnly
-        />
+        <Input label="Correo" value={estado.usuario.correo} icon={<MailIcon />} disabled readOnly />
         <Input
           label="Nombre completo"
           icon={<PersonIcon />}
@@ -166,19 +243,8 @@ export function PerfilTab() {
         </Button>
       </form>
 
-      <form
-        onSubmit={onCambiarPassword}
-        style={{
-          background: 'var(--color-white)',
-          borderRadius: 16,
-          padding: 'var(--space-5)',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 'var(--space-4)',
-          maxWidth: 420,
-        }}
-      >
-        <h2 style={{ fontSize: '1rem', margin: 0 }}>Cambiar contraseña</h2>
+      <form onSubmit={onCambiarPassword} className="admin-card" style={{ maxWidth: 420 }}>
+        <h2>Cambiar contraseña</h2>
 
         {errorPassword ? <Alert tono="error">{errorPassword}</Alert> : null}
         {passwordCambiada ? <Alert tono="exito">Contraseña actualizada.</Alert> : null}

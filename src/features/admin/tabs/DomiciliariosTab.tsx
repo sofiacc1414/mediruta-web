@@ -36,17 +36,6 @@ const ETIQUETAS_ESTADO: Record<DetalleDomiciliario['estado'], string> = {
   rechazado: 'Rechazado',
 };
 
-function tarjeta(): CSSProperties {
-  return {
-    background: 'var(--color-white)',
-    borderRadius: 16,
-    padding: 'var(--space-5)',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 'var(--space-3)',
-  };
-}
-
 /** G05 — mismos 7 requisitos que valida `app.aprobar_domiciliario`. */
 function calcularFaltantes(detalle: DetalleDomiciliario): string[] {
   const requisitos: [string, unknown][] = [
@@ -137,53 +126,48 @@ export function DomiciliariosTab() {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
-      <h1>Domiciliarios pendientes</h1>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
+      <div className="admin-page-header">
+        <h1>Domiciliarios pendientes</h1>
+        <p>Revisá y decidí las solicitudes de validación de Domiciliario.</p>
+      </div>
 
       {errorLista ? <Alert tono="error">{errorLista}</Alert> : null}
 
-      {pendientes === null && !errorLista ? (
-        <p style={{ color: 'var(--color-teal)' }}>Cargando…</p>
-      ) : null}
+      {pendientes === null && !errorLista ? <p className="admin-muted">Cargando…</p> : null}
 
       {pendientes?.length === 0 ? (
-        <div style={{ ...tarjeta(), textAlign: 'center', color: 'var(--color-teal)' }}>
-          No hay domiciliarios pendientes de validación por ahora.
-        </div>
+        <div className="admin-card admin-empty">No hay domiciliarios pendientes de validación por ahora.</div>
       ) : null}
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
-        {pendientes?.map((domiciliario) => (
-          <button
-            key={domiciliario.usuarioId}
-            onClick={() => setVista({ tipo: 'detalle', id: domiciliario.usuarioId })}
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              gap: 'var(--space-4)',
-              width: '100%',
-              textAlign: 'left',
-              padding: 'var(--space-4) var(--space-5)',
-              borderRadius: 16,
-              border: '1.5px solid var(--color-sky-blue)',
-              background: 'var(--color-white)',
-              cursor: 'pointer',
-            }}
-          >
-            <div>
-              <div style={{ fontWeight: 600, color: 'var(--color-navy)' }}>
-                {domiciliario.nombreCompleto ?? 'Sin nombre registrado'}
-              </div>
-              <div style={{ fontSize: '0.875rem', color: 'var(--color-teal)' }}>
-                {domiciliario.telefono ?? 'Sin teléfono'} · Solicitado el{' '}
-                {formatearFecha(domiciliario.solicitadoEn)}
-              </div>
-            </div>
-            <span style={{ color: 'var(--color-navy)', fontWeight: 600 }}>Revisar →</span>
-          </button>
-        ))}
-      </div>
+      {pendientes && pendientes.length > 0 ? (
+        <div className="admin-card admin-table-wrap" style={{ padding: 0 }}>
+          <table className="admin-table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Teléfono</th>
+                <th>Solicitado</th>
+                <th />
+              </tr>
+            </thead>
+            <tbody>
+              {pendientes.map((domiciliario) => (
+                <tr
+                  key={domiciliario.usuarioId}
+                  className="admin-table-row-clickable admin-table-row-button"
+                  onClick={() => setVista({ tipo: 'detalle', id: domiciliario.usuarioId })}
+                >
+                  <td style={{ fontWeight: 600 }}>{domiciliario.nombreCompleto ?? 'Sin nombre registrado'}</td>
+                  <td>{domiciliario.telefono ?? '—'}</td>
+                  <td className="admin-muted">{formatearFecha(domiciliario.solicitadoEn)}</td>
+                  <td style={{ color: 'var(--color-navy)', fontWeight: 600, textAlign: 'right' }}>Revisar →</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -273,10 +257,10 @@ function DomiciliarioDetalle({
   if (!detalle) {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
-        <Button variante="secondary" onClick={onVolver} style={{ width: 'auto', alignSelf: 'flex-start' }}>
+        <button type="button" className="admin-back-link" onClick={onVolver}>
           ← Volver
-        </Button>
-        {error ? <Alert tono="error">{error}</Alert> : <p style={{ color: 'var(--color-teal)' }}>Cargando…</p>}
+        </button>
+        {error ? <Alert tono="error">{error}</Alert> : <p className="admin-muted">Cargando…</p>}
       </div>
     );
   }
@@ -293,9 +277,9 @@ function DomiciliarioDetalle({
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
-      <Button variante="secondary" onClick={onVolver} style={{ width: 'auto', alignSelf: 'flex-start' }}>
+      <button type="button" className="admin-back-link" onClick={onVolver}>
         ← Volver a la lista
-      </Button>
+      </button>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-4)' }}>
         <div
@@ -325,7 +309,7 @@ function DomiciliarioDetalle({
 
       {error ? <Alert tono="error">{error}</Alert> : null}
 
-      <section style={tarjeta()}>
+      <section className="admin-card">
         <h2 style={{ fontSize: '1rem', margin: 0 }}>Datos</h2>
         <p>Teléfono: {detalle.telefono ?? '—'}</p>
         <p>Dirección de residencia: {detalle.direccion ?? '—'}</p>
@@ -337,7 +321,7 @@ function DomiciliarioDetalle({
         </p>
       </section>
 
-      <section style={tarjeta()}>
+      <section className="admin-card">
         <h2 style={{ fontSize: '1rem', margin: 0 }}>Documentos</h2>
         {documentos.map((doc) => {
           const contenido = (
@@ -415,7 +399,7 @@ function DomiciliarioDetalle({
       </section>
 
       {esPendiente ? (
-        <section style={tarjeta()}>
+        <section className="admin-card">
           {faltantes.length > 0 ? <Alert tono="info">Falta completar: {faltantes.join(', ')}.</Alert> : null}
 
           <Button onClick={onAprobar} disabled={procesando || faltantes.length > 0}>
@@ -473,7 +457,7 @@ function DomiciliarioDetalle({
       ) : null}
 
       {detalle.historial.length > 0 ? (
-        <section style={tarjeta()}>
+        <section className="admin-card">
           <h2 style={{ fontSize: '1rem', margin: 0 }}>Historial</h2>
           {detalle.historial.map((item, indice) => (
             <div key={indice} style={{ display: 'flex', gap: 'var(--space-2)', alignItems: 'flex-start' }}>

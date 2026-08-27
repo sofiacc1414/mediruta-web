@@ -26,11 +26,18 @@ type RequestOptions = {
 
 async function request(path: string, options: RequestOptions, esReintento = false): Promise<unknown> {
   const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
     'X-Client-Type': 'web',
   };
   if (options.accessToken) {
     headers.Authorization = `Bearer ${options.accessToken}`;
+  }
+
+  // FormData (subida de archivos) nunca se serializa a JSON, y el
+  // header Content-Type con su boundary lo arma fetch solo — ponerlo a
+  // mano rompe el multipart.
+  const esFormData = options.body instanceof FormData;
+  if (!esFormData) {
+    headers['Content-Type'] = 'application/json';
   }
 
   let respuesta: Response;
@@ -39,7 +46,11 @@ async function request(path: string, options: RequestOptions, esReintento = fals
       method: options.method,
       credentials: 'include',
       headers,
-      body: options.body !== undefined ? JSON.stringify(options.body) : undefined,
+      body: esFormData
+        ? (options.body as FormData)
+        : options.body !== undefined
+          ? JSON.stringify(options.body)
+          : undefined,
     });
   } catch {
     throw new ApiSinConexionError();
@@ -101,5 +112,21 @@ export const apiClient = {
 
   patch(path: string, body?: unknown, opts?: { accessToken?: string | null }) {
     return request(path, { method: 'PATCH', body, accessToken: opts?.accessToken });
+  },
+
+  /** Subida de archivo (foto de perfil, documentos, etc.) — multipart,
+   * nunca JSON. `campos` agrega texto adicional al form (ej. `lado`,
+   * `tipo`), mismo criterio que `postMultipart` de la App Flutter. */
+  postMultipart(
+    path: string,
+    archivo: File,
+    opts?: { campos?: Record<string, string>; accessToken?: string | null },
+  ) {
+    const formData = new FormData();
+    formData.append('archivo', archivo);
+    for (const [clave, valor] of Object.entries(opts?.campos ?? {})) {
+      formData.append(clave, valor);
+    }
+    return request(path, { method: 'POST', body: formData, accessToken: opts?.accessToken });
   },
 };

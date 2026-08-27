@@ -41,6 +41,54 @@ export type NovedadAbierta = {
   creadoEn: string;
 };
 
+export type EventoHistorial = {
+  estado: EstadoPedido;
+  creadoEn: string;
+};
+
+export type Medicamento = {
+  nombre: string | null;
+  concentracion: string | null;
+  formaFarmaceutica: string | null;
+  cantidad: string | null;
+  posologia: string | null;
+};
+
+export type NovedadDelPedido = {
+  id: string;
+  detalle: string;
+  creadoEn: string;
+};
+
+export type DetallePedidoAdmin = {
+  id: string;
+  codigoPedido: string;
+  estado: EstadoPedido;
+  recetaUrl: string | null;
+  recetaFechaVencimiento: string | null;
+  direccionEntrega: string | null;
+  direccionFarmacia: string | null;
+  creadoEn: string;
+  enviadoEn: string | null;
+  canceladoEn: string | null;
+  codigoEntrega: string | null;
+  paciente: {
+    nombre: string | null;
+    correo: string;
+    telefono: string | null;
+    cedulaFrenteUrl: string | null;
+    cedulaReversoUrl: string | null;
+  };
+  domiciliario: {
+    nombre: string | null;
+    correo: string;
+    telefono: string | null;
+  } | null;
+  medicamentos: Medicamento[];
+  historial: EventoHistorial[];
+  novedadAbierta: NovedadDelPedido | null;
+};
+
 type MensajeResultado = { message: string };
 
 function armarQuery(filtros: FiltrosPedidos): string {
@@ -59,6 +107,14 @@ export function listarPedidosAdmin(accessToken: string, filtros: FiltrosPedidos 
   return apiClient.get(`/admin/pedidos${armarQuery(filtros)}`, {
     accessToken,
   }) as Promise<PedidoAdmin[]>;
+}
+
+/** "Ver el detalle de cada pedido, no solo el listado": datos +
+ * medicamentos + tracking + novedad abierta + cédula del paciente. */
+export function obtenerDetallePedidoAdmin(accessToken: string, pedidoId: string) {
+  return apiClient.get(`/admin/pedidos/${pedidoId}`, {
+    accessToken,
+  }) as Promise<DetallePedidoAdmin>;
 }
 
 /** HU-07 — novedades reportadas por Domiciliarios, todavía sin resolver. */

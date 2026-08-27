@@ -17,7 +17,7 @@ export function Button({ variante = 'primary', style, disabled, ...resto }: Prop
     fontWeight: 600,
     width: '100%',
     padding: '14px var(--space-6)',
-    borderRadius: 999,
+    borderRadius: 'var(--radius-pill)',
     cursor: disabled ? 'not-allowed' : 'pointer',
     opacity: disabled ? 0.6 : 1,
     border: '1.5px solid var(--color-navy)',

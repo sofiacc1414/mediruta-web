@@ -76,7 +76,7 @@ export function ImageLightbox({ url, label, onClose }: Props) {
         style={{
           maxWidth: '100%',
           maxHeight: 'calc(100% - 3rem)',
-          borderRadius: 12,
+          borderRadius: 'var(--radius-md)',
           boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)',
           objectFit: 'contain',
         }}

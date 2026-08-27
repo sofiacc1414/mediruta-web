@@ -52,7 +52,7 @@ export function Input({ label, errorText, icon, esPassword, id, style, type, ...
             padding: '14px 20px',
             paddingLeft: icon ? 46 : 20,
             paddingRight: esPassword ? 46 : 20,
-            borderRadius: 999,
+            borderRadius: 'var(--radius-pill)',
             border: `${errorText ? 2 : 1}px solid var(--color-navy)`,
             background: 'var(--color-beige)',
             color: 'var(--color-navy)',

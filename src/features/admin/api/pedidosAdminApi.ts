@@ -23,6 +23,10 @@ export type PedidoAdmin = {
   direccionFarmacia: string | null;
   creadoEn: string;
   enviadoEn: string | null;
+  /** Desde cuándo está en `en_asignacion` — `null` si nunca pasó por
+   * ahí o ya tiene domiciliario. Se compara contra el umbral
+   * configurable para mostrar la alarma de "demorado". */
+  enAsignacionDesde: string | null;
 };
 
 export type FiltrosPedidos = {
@@ -30,7 +34,11 @@ export type FiltrosPedidos = {
   desde?: string;
   hasta?: string;
   busqueda?: string;
+  pacienteBusqueda?: string;
+  domiciliarioBusqueda?: string;
 };
+
+export type OrigenNovedad = 'domiciliario' | 'paciente';
 
 export type NovedadAbierta = {
   id: string;
@@ -38,7 +46,15 @@ export type NovedadAbierta = {
   codigoPedido: string | null;
   detalle: string;
   reportadaPorCorreo: string;
+  origen: OrigenNovedad;
   creadoEn: string;
+};
+
+export type DomiciliarioCercano = {
+  usuarioId: string;
+  nombreCompleto: string | null;
+  telefono: string | null;
+  distanciaMetros: number;
 };
 
 export type EventoHistorial = {
@@ -57,6 +73,7 @@ export type Medicamento = {
 export type NovedadDelPedido = {
   id: string;
   detalle: string;
+  origen: OrigenNovedad;
   creadoEn: string;
 };
 
@@ -87,6 +104,7 @@ export type DetallePedidoAdmin = {
   medicamentos: Medicamento[];
   historial: EventoHistorial[];
   novedadAbierta: NovedadDelPedido | null;
+  enAsignacionDesde: string | null;
 };
 
 type MensajeResultado = { message: string };
@@ -97,6 +115,10 @@ function armarQuery(filtros: FiltrosPedidos): string {
   if (filtros.desde) params.set('desde', filtros.desde);
   if (filtros.hasta) params.set('hasta', filtros.hasta);
   if (filtros.busqueda) params.set('busqueda', filtros.busqueda);
+  if (filtros.pacienteBusqueda) params.set('pacienteBusqueda', filtros.pacienteBusqueda);
+  if (filtros.domiciliarioBusqueda) {
+    params.set('domiciliarioBusqueda', filtros.domiciliarioBusqueda);
+  }
   const query = params.toString();
   return query ? `?${query}` : '';
 }
@@ -127,4 +149,22 @@ export function resolverNovedad(accessToken: string, novedadId: string) {
   return apiClient.post(`/admin/novedades/${novedadId}/resolver`, undefined, {
     accessToken,
   }) as Promise<MensajeResultado>;
+}
+
+/** Pedido demorado sin domiciliario — candidatos disponibles más
+ * cercanos a la farmacia de ese pedido. */
+export function listarDomiciliariosCercanos(accessToken: string, pedidoId: string) {
+  return apiClient.get(`/admin/pedidos/${pedidoId}/domiciliarios-cercanos`, {
+    accessToken,
+  }) as Promise<DomiciliarioCercano[]>;
+}
+
+/** Asignación manual — misma transición que cuando el domiciliario
+ * acepta su propio pedido, pero elegida por el admin. */
+export function asignarDomiciliario(accessToken: string, pedidoId: string, domiciliarioId: string) {
+  return apiClient.post(
+    `/admin/pedidos/${pedidoId}/asignar`,
+    { domiciliarioId },
+    { accessToken },
+  ) as Promise<MensajeResultado>;
 }

@@ -21,7 +21,7 @@ function estilo(estado: EstadoPedido): CSSProperties {
     display: 'inline-flex',
     alignItems: 'center',
     padding: '4px 12px',
-    borderRadius: 999,
+    borderRadius: 'var(--radius-pill)',
     fontSize: '0.75rem',
     fontWeight: 700,
     whiteSpace: 'nowrap',

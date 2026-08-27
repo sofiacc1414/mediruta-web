@@ -24,8 +24,16 @@
   --space-2: 8px;
   --space-3: 12px;
   --space-4: 16px;
+  --space-5: 20px;
   --space-6: 24px;
   --space-8: 32px;
   --space-12: 48px;
   --space-16: 64px;
+
+  /* Radios — centralizados para no repetir números sueltos por componente
+     (context.md Parte A, sección 25). */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-pill: 999px;
 }

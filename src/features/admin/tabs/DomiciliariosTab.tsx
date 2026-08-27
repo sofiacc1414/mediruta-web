@@ -330,7 +330,7 @@ function DomiciliarioDetalle({
                 style={{
                   width: 44,
                   height: 44,
-                  borderRadius: 8,
+                  borderRadius: 'var(--radius-sm)',
                   overflow: 'hidden',
                   background: 'var(--color-beige)',
                   display: 'flex',
@@ -425,7 +425,7 @@ function DomiciliarioDetalle({
                   fontFamily: 'var(--font-body)',
                   fontSize: '1rem',
                   padding: 'var(--space-3)',
-                  borderRadius: 16,
+                  borderRadius: 'var(--radius-md)',
                   border: `${errorMotivo ? 2 : 1}px solid var(--color-navy)`,
                   background: 'var(--color-beige)',
                   color: 'var(--color-navy)',

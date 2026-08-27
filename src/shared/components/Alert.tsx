@@ -33,7 +33,7 @@ export function Alert({ tono = 'info', children }: Props) {
         alignItems: 'flex-start',
         gap: 8,
         padding: 'var(--space-3)',
-        borderRadius: 8,
+        borderRadius: 'var(--radius-sm)',
         border: '1.5px solid var(--color-navy)',
         background: FONDOS[tono],
         color: 'var(--color-navy)',

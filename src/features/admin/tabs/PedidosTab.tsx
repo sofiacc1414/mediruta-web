@@ -3,12 +3,19 @@ import { Alert } from '../../../shared/components/Alert';
 import { Button } from '../../../shared/components/Button';
 import { ApiError, ApiSinConexionError } from '../../../shared/lib/apiError';
 import { useAuth } from '../../usuarios/hooks/useAuth';
+import {
+  actualizarConfiguracionAdmin,
+  obtenerConfiguracionAdmin,
+} from '../api/configuracionAdminApi';
 import { EstadoPedidoPill } from '../components/EstadoPedidoPill';
 import { TrackingTimeline } from '../components/TrackingTimeline';
 import {
+  asignarDomiciliario,
+  listarDomiciliariosCercanos,
   listarPedidosAdmin,
   obtenerDetallePedidoAdmin,
   type DetallePedidoAdmin,
+  type DomiciliarioCercano,
   type EstadoPedido,
   type FiltrosPedidos,
   type PedidoAdmin,
@@ -40,15 +47,57 @@ function formatearFechaHora(iso: string) {
   });
 }
 
+/** Minutos transcurridos desde `desde`, formateados como "Xh Ym" o "Ym". */
+function formatearDuracion(desdeIso: string): string {
+  const minutos = Math.floor((Date.now() - new Date(desdeIso).getTime()) / 60000);
+  if (minutos < 60) return `${minutos} min`;
+  const horas = Math.floor(minutos / 60);
+  const resto = minutos % 60;
+  return `${horas}h ${resto}min`;
+}
+
+function estaDemorado(
+  pedido: Pick<PedidoAdmin, 'estado' | 'enAsignacionDesde'>,
+  umbralMinutos: number | null,
+): boolean {
+  if (!umbralMinutos || pedido.estado !== 'en_asignacion' || !pedido.enAsignacionDesde) return false;
+  const minutos = (Date.now() - new Date(pedido.enAsignacionDesde).getTime()) / 60000;
+  return minutos > umbralMinutos;
+}
+
 const inputEstilo = {
   fontFamily: 'var(--font-body)',
   fontSize: '0.9rem',
   padding: '10px 14px',
-  borderRadius: 999,
+  borderRadius: 'var(--radius-pill)',
   border: '1px solid var(--color-navy)',
   background: 'var(--color-beige)',
   color: 'var(--color-navy)',
 };
+
+/** Pill de alarma — nunca rojo/naranja, dentro de la paleta oficial:
+ * outline navy + ícono, el texto ya comunica la urgencia. */
+function AlarmaDemora({ desdeIso }: { desdeIso: string }) {
+  return (
+    <span
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 4,
+        padding: '3px 10px',
+        borderRadius: 'var(--radius-pill)',
+        border: '1.5px solid var(--color-navy)',
+        background: 'var(--color-beige)',
+        color: 'var(--color-navy)',
+        fontSize: '0.7rem',
+        fontWeight: 700,
+        whiteSpace: 'nowrap',
+      }}
+    >
+      ⚠ Demorado hace {formatearDuracion(desdeIso)}
+    </span>
+  );
+}
 
 /**
  * "Pedidos" — lista filtrable de todos los pedidos reales, con
@@ -68,10 +117,14 @@ export function PedidosTab() {
   const [filtroDesde, setFiltroDesde] = useState('');
   const [filtroHasta, setFiltroHasta] = useState('');
   const [filtroBusqueda, setFiltroBusqueda] = useState('');
+  const [filtroPaciente, setFiltroPaciente] = useState('');
+  const [filtroDomiciliario, setFiltroDomiciliario] = useState('');
 
   const [pedidos, setPedidos] = useState<PedidoAdmin[] | null>(null);
   const [errorPedidos, setErrorPedidos] = useState<string | null>(null);
   const [cargandoPedidos, setCargandoPedidos] = useState(false);
+
+  const [umbralMinutos, setUmbralMinutos] = useState<number | null>(null);
 
   const cargarPedidos = useCallback(
     (filtros: FiltrosPedidos) => {
@@ -97,10 +150,28 @@ export function PedidosTab() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (estado.tipo !== 'autenticado') return;
+    obtenerConfiguracionAdmin(estado.accessToken)
+      .then((c) => setUmbralMinutos(c.umbralDemoraAsignacionMinutos))
+      .catch(() => {
+        // Si no se pudo leer el umbral, simplemente no se muestra la
+        // alarma — no es motivo para romper la pantalla de pedidos.
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   if (estado.tipo !== 'autenticado') return null;
 
   if (vista.tipo === 'detalle') {
-    return <PedidoDetalle pedidoId={vista.id} onVolver={() => setVista({ tipo: 'lista' })} />;
+    return (
+      <PedidoDetalle
+        pedidoId={vista.id}
+        umbralMinutos={umbralMinutos}
+        onVolver={() => setVista({ tipo: 'lista' })}
+        onAsignado={() => cargarPedidos(filtrosAplicados)}
+      />
+    );
   }
 
   function onFiltrar(evento: FormEvent) {
@@ -110,6 +181,8 @@ export function PedidosTab() {
       desde: filtroDesde ? new Date(filtroDesde).toISOString() : undefined,
       hasta: filtroHasta ? new Date(`${filtroHasta}T23:59:59`).toISOString() : undefined,
       busqueda: filtroBusqueda.trim() || undefined,
+      pacienteBusqueda: filtroPaciente.trim() || undefined,
+      domiciliarioBusqueda: filtroDomiciliario.trim() || undefined,
     };
     setFiltrosAplicados(filtros);
     cargarPedidos(filtros);
@@ -120,6 +193,8 @@ export function PedidosTab() {
     setFiltroDesde('');
     setFiltroHasta('');
     setFiltroBusqueda('');
+    setFiltroPaciente('');
+    setFiltroDomiciliario('');
     setFiltrosAplicados({});
     cargarPedidos({});
   }
@@ -130,6 +205,8 @@ export function PedidosTab() {
         <h1>Pedidos</h1>
         <p>Ver y filtrar todos los pedidos, con seguimiento completo de cada uno.</p>
       </div>
+
+      <ConfiguracionUmbral umbralMinutos={umbralMinutos} onActualizado={setUmbralMinutos} />
 
       <section className="admin-card">
         <form
@@ -161,6 +238,20 @@ export function PedidosTab() {
             value={filtroBusqueda}
             onChange={(e) => setFiltroBusqueda(e.target.value)}
             style={{ ...inputEstilo, flex: 1, minWidth: 220 }}
+          />
+          <input
+            type="search"
+            placeholder="Filtrar por paciente"
+            value={filtroPaciente}
+            onChange={(e) => setFiltroPaciente(e.target.value)}
+            style={{ ...inputEstilo, minWidth: 180 }}
+          />
+          <input
+            type="search"
+            placeholder="Filtrar por domiciliario"
+            value={filtroDomiciliario}
+            onChange={(e) => setFiltroDomiciliario(e.target.value)}
+            style={{ ...inputEstilo, minWidth: 180 }}
           />
           <Button type="submit" style={{ width: 'auto' }} disabled={cargandoPedidos}>
             Filtrar
@@ -205,7 +296,12 @@ export function PedidosTab() {
                   </td>
                   <td>{pedido.domiciliarioNombre ?? pedido.domiciliarioCorreo ?? '— sin asignar —'}</td>
                   <td>
-                    <EstadoPedidoPill estado={pedido.estado} />
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 4, alignItems: 'flex-start' }}>
+                      <EstadoPedidoPill estado={pedido.estado} />
+                      {estaDemorado(pedido, umbralMinutos) && pedido.enAsignacionDesde ? (
+                        <AlarmaDemora desdeIso={pedido.enAsignacionDesde} />
+                      ) : null}
+                    </div>
                   </td>
                   <td className="admin-muted">{formatearFecha(pedido.creadoEn)}</td>
                 </tr>
@@ -218,12 +314,112 @@ export function PedidosTab() {
   );
 }
 
-function PedidoDetalle({ pedidoId, onVolver }: { pedidoId: string; onVolver: () => void }) {
+function ConfiguracionUmbral({
+  umbralMinutos,
+  onActualizado,
+}: {
+  umbralMinutos: number | null;
+  onActualizado: (umbral: number) => void;
+}) {
+  const { estado } = useAuth();
+  const [editando, setEditando] = useState(false);
+  const [valor, setValor] = useState('');
+  const [guardando, setGuardando] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  if (estado.tipo !== 'autenticado') return null;
+
+  async function onGuardar(evento: FormEvent) {
+    evento.preventDefault();
+    if (estado.tipo !== 'autenticado') return;
+    const numero = Number(valor);
+    if (!Number.isInteger(numero) || numero < 1) {
+      setError('Ingresá un número entero de minutos, mayor a 0.');
+      return;
+    }
+    setGuardando(true);
+    setError(null);
+    try {
+      await actualizarConfiguracionAdmin(estado.accessToken, numero);
+      onActualizado(numero);
+      setEditando(false);
+    } catch (err) {
+      if (err instanceof ApiError || err instanceof ApiSinConexionError) {
+        setError(err.message);
+      } else {
+        throw err;
+      }
+    } finally {
+      setGuardando(false);
+    }
+  }
+
+  return (
+    <section className="admin-card" style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 'var(--space-3)' }}>
+      {editando ? (
+        <form onSubmit={onGuardar} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
+          <label style={{ fontSize: '0.9rem' }}>
+            Alertar si un pedido lleva más de{' '}
+            <input
+              type="number"
+              min={1}
+              max={1440}
+              value={valor}
+              onChange={(e) => setValor(e.target.value)}
+              style={{ ...inputEstilo, width: 80, textAlign: 'center' }}
+              autoFocus
+            />{' '}
+            minutos sin domiciliario
+          </label>
+          <Button type="submit" style={{ width: 'auto' }} disabled={guardando}>
+            {guardando ? 'Guardando…' : 'Guardar'}
+          </Button>
+          <Button type="button" variante="secondary" style={{ width: 'auto' }} onClick={() => setEditando(false)}>
+            Cancelar
+          </Button>
+        </form>
+      ) : (
+        <>
+          <span style={{ fontSize: '0.9rem' }}>
+            Alarma de pedido demorado:{' '}
+            <strong>
+              {umbralMinutos === null ? 'cargando…' : `más de ${umbralMinutos} min sin domiciliario`}
+            </strong>
+          </span>
+          <Button
+            type="button"
+            variante="secondary"
+            style={{ width: 'auto' }}
+            onClick={() => {
+              setValor(String(umbralMinutos ?? 15));
+              setEditando(true);
+            }}
+          >
+            Cambiar umbral
+          </Button>
+        </>
+      )}
+      {error ? <Alert tono="error">{error}</Alert> : null}
+    </section>
+  );
+}
+
+function PedidoDetalle({
+  pedidoId,
+  umbralMinutos,
+  onVolver,
+  onAsignado,
+}: {
+  pedidoId: string;
+  umbralMinutos: number | null;
+  onVolver: () => void;
+  onAsignado: () => void;
+}) {
   const { estado } = useAuth();
   const [detalle, setDetalle] = useState<DetallePedidoAdmin | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  const cargar = useCallback(() => {
     if (estado.tipo !== 'autenticado') return;
     setError(null);
     obtenerDetallePedidoAdmin(estado.accessToken, pedidoId)
@@ -237,7 +433,13 @@ function PedidoDetalle({ pedidoId, onVolver }: { pedidoId: string; onVolver: () 
       });
   }, [estado, pedidoId]);
 
+  useEffect(() => {
+    cargar();
+  }, [cargar]);
+
   if (estado.tipo !== 'autenticado') return null;
+
+  const demorado = detalle ? estaDemorado(detalle, umbralMinutos) : false;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
@@ -255,7 +457,10 @@ function PedidoDetalle({ pedidoId, onVolver }: { pedidoId: string; onVolver: () 
               <h1 style={{ marginBottom: 4 }}>{detalle.codigoPedido}</h1>
               <span className="admin-muted">Creado el {formatearFechaHora(detalle.creadoEn)}</span>
             </div>
-            <EstadoPedidoPill estado={detalle.estado} />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 4, alignItems: 'flex-end' }}>
+              <EstadoPedidoPill estado={detalle.estado} />
+              {demorado && detalle.enAsignacionDesde ? <AlarmaDemora desdeIso={detalle.enAsignacionDesde} /> : null}
+            </div>
           </div>
 
           {detalle.novedadAbierta ? (
@@ -263,6 +468,16 @@ function PedidoDetalle({ pedidoId, onVolver }: { pedidoId: string; onVolver: () 
               Novedad sin resolver: {detalle.novedadAbierta.detalle} (
               {formatearFechaHora(detalle.novedadAbierta.creadoEn)})
             </Alert>
+          ) : null}
+
+          {detalle.estado === 'en_asignacion' ? (
+            <AsignarDomiciliarioCard
+              pedidoId={detalle.id}
+              onAsignado={() => {
+                cargar();
+                onAsignado();
+              }}
+            />
           ) : null}
 
           {detalle.codigoEntrega ? (
@@ -338,6 +553,111 @@ function PedidoDetalle({ pedidoId, onVolver }: { pedidoId: string; onVolver: () 
   );
 }
 
+function AsignarDomiciliarioCard({ pedidoId, onAsignado }: { pedidoId: string; onAsignado: () => void }) {
+  const { estado } = useAuth();
+  const [abierto, setAbierto] = useState(false);
+  const [cercanos, setCercanos] = useState<DomiciliarioCercano[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [asignando, setAsignando] = useState<string | null>(null);
+
+  if (estado.tipo !== 'autenticado') return null;
+
+  function onAbrir() {
+    if (estado.tipo !== 'autenticado') return;
+    setAbierto(true);
+    setError(null);
+    setCercanos(null);
+    listarDomiciliariosCercanos(estado.accessToken, pedidoId)
+      .then(setCercanos)
+      .catch((err: unknown) => {
+        if (err instanceof ApiError || err instanceof ApiSinConexionError) {
+          setError(err.message);
+        } else {
+          throw err;
+        }
+      });
+  }
+
+  async function onAsignar(domiciliarioId: string) {
+    if (estado.tipo !== 'autenticado') return;
+    setAsignando(domiciliarioId);
+    setError(null);
+    try {
+      await asignarDomiciliario(estado.accessToken, pedidoId, domiciliarioId);
+      setAbierto(false);
+      onAsignado();
+    } catch (err) {
+      if (err instanceof ApiError || err instanceof ApiSinConexionError) {
+        setError(err.message);
+      } else {
+        throw err;
+      }
+    } finally {
+      setAsignando(null);
+    }
+  }
+
+  return (
+    <section className="admin-card">
+      <div className="admin-card-header">
+        <h2 style={{ margin: 0 }}>Asignar domiciliario</h2>
+        {!abierto ? (
+          <Button type="button" style={{ width: 'auto' }} onClick={onAbrir}>
+            Ver domiciliarios cercanos
+          </Button>
+        ) : (
+          <Button type="button" variante="secondary" style={{ width: 'auto' }} onClick={() => setAbierto(false)}>
+            Cerrar
+          </Button>
+        )}
+      </div>
+
+      {abierto ? (
+        <>
+          {error ? <Alert tono="error">{error}</Alert> : null}
+          {cercanos === null && !error ? <p className="admin-muted">Buscando domiciliarios disponibles…</p> : null}
+          {cercanos?.length === 0 ? (
+            <p className="admin-muted">No hay domiciliarios disponibles cerca de esta farmacia en este momento.</p>
+          ) : null}
+          {cercanos && cercanos.length > 0 ? (
+            <div className="admin-table-wrap">
+              <table className="admin-table">
+                <thead>
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Teléfono</th>
+                    <th>Distancia</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {cercanos.map((d) => (
+                    <tr key={d.usuarioId}>
+                      <td>{d.nombreCompleto ?? 'Sin nombre'}</td>
+                      <td className="admin-muted">{d.telefono ?? '—'}</td>
+                      <td className="admin-muted">{(d.distanciaMetros / 1000).toFixed(1)} km</td>
+                      <td>
+                        <Button
+                          type="button"
+                          style={{ width: 'auto' }}
+                          disabled={asignando === d.usuarioId}
+                          onClick={() => onAsignar(d.usuarioId)}
+                        >
+                          {asignando === d.usuarioId ? 'Asignando…' : 'Asignar'}
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : null}
+        </>
+      ) : null}
+    </section>
+  );
+}
+
 function MiniaturaDoc({ etiqueta, url }: { etiqueta: string; url: string | null }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
@@ -347,7 +667,7 @@ function MiniaturaDoc({ etiqueta, url }: { etiqueta: string; url: string | null 
           <img
             src={url}
             alt={etiqueta}
-            style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 8, border: '1px solid var(--color-sky-blue)' }}
+            style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-sky-blue)' }}
           />
         </a>
       ) : (
@@ -355,7 +675,7 @@ function MiniaturaDoc({ etiqueta, url }: { etiqueta: string; url: string | null 
           style={{
             width: 80,
             height: 80,
-            borderRadius: 8,
+            borderRadius: 'var(--radius-sm)',
             border: '1px dashed var(--color-sky-blue)',
             display: 'flex',
             alignItems: 'center',

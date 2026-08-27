@@ -37,7 +37,6 @@ export function AdminShell() {
 
   if (estado.tipo !== 'autenticado') return null;
 
-  const esRoot = estado.usuario.roles.some((r) => r.codigo === 'ROOT' && r.estado === 'habilitado');
   const rolPrincipal = estado.usuario.roles.find((r) => r.estado === 'habilitado')?.codigo;
 
   function irA(key: TabKey) {
@@ -54,7 +53,10 @@ export function AdminShell() {
     { key: 'pedidos', label: 'Pedidos', icon: <PackageIcon /> },
     { key: 'novedades', label: 'Novedades', icon: <AlertTriangleIcon /> },
     { key: 'domiciliarios', label: 'Domiciliarios', icon: <MopedIcon /> },
-    ...(esRoot ? [{ key: 'usuarios' as const, label: 'Usuarios', icon: <UsersIcon /> }] : []),
+    // Ver/bloquear cuentas Paciente/Domiciliario es para cualquier
+    // admin; crear o bloquear una cuenta Administrador sigue siendo
+    // solo ROOT (lo exige la propia UsuariosTab con `esRoot`).
+    { key: 'usuarios', label: 'Usuarios', icon: <UsersIcon /> },
     { key: 'perfil', label: 'Mi perfil', icon: <PersonIcon /> },
   ];
 
@@ -79,11 +81,9 @@ export function AdminShell() {
           <div style={{ display: tab === 'domiciliarios' ? 'block' : 'none' }}>
             {visited.has('domiciliarios') ? <DomiciliariosTab /> : null}
           </div>
-          {esRoot ? (
-            <div style={{ display: tab === 'usuarios' ? 'block' : 'none' }}>
-              {visited.has('usuarios') ? <UsuariosTab /> : null}
-            </div>
-          ) : null}
+          <div style={{ display: tab === 'usuarios' ? 'block' : 'none' }}>
+            {visited.has('usuarios') ? <UsuariosTab /> : null}
+          </div>
           <div style={{ display: tab === 'perfil' ? 'block' : 'none' }}>
             {visited.has('perfil') ? <PerfilTab /> : null}
           </div>

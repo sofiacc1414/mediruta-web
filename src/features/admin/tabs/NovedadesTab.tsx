@@ -5,6 +5,11 @@ import { ApiError, ApiSinConexionError } from '../../../shared/lib/apiError';
 import { useAuth } from '../../usuarios/hooks/useAuth';
 import { listarNovedadesAbiertas, resolverNovedad, type NovedadAbierta } from '../api/pedidosAdminApi';
 
+const ETIQUETAS_ORIGEN: Record<NovedadAbierta['origen'], string> = {
+  paciente: 'el paciente',
+  domiciliario: 'el domiciliario',
+};
+
 function formatearFechaHora(iso: string) {
   return new Date(iso).toLocaleString('es-CO', {
     day: '2-digit',
@@ -86,7 +91,8 @@ export function NovedadesTab() {
               <div style={{ fontWeight: 700 }}>{novedad.codigoPedido ?? 'Pedido'}</div>
               <div>{novedad.detalle}</div>
               <div className="admin-muted">
-                Reportada por {novedad.reportadaPorCorreo} el {formatearFechaHora(novedad.creadoEn)}
+                Reportada por {ETIQUETAS_ORIGEN[novedad.origen]} ({novedad.reportadaPorCorreo}) el{' '}
+                {formatearFechaHora(novedad.creadoEn)}
               </div>
             </div>
             <Button

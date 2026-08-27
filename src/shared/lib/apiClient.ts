@@ -18,7 +18,7 @@ if (!API_URL) {
 }
 
 type RequestOptions = {
-  method: 'GET' | 'POST';
+  method: 'GET' | 'POST' | 'PATCH';
   body?: unknown;
   /** Access token en memoria (nunca localStorage) para endpoints protegidos. */
   accessToken?: string | null;
@@ -97,5 +97,9 @@ export const apiClient = {
 
   post(path: string, body?: unknown, opts?: { accessToken?: string | null }) {
     return request(path, { method: 'POST', body, accessToken: opts?.accessToken });
+  },
+
+  patch(path: string, body?: unknown, opts?: { accessToken?: string | null }) {
+    return request(path, { method: 'PATCH', body, accessToken: opts?.accessToken });
   },
 };

@@ -1,0 +1,200 @@
+/**
+ * Layout del panel admin — la única razón para un CSS aparte (en vez de
+ * estilos inline, como el resto del panel) es la media query del
+ * sidebar responsive, que no se puede expresar inline. Todos los
+ * colores salen de los tokens oficiales (tokens.css) — cero valores
+ * nuevos acá.
+ */
+
+.admin-shell {
+  display: flex;
+  min-height: 100svh;
+  background: var(--color-beige);
+}
+
+.admin-sidebar {
+  width: 248px;
+  flex-shrink: 0;
+  background: var(--color-navy);
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-6) var(--space-4);
+  gap: var(--space-6);
+}
+
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex: 1;
+}
+
+.admin-nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: 12px var(--space-3);
+  border: none;
+  border-left: 3px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--color-sky-blue);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.admin-nav-item:hover {
+  background: color-mix(in srgb, var(--color-white) 8%, transparent);
+  color: var(--color-white);
+}
+
+.admin-nav-item[data-activo='true'] {
+  background: color-mix(in srgb, var(--color-white) 12%, transparent);
+  border-left-color: var(--color-sky-blue);
+  color: var(--color-white);
+}
+
+.admin-nav-item svg,
+.admin-nav-item .admin-nav-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.admin-account {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  border-top: 1px solid color-mix(in srgb, var(--color-white) 15%, transparent);
+}
+
+.admin-avatar-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--color-sky-blue);
+  color: var(--color-navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.admin-account-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-account-correo {
+  color: var(--color-white);
+  font-size: 0.85rem;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-account-rol {
+  color: var(--color-sky-blue);
+  font-size: 0.75rem;
+}
+
+.admin-logout-button {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--color-sky-blue);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.admin-logout-button:hover {
+  background: color-mix(in srgb, var(--color-white) 12%, transparent);
+  color: var(--color-white);
+}
+
+.admin-logout-button svg {
+  width: 18px;
+  height: 18px;
+}
+
+.admin-content {
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-8);
+}
+
+.admin-content-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+@media (max-width: 860px) {
+  .admin-shell {
+    flex-direction: column;
+  }
+
+  .admin-sidebar {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    padding: var(--space-3) var(--space-4);
+    gap: var(--space-4);
+    overflow-x: auto;
+  }
+
+  .admin-sidebar-brand {
+    display: none;
+  }
+
+  .admin-nav {
+    flex-direction: row;
+    flex: 1;
+  }
+
+  .admin-nav-item {
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px var(--space-2);
+    border-left: none;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+  }
+
+  .admin-nav-item[data-activo='true'] {
+    border-left-color: transparent;
+    border-bottom-color: var(--color-sky-blue);
+  }
+
+  .admin-account {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .admin-account-text {
+    display: none;
+  }
+
+  .admin-content {
+    padding: var(--space-4);
+  }
+}

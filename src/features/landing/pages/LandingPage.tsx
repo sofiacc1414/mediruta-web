@@ -23,7 +23,7 @@ import { TrustSection } from '../components/TrustSection';
  * mediruta-app).
  */
 const APK_DOWNLOAD_URL =
-  'https://github.com/sofiacc1414/mediruta-app/releases/download/v1.0.0/mediruta.apk';
+  'https://github.com/sofiacc1414/mediruta-app/releases/download/v1.1.0/mediruta.apk';
 
 export function LandingPage() {
   return (

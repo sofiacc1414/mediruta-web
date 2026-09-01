@@ -40,6 +40,17 @@ export type FiltrosPedidos = {
 
 export type OrigenNovedad = 'domiciliario' | 'paciente';
 
+/** HU-07 (ronda 3) — clasifica la novedad: 'pregunta' es el mensaje
+ * directo de siempre; 'edicion' trae `datosActuales`/`datosPropuestos`
+ * para pintar el diff antes de aprobar/rechazar; 'codigo' es "no vi mi
+ * código de entrega", sin datos propuestos. */
+export type TipoNovedad = 'pregunta' | 'edicion' | 'codigo';
+
+export type DatosEdicionPedido = {
+  direccionEntrega: string | null;
+  direccionFarmacia: string | null;
+};
+
 export type NovedadAbierta = {
   id: string;
   solicitudId: string;
@@ -47,6 +58,12 @@ export type NovedadAbierta = {
   detalle: string;
   reportadaPorCorreo: string;
   origen: OrigenNovedad;
+  tipo: TipoNovedad;
+  datosActuales: DatosEdicionPedido | null;
+  datosPropuestos: DatosEdicionPedido | null;
+  /** Código de entrega vigente del pedido — solo relevante cuando
+   * `tipo = 'codigo'`. */
+  codigoEntrega: string | null;
   creadoEn: string;
 };
 
@@ -147,6 +164,36 @@ export function listarNovedadesAbiertas(accessToken: string) {
 /** HU-07 — marca una novedad como atendida. No toca el estado del pedido. */
 export function resolverNovedad(accessToken: string, novedadId: string) {
   return apiClient.post(`/admin/novedades/${novedadId}/resolver`, undefined, {
+    accessToken,
+  }) as Promise<MensajeResultado>;
+}
+
+/** HU-07 (ronda 3) — aplica los `datosPropuestos` de una novedad tipo
+ * 'edicion' al pedido y cierra la novedad. */
+export function aprobarEdicionNovedad(accessToken: string, novedadId: string) {
+  return apiClient.post(`/admin/novedades/${novedadId}/aprobar-edicion`, undefined, {
+    accessToken,
+  }) as Promise<MensajeResultado>;
+}
+
+/** HU-07 (ronda 3) — cierra una novedad tipo 'edicion' sin tocar el pedido. */
+export function rechazarEdicionNovedad(accessToken: string, novedadId: string) {
+  return apiClient.post(`/admin/novedades/${novedadId}/rechazar-edicion`, undefined, {
+    accessToken,
+  }) as Promise<MensajeResultado>;
+}
+
+/** HU-07 (ronda 3) — genera un código de entrega nuevo para el pedido. */
+export function regenerarCodigoEntrega(accessToken: string, pedidoId: string) {
+  return apiClient.post(`/admin/pedidos/${pedidoId}/regenerar-codigo`, undefined, {
+    accessToken,
+  }) as Promise<MensajeResultado & { codigoEntrega: string }>;
+}
+
+/** HU-07 (ronda 3) — reenvía por correo el código de entrega vigente
+ * (sin regenerarlo). */
+export function reenviarCodigoEntregaCorreo(accessToken: string, pedidoId: string) {
+  return apiClient.post(`/admin/pedidos/${pedidoId}/reenviar-codigo-correo`, undefined, {
     accessToken,
   }) as Promise<MensajeResultado>;
 }

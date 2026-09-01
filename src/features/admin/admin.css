@@ -257,6 +257,80 @@ tr.admin-table-row-clickable:hover {
   padding: var(--space-6);
 }
 
+/* HU-07 (ronda 3) — tag de "tipo de novedad" (NovedadesTab). Distingue
+ * los 3 tipos con contraste, no con un color fuera de la paleta —
+ * mismo criterio que el resto del proyecto (context.md Parte A, §4). */
+.admin-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px var(--space-2);
+  border-radius: var(--radius-pill);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.admin-tag--pregunta {
+  background: var(--color-beige);
+  color: var(--color-navy);
+}
+
+.admin-tag--edicion {
+  background: var(--color-sky-blue);
+  color: var(--color-navy);
+}
+
+.admin-tag--codigo {
+  background: var(--color-navy);
+  color: var(--color-white);
+}
+
+/* HU-07 (ronda 3) — diff "antes / propuesto" de una solicitud de edición. */
+.admin-diff-edicion {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.admin-diff-columna {
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--color-beige);
+}
+
+.admin-diff-columna--propuesto {
+  background: var(--color-sky-blue);
+}
+
+.admin-diff-columna-titulo {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-teal);
+  margin-bottom: 4px;
+}
+
+.admin-diff-campo {
+  font-size: 0.85rem;
+  color: var(--color-navy);
+}
+
+.admin-diff-campo strong {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--color-teal);
+}
+
+@media (max-width: 560px) {
+  .admin-diff-edicion {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 860px) {
   .admin-shell {
     flex-direction: column;

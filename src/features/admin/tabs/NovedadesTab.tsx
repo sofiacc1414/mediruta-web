@@ -3,11 +3,28 @@ import { Alert } from '../../../shared/components/Alert';
 import { Button } from '../../../shared/components/Button';
 import { ApiError, ApiSinConexionError } from '../../../shared/lib/apiError';
 import { useAuth } from '../../usuarios/hooks/useAuth';
-import { listarNovedadesAbiertas, resolverNovedad, type NovedadAbierta } from '../api/pedidosAdminApi';
+import {
+  aprobarEdicionNovedad,
+  listarNovedadesAbiertas,
+  reenviarCodigoEntregaCorreo,
+  regenerarCodigoEntrega,
+  rechazarEdicionNovedad,
+  resolverNovedad,
+  type NovedadAbierta,
+  type TipoNovedad,
+} from '../api/pedidosAdminApi';
+import { AccionesCodigoEntrega } from './AccionesCodigoEntrega';
+import { DiffEdicionPedido } from './DiffEdicionPedido';
 
 const ETIQUETAS_ORIGEN: Record<NovedadAbierta['origen'], string> = {
   paciente: 'el paciente',
   domiciliario: 'el domiciliario',
+};
+
+const ETIQUETAS_TIPO: Record<TipoNovedad, string> = {
+  pregunta: 'Pregunta',
+  edicion: 'Edición',
+  codigo: 'Código',
 };
 
 function formatearFechaHora(iso: string) {
@@ -20,15 +37,26 @@ function formatearFechaHora(iso: string) {
   });
 }
 
-/** "Novedades" — incidentes reportados por Domiciliarios sobre un
- * pedido en curso, todavía sin resolver (HU-07). Pestaña propia,
+/** "Novedades" — lo que el Paciente/Domiciliario reporta sobre un
+ * pedido en curso, todavía sin atender (HU-07). Pestaña propia,
  * separada de Pedidos — es lo primero que un admin necesita atender
- * al entrar al panel. */
+ * al entrar al panel.
+ *
+ * Desde la ronda 3, cada novedad trae un `tipo` que cambia qué acciones
+ * ofrece esta pantalla:
+ * - 'pregunta' → mensaje directo de siempre: un botón "Resolver".
+ * - 'edicion'  → el paciente pidió corregir un dato del pedido: se ve
+ *   el diff antes/propuesto (`DiffEdicionPedido`) y se aprueba o
+ *   rechaza.
+ * - 'codigo'   → el paciente no vio su código de entrega:
+ *   `AccionesCodigoEntrega` deja regenerarlo o reenviarlo por correo.
+ */
 export function NovedadesTab() {
   const { estado } = useAuth();
   const [novedades, setNovedades] = useState<NovedadAbierta[] | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [resolviendo, setResolviendo] = useState<string | null>(null);
+  const [exito, setExito] = useState<string | null>(null);
+  const [procesando, setProcesando] = useState<string | null>(null);
 
   const cargar = useCallback(() => {
     if (estado.tipo !== 'autenticado') return;
@@ -51,13 +79,19 @@ export function NovedadesTab() {
 
   if (estado.tipo !== 'autenticado') return null;
 
-  async function onResolver(novedadId: string) {
+  async function ejecutar(
+    novedadId: string,
+    accion: () => Promise<{ message: string }>,
+    { recargar = true }: { recargar?: boolean } = {},
+  ) {
     if (estado.tipo !== 'autenticado') return;
-    setResolviendo(novedadId);
+    setProcesando(novedadId);
     setError(null);
+    setExito(null);
     try {
-      await resolverNovedad(estado.accessToken, novedadId);
-      cargar();
+      const resultado = await accion();
+      setExito(resultado.message);
+      if (recargar) cargar();
     } catch (err) {
       if (err instanceof ApiError || err instanceof ApiSinConexionError) {
         setError(err.message);
@@ -65,18 +99,22 @@ export function NovedadesTab() {
         throw err;
       }
     } finally {
-      setResolviendo(null);
+      setProcesando(null);
     }
   }
+
+  if (estado.tipo !== 'autenticado') return null;
+  const accessToken = estado.accessToken;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
       <div className="admin-page-header">
         <h1>Novedades</h1>
-        <p>Incidentes reportados por los domiciliarios sobre un pedido en curso.</p>
+        <p>Lo que pacientes y domiciliarios reportan sobre un pedido en curso.</p>
       </div>
 
       {error ? <Alert tono="error">{error}</Alert> : null}
+      {exito ? <Alert tono="exito">{exito}</Alert> : null}
 
       {novedades === null && !error ? <p className="admin-muted">Cargando…</p> : null}
 
@@ -85,26 +123,98 @@ export function NovedadesTab() {
       ) : null}
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
-        {novedades?.map((novedad) => (
-          <div key={novedad.id} className="admin-card" style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div>
-              <div style={{ fontWeight: 700 }}>{novedad.codigoPedido ?? 'Pedido'}</div>
-              <div>{novedad.detalle}</div>
-              <div className="admin-muted">
-                Reportada por {ETIQUETAS_ORIGEN[novedad.origen]} ({novedad.reportadaPorCorreo}) el{' '}
-                {formatearFechaHora(novedad.creadoEn)}
+        {novedades?.map((novedad) => {
+          const enProceso = procesando === novedad.id;
+          return (
+            <div key={novedad.id} className="admin-card">
+              <div className="admin-card-header">
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+                    <span style={{ fontWeight: 700 }}>{novedad.codigoPedido ?? 'Pedido'}</span>
+                    <span className={`admin-tag admin-tag--${novedad.tipo}`}>
+                      {ETIQUETAS_TIPO[novedad.tipo]}
+                    </span>
+                  </div>
+                  <div>{novedad.detalle}</div>
+                  <div className="admin-muted">
+                    Reportada por {ETIQUETAS_ORIGEN[novedad.origen]} ({novedad.reportadaPorCorreo}) el{' '}
+                    {formatearFechaHora(novedad.creadoEn)}
+                  </div>
+                </div>
+
+                {novedad.tipo === 'pregunta' || novedad.tipo === 'codigo' ? (
+                  <Button
+                    variante="secondary"
+                    style={{ width: 'auto', flexShrink: 0 }}
+                    onClick={() =>
+                      ejecutar(novedad.id, () => resolverNovedad(accessToken, novedad.id))
+                    }
+                    disabled={enProceso}
+                  >
+                    {enProceso ? 'Resolviendo…' : 'Resolver'}
+                  </Button>
+                ) : null}
               </div>
+
+              {novedad.tipo === 'edicion' ? (
+                <>
+                  <DiffEdicionPedido
+                    actuales={novedad.datosActuales}
+                    propuestos={novedad.datosPropuestos}
+                  />
+                  <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
+                    <Button
+                      variante="primary"
+                      style={{ width: 'auto', flexShrink: 0 }}
+                      onClick={() =>
+                        ejecutar(novedad.id, () =>
+                          aprobarEdicionNovedad(accessToken, novedad.id),
+                        )
+                      }
+                      disabled={enProceso}
+                    >
+                      {enProceso ? 'Aplicando…' : 'Aprobar'}
+                    </Button>
+                    <Button
+                      variante="secondary"
+                      style={{ width: 'auto', flexShrink: 0 }}
+                      onClick={() =>
+                        ejecutar(novedad.id, () =>
+                          rechazarEdicionNovedad(accessToken, novedad.id),
+                        )
+                      }
+                      disabled={enProceso}
+                    >
+                      {enProceso ? 'Rechazando…' : 'Rechazar'}
+                    </Button>
+                  </div>
+                </>
+              ) : null}
+
+              {novedad.tipo === 'codigo' ? (
+                <AccionesCodigoEntrega
+                  codigoEntrega={novedad.codigoEntrega}
+                  regenerando={enProceso}
+                  reenviando={enProceso}
+                  onRegenerar={() =>
+                    ejecutar(
+                      novedad.id,
+                      () => regenerarCodigoEntrega(accessToken, novedad.solicitudId),
+                      { recargar: false },
+                    )
+                  }
+                  onReenviar={() =>
+                    ejecutar(
+                      novedad.id,
+                      () => reenviarCodigoEntregaCorreo(accessToken, novedad.solicitudId),
+                      { recargar: false },
+                    )
+                  }
+                />
+              ) : null}
             </div>
-            <Button
-              variante="secondary"
-              style={{ width: 'auto', flexShrink: 0 }}
-              onClick={() => onResolver(novedad.id)}
-              disabled={resolviendo === novedad.id}
-            >
-              {resolviendo === novedad.id ? 'Resolviendo…' : 'Resolver'}
-            </Button>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

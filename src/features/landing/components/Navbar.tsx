@@ -1,6 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '../../../shared/components/Button';
 import { MenuIcon } from '../../../shared/components/icons';
 
 const LINKS = [
@@ -13,12 +12,26 @@ const LINKS = [
 export function Navbar() {
   const navigate = useNavigate();
   const [abierto, setAbierto] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <header className="lp-nav" id="inicio">
-      <div className="lp-shell lp-nav-inner">
+    <header className={`lp-nav ${scrolled ? 'scrolled' : ''}`}>
+      <div className="lp-container lp-nav-inner">
+        {/* >>> LOGO EN BLANCO <<< */}
         <a href="#inicio" className="lp-logo">
-          <img src="/logo-mediruta.png" alt="MediRuta" className="lp-logo-img" />
+          <img 
+            src="/images/LogoEnBlanco.png" 
+            alt="MediRuta" 
+            className="lp-logo-image"
+          />
         </a>
 
         <nav className="lp-nav-links" aria-label="Navegación principal">
@@ -30,14 +43,13 @@ export function Navbar() {
         </nav>
 
         <div className="lp-nav-cta">
-          <Button
-            variante="secondary"
-            className="lp-nav-login-desktop"
-            style={{ width: 'auto', padding: '10px 26px' }}
+          <button
+            type="button"
+            className="lp-btn"
             onClick={() => navigate('/login')}
           >
             Iniciar sesión
-          </Button>
+          </button>
           <button
             type="button"
             className="lp-nav-menu-btn"
@@ -45,38 +57,37 @@ export function Navbar() {
             aria-expanded={abierto}
             onClick={() => setAbierto((v) => !v)}
           >
-            <MenuIcon width={22} height={22} />
+            <MenuIcon width={24} height={24} />
           </button>
         </div>
       </div>
 
-      {abierto ? (
-        <div
-          className="lp-shell"
-          style={{ paddingBottom: 18, display: 'flex', flexDirection: 'column', gap: 14 }}
-        >
+      {abierto && (
+        <div className="lp-container" style={{ paddingBottom: 20, display: 'flex', flexDirection: 'column', gap: 14 }}>
           {LINKS.map((link) => (
             <a
               key={link.href}
               href={link.href}
               className="lp-nav-link"
               onClick={() => setAbierto(false)}
+              style={{ fontSize: '1.1rem' }}
             >
               {link.label}
             </a>
           ))}
-          <Button
-            variante="secondary"
-            style={{ marginTop: 4 }}
+          <button
+            type="button"
+            className="lp-btn lp-btn-primary"
+            style={{ marginTop: 8, width: '100%', justifyContent: 'center', background: 'var(--lp-white)', color: 'var(--lp-navy)' }}
             onClick={() => {
               setAbierto(false);
               navigate('/login');
             }}
           >
             Iniciar sesión
-          </Button>
+          </button>
         </div>
-      ) : null}
+      )}
     </header>
   );
 }

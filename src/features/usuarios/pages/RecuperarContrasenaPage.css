@@ -1,0 +1,434 @@
+/* ============================================================
+   RECUPERAR CONTRASEÑA — DISEÑO PREMIUM
+   ============================================================ */
+
+.lp-recovery-page {
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f2ed;
+  padding: 20px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  position: relative;
+}
+
+/* ===== BOTÓN VOLVER ===== */
+.lp-recovery-back {
+  position: absolute;
+  top: 28px;
+  left: 28px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  background: rgba(255, 254, 255, 0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(47, 65, 86, 0.04);
+  border-radius: 60px;
+  color: #2F4156;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.2, 1);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.03);
+}
+
+.lp-recovery-back:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 12px 40px rgba(47, 65, 86, 0.08);
+  background: rgba(255, 254, 255, 1);
+}
+
+.lp-recovery-back svg {
+  transition: transform 0.3s ease;
+}
+
+.lp-recovery-back:hover svg {
+  transform: translateX(-4px);
+}
+
+/* ============================================================
+   CONTENEDOR PRINCIPAL
+   ============================================================ */
+
+.lp-recovery-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  max-width: 1100px;
+  width: 100%;
+  height: 90vh;
+  max-height: 720px;
+  background: #FFFEFF;
+  border-radius: 36px;
+  overflow: hidden;
+  box-shadow: 0 40px 120px rgba(47, 65, 86, 0.08);
+  position: relative;
+}
+
+/* ============================================================
+   LADO IZQUIERDO — IMAGEN
+   ============================================================ */
+
+.lp-recovery-image {
+  position: relative;
+  overflow: hidden;
+  background: #2F4156;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lp-recovery-image-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.75;
+  transition: transform 12s ease;
+}
+
+.lp-recovery-image:hover .lp-recovery-image-bg {
+  transform: scale(1.08);
+}
+
+.lp-recovery-image-overlay {
+  position: absolute;
+  inset: 0;
+  background: 
+    linear-gradient(160deg, 
+      rgba(47, 65, 86, 0.80) 0%, 
+      rgba(47, 65, 86, 0.40) 50%,
+      rgba(86, 124, 141, 0.20) 100%
+    );
+  z-index: 1;
+}
+
+.lp-recovery-image-content {
+  position: relative;
+  z-index: 2;
+  color: white;
+  padding: 48px 40px;
+  text-align: center;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lp-recovery-image-content h2 {
+  font-family: 'Fraunces', serif;
+  font-size: 2.2rem;
+  line-height: 1.15;
+  margin-bottom: 12px;
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 0 4px 40px rgba(0, 0, 0, 0.10);
+}
+
+.lp-recovery-image-highlight {
+  position: relative;
+  display: inline-block;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.lp-recovery-image-highlight::before {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: -6px;
+  right: -6px;
+  height: 28%;
+  background: rgba(86, 124, 141, 0.35);
+  border-radius: 4px;
+  transform: rotate(-1.5deg);
+  z-index: -1;
+}
+
+.lp-recovery-image-content p {
+  opacity: 0.8;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  margin-top: 4px;
+}
+
+/* ============================================================
+   LADO DERECHO — FORMULARIO
+   ============================================================ */
+
+.lp-recovery-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 48px 56px;
+  background: #FFFEFF;
+}
+
+.lp-recovery-form-header {
+  margin-bottom: 32px;
+}
+
+.lp-recovery-form-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: rgba(86, 124, 141, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.lp-recovery-form-header h1 {
+  font-family: 'Fraunces', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2F4156;
+  margin: 0 0 6px 0;
+  letter-spacing: -0.02em;
+}
+
+.lp-recovery-form-header p {
+  color: rgba(47, 65, 86, 0.45);
+  font-size: 0.95rem;
+  margin: 0;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.lp-recovery-form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ===== BOTÓN ===== */
+.lp-recovery-btn {
+  width: 100%;
+  padding: 16px 24px;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 1rem;
+  background: #2F4156;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.2, 1);
+  margin-top: 4px;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+}
+
+.lp-recovery-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(145deg, #567C8D, #2F4156);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.lp-recovery-btn:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 16px 48px rgba(47, 65, 86, 0.20);
+}
+
+.lp-recovery-btn:hover::before {
+  opacity: 1;
+}
+
+.lp-recovery-btn span {
+  position: relative;
+  z-index: 1;
+}
+
+.lp-recovery-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* ===== ÉXITO ===== */
+.lp-recovery-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+}
+
+.lp-recovery-success-icon {
+  font-size: 3rem;
+  margin-bottom: 4px;
+}
+
+.lp-recovery-success-text {
+  color: rgba(47, 65, 86, 0.6);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.lp-recovery-success-text strong {
+  color: #2F4156;
+  font-weight: 600;
+}
+
+.lp-recovery-success-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.lp-recovery-success-actions .lp-recovery-btn {
+  margin-top: 0;
+}
+
+.lp-recovery-resend {
+  background: none;
+  border: none;
+  color: #567C8D;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 8px;
+  transition: color 0.3s ease;
+  font-family: 'Inter', sans-serif;
+}
+
+.lp-recovery-resend:hover {
+  color: #2F4156;
+  text-decoration: underline;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1024px) {
+  .lp-recovery-container {
+    max-height: 660px;
+  }
+}
+
+@media (max-width: 900px) {
+  .lp-recovery-container {
+    grid-template-columns: 1fr;
+    height: auto;
+    max-height: none;
+    border-radius: 28px;
+  }
+
+  .lp-recovery-back {
+    top: 16px;
+    left: 16px;
+    padding: 8px 18px;
+    font-size: 0.8rem;
+    z-index: 20;
+    background: rgba(255, 254, 255, 0.92);
+  }
+
+  .lp-recovery-image {
+    min-height: 240px;
+    max-height: 280px;
+  }
+
+  .lp-recovery-image-content {
+    padding: 28px 32px;
+  }
+
+  .lp-recovery-image-content h2 {
+    font-size: 1.6rem;
+  }
+
+  .lp-recovery-image-content p {
+    font-size: 0.85rem;
+  }
+
+  .lp-recovery-form {
+    padding: 36px 32px;
+  }
+
+  .lp-recovery-form-header h1 {
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .lp-recovery-page {
+    padding: 12px;
+  }
+
+  .lp-recovery-container {
+    border-radius: 20px;
+  }
+
+  .lp-recovery-back {
+    top: 12px;
+    left: 12px;
+    padding: 6px 14px;
+    font-size: 0.75rem;
+    gap: 6px;
+    border-radius: 40px;
+  }
+
+  .lp-recovery-image {
+    min-height: 180px;
+    max-height: 200px;
+  }
+
+  .lp-recovery-image-content {
+    padding: 20px 18px;
+  }
+
+  .lp-recovery-image-content h2 {
+    font-size: 1.2rem;
+  }
+
+  .lp-recovery-image-content p {
+    font-size: 0.75rem;
+  }
+
+  .lp-recovery-image-highlight::before {
+    height: 25%;
+    bottom: 2px;
+  }
+
+  .lp-recovery-form {
+    padding: 24px 18px;
+  }
+
+  .lp-recovery-form-header h1 {
+    font-size: 1.3rem;
+  }
+
+  .lp-recovery-form-header p {
+    font-size: 0.85rem;
+  }
+
+  .lp-recovery-btn {
+    padding: 14px;
+    font-size: 0.9rem;
+    border-radius: 12px;
+  }
+
+  .lp-recovery-form-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .lp-recovery-form-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+}

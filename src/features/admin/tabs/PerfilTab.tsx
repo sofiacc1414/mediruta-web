@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
 import { Alert } from '../../../shared/components/Alert';
-import { Button } from '../../../shared/components/Button';
 import { Input } from '../../../shared/components/Input';
 import { LockResetIcon, MailIcon, PersonIcon, PinIcon } from '../../../shared/components/icons';
 import { ApiError, ApiSinConexionError } from '../../../shared/lib/apiError';
@@ -13,15 +12,13 @@ import {
   type Perfil,
 } from '../../usuarios/api/perfil.api';
 import { useAuth } from '../../usuarios/hooks/useAuth';
+import './PerfilTab.css';
 
 const ETIQUETAS_ROL: Record<string, string> = {
   ROOT: 'Root',
   ADMINISTRADOR: 'Administrador',
 };
 
-/** "Mi perfil" — foto, datos comunes (nombre/teléfono) y cambio de
- * contraseña, todo en una sola pantalla (antes el cambio de
- * contraseña era su propia página aparte). */
 export function PerfilTab() {
   const { estado } = useAuth();
   const inputArchivoRef = useRef<HTMLInputElement>(null);
@@ -136,145 +133,143 @@ export function PerfilTab() {
   }
 
   const rolPrincipal = estado.usuario.roles.find((r) => r.estado === 'habilitado')?.codigo;
-  const inicial = (perfil?.nombreCompleto ?? estado.usuario.correo).charAt(0).toUpperCase();
+  const nombreVisible = perfil?.nombreCompleto?.trim() || 'Mi perfil';
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
-      <div className="admin-page-header">
-        <h1>Mi perfil</h1>
-        <p>
-          {estado.usuario.correo}
-          {rolPrincipal ? ` · ${ETIQUETAS_ROL[rolPrincipal] ?? rolPrincipal}` : ''}
-        </p>
+    <div className="lp-perfil-page">
+      {/* ===== ÍCONO LATERAL FLOTANTE ===== */}
+      <div className="lp-perfil-icon-side">
+        <img 
+          src="/images/Perfil.png" 
+          alt="Perfil"
+          className="lp-perfil-icon-img"
+        />
       </div>
 
-      {errorCarga ? <Alert tono="error">{errorCarga}</Alert> : null}
+      <div className="lp-perfil-main">
+        {errorCarga ? <Alert tono="error">{errorCarga}</Alert> : null}
 
-      <div className="admin-card" style={{ maxWidth: 420, alignItems: 'center' }}>
-        <div style={{ position: 'relative', width: 96, height: 96 }}>
-          <div
-            style={{
-              width: 96,
-              height: 96,
-              borderRadius: '50%',
-              background: 'var(--color-sky-blue)',
-              color: 'var(--color-navy)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontWeight: 700,
-              fontSize: '2rem',
-              overflow: 'hidden',
-            }}
-          >
-            {perfil?.fotoPerfilUrl ? (
-              <img
-                src={perfil.fotoPerfilUrl}
-                alt=""
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+        {/* ===== CABECERA HERO CON FOTO QUEMADA ===== */}
+        <section className="lp-perfil-hero">
+          <div className="lp-perfil-hero-bg"></div>
+          <div className="lp-perfil-hero-overlay"></div>
+          
+          <div className="lp-perfil-hero-content">
+            <div className="lp-perfil-avatar-wrap">
+              <div className="lp-perfil-avatar">
+                {/* Foto quemada de ADMINISTRADORA.jpg en el CSS */}
+              </div>
+              <button
+                type="button"
+                onClick={() => inputArchivoRef.current?.click()}
+                disabled={subiendoFoto}
+                aria-label="Cambiar foto de perfil"
+                title="Cambiar foto de perfil"
+                className="lp-perfil-avatar-edit"
+              >
+                {subiendoFoto ? '…' : '📷'}
+              </button>
+              <input
+                ref={inputArchivoRef}
+                type="file"
+                accept="image/png,image/jpeg"
+                onChange={onElegirFoto}
+                className="lp-perfil-file-input"
               />
-            ) : (
-              inicial
-            )}
+            </div>
+
+            <div className="lp-perfil-hero-copy">
+              <h1 className="lp-perfil-nombre">{nombreVisible}</h1>
+              <p className="lp-perfil-correo">{estado.usuario.correo}</p>
+              {rolPrincipal ? (
+                <span className="lp-perfil-badge">
+                  {ETIQUETAS_ROL[rolPrincipal] ?? rolPrincipal}
+                </span>
+              ) : null}
+            </div>
           </div>
-          <button
-            type="button"
-            onClick={() => inputArchivoRef.current?.click()}
-            disabled={subiendoFoto}
-            aria-label="Cambiar foto de perfil"
-            title="Cambiar foto de perfil"
-            style={{
-              position: 'absolute',
-              bottom: -2,
-              right: -2,
-              width: 32,
-              height: 32,
-              borderRadius: '50%',
-              border: '2px solid var(--color-white)',
-              background: 'var(--color-navy)',
-              color: 'var(--color-white)',
-              cursor: subiendoFoto ? 'not-allowed' : 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '0.9rem',
-            }}
-          >
-            {subiendoFoto ? '…' : '📷'}
-          </button>
-          <input
-            ref={inputArchivoRef}
-            type="file"
-            accept="image/png,image/jpeg"
-            onChange={onElegirFoto}
-            style={{ display: 'none' }}
-          />
-        </div>
+        </section>
+
         {errorFoto ? <Alert tono="error">{errorFoto}</Alert> : null}
+
+        {/* ===== GRID DE TARJETAS ===== */}
+        <div className="lp-perfil-grid">
+          <form onSubmit={onGuardarDatos} className="lp-perfil-card">
+            <h2 className="lp-perfil-card-titulo">
+              <PersonIcon /> Información personal
+            </h2>
+
+            {errorDatos ? <Alert tono="error">{errorDatos}</Alert> : null}
+            {datosGuardados ? <Alert tono="exito">Datos actualizados.</Alert> : null}
+
+            <Input label="Correo" value={estado.usuario.correo} icon={<MailIcon />} disabled readOnly />
+            <Input
+              label="Nombre completo"
+              icon={<PersonIcon />}
+              required
+              value={nombreCompleto}
+              onChange={(e) => setNombreCompleto(e.target.value)}
+              disabled={guardandoDatos || perfil === null}
+            />
+            <Input
+              label="Teléfono"
+              type="tel"
+              icon={<PinIcon />}
+              required
+              value={telefono}
+              onChange={(e) => setTelefono(e.target.value)}
+              disabled={guardandoDatos || perfil === null}
+            />
+
+            <button
+              type="submit"
+              className="lp-perfil-btn lp-perfil-btn-primary"
+              disabled={guardandoDatos || perfil === null}
+            >
+              {guardandoDatos ? 'Guardando…' : 'Guardar datos'}
+            </button>
+          </form>
+
+          <form onSubmit={onCambiarPassword} className="lp-perfil-card">
+            <h2 className="lp-perfil-card-titulo">
+              <LockResetIcon /> Seguridad
+            </h2>
+
+            {errorPassword ? <Alert tono="error">{errorPassword}</Alert> : null}
+            {passwordCambiada ? <Alert tono="exito">Contraseña actualizada.</Alert> : null}
+
+            <Input
+              label="Contraseña actual"
+              esPassword
+              icon={<LockResetIcon />}
+              autoComplete="current-password"
+              required
+              value={passwordActual}
+              onChange={(e) => setPasswordActual(e.target.value)}
+              disabled={cambiandoPassword}
+            />
+            <Input
+              label="Nueva contraseña"
+              esPassword
+              icon={<LockResetIcon />}
+              autoComplete="new-password"
+              required
+              value={nuevaPassword}
+              onChange={(e) => setNuevaPassword(e.target.value)}
+              disabled={cambiandoPassword}
+              errorText={errorPoliticaPassword ?? undefined}
+            />
+
+            <button
+              type="submit"
+              className="lp-perfil-btn lp-perfil-btn-primary"
+              disabled={cambiandoPassword}
+            >
+              {cambiandoPassword ? 'Guardando…' : 'Cambiar contraseña'}
+            </button>
+          </form>
+        </div>
       </div>
-
-      <form onSubmit={onGuardarDatos} className="admin-card" style={{ maxWidth: 420 }}>
-        <h2>Datos</h2>
-
-        {errorDatos ? <Alert tono="error">{errorDatos}</Alert> : null}
-        {datosGuardados ? <Alert tono="exito">Datos actualizados.</Alert> : null}
-
-        <Input label="Correo" value={estado.usuario.correo} icon={<MailIcon />} disabled readOnly />
-        <Input
-          label="Nombre completo"
-          icon={<PersonIcon />}
-          required
-          value={nombreCompleto}
-          onChange={(e) => setNombreCompleto(e.target.value)}
-          disabled={guardandoDatos || perfil === null}
-        />
-        <Input
-          label="Teléfono"
-          type="tel"
-          icon={<PinIcon />}
-          required
-          value={telefono}
-          onChange={(e) => setTelefono(e.target.value)}
-          disabled={guardandoDatos || perfil === null}
-        />
-
-        <Button type="submit" disabled={guardandoDatos || perfil === null}>
-          {guardandoDatos ? 'Guardando…' : 'Guardar datos'}
-        </Button>
-      </form>
-
-      <form onSubmit={onCambiarPassword} className="admin-card" style={{ maxWidth: 420 }}>
-        <h2>Cambiar contraseña</h2>
-
-        {errorPassword ? <Alert tono="error">{errorPassword}</Alert> : null}
-        {passwordCambiada ? <Alert tono="exito">Contraseña actualizada.</Alert> : null}
-
-        <Input
-          label="Contraseña actual"
-          esPassword
-          icon={<LockResetIcon />}
-          autoComplete="current-password"
-          required
-          value={passwordActual}
-          onChange={(e) => setPasswordActual(e.target.value)}
-          disabled={cambiandoPassword}
-        />
-        <Input
-          label="Nueva contraseña"
-          esPassword
-          icon={<LockResetIcon />}
-          autoComplete="new-password"
-          required
-          value={nuevaPassword}
-          onChange={(e) => setNuevaPassword(e.target.value)}
-          disabled={cambiandoPassword}
-          errorText={errorPoliticaPassword ?? undefined}
-        />
-
-        <Button type="submit" disabled={cambiandoPassword}>
-          {cambiandoPassword ? 'Guardando…' : 'Cambiar contraseña'}
-        </Button>
-      </form>
     </div>
   );
 }

@@ -1,0 +1,1088 @@
+/* ============================================================
+   PEDIDOS TAB — FONDO BLANCO CON ÍCONO LATERAL
+   ============================================================ */
+
+/* ===== WRAPPER ===== */
+.lp-pedidos-wrapper {
+  position: relative;
+  display: flex;
+  gap: 0;
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  background: #ffffff;
+}
+
+/* ============================================================
+   ÍCONO LATERAL (MÁS GRANDE, transparente, sin marco)
+   ============================================================ */
+
+.lp-pedidos-icon-side {
+  position: sticky;
+  top: 0;
+  flex-shrink: 0;
+  width: 180px; 
+  height: 100%;
+  min-height: 400px;
+  display: flex;
+  align-items: flex-start; 
+  justify-content: flex-start;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+}
+
+.lp-pedidos-icon-img {
+  width: 100%;
+  max-width: 160px;
+  height: auto;
+  object-fit: contain;
+  opacity: 0.85;
+  display: block;
+  filter: drop-shadow(0 2px 8px rgba(47, 65, 86, 0.04));
+  margin-top: 10px;
+}
+
+/* ============================================================
+   CONTENIDO PRINCIPAL (ocupa el resto del ancho)
+   ============================================================ */
+
+.lp-pedidos-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 24px 24px 0;
+  height: 100%;
+  max-height: 100vh; 
+  min-width: 0;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.lp-pedidos-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  flex-shrink: 0;
+  padding-top: 24px;
+}
+
+.lp-pedidos-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lp-pedidos-title {
+  font-family: 'Fraunces', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2F4156;
+  margin: 0;
+}
+
+.lp-pedidos-subtitle {
+  color: rgba(47, 65, 86, 0.35);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.lp-pedidos-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ============================================================
+   UMBRAL MINI
+   ============================================================ */
+
+.lp-pedidos-umbral-mini {
+  background: rgba(47, 65, 86, 0.02);
+  border: 1px solid rgba(47, 65, 86, 0.04);
+  border-radius: 10px;
+  padding: 4px 12px;
+}
+
+.lp-pedidos-umbral-mini-btn {
+  background: none;
+  border: none;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #2F4156;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  font-family: 'Inter', sans-serif;
+}
+
+.lp-pedidos-umbral-mini-btn:hover {
+  background: rgba(86, 124, 141, 0.04);
+}
+
+.lp-pedidos-umbral-mini-form {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.lp-pedidos-umbral-mini-label {
+  font-size: 0.65rem;
+  color: rgba(47, 65, 86, 0.4);
+}
+
+.lp-pedidos-umbral-mini-input {
+  width: 38px;
+  padding: 2px 4px;
+  border: 1.5px solid rgba(47, 65, 86, 0.06);
+  border-radius: 6px;
+  font-size: 0.7rem;
+  text-align: center;
+  font-weight: 600;
+  background: #ffffff;
+  color: #2F4156;
+}
+
+.lp-pedidos-umbral-mini-input:focus {
+  outline: none;
+  border-color: #567C8D;
+}
+
+/* ============================================================
+   ESTADÍSTICAS
+   ============================================================ */
+
+.lp-pedidos-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.lp-pedidos-stat {
+  background: rgba(47, 65, 86, 0.01);
+  border: 1px solid rgba(47, 65, 86, 0.04);
+  border-radius: 12px;
+  padding: 12px 16px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.lp-pedidos-stat:hover {
+  background: rgba(47, 65, 86, 0.02);
+}
+
+.lp-pedidos-stat-number {
+  display: block;
+  font-family: 'Fraunces', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2F4156;
+}
+
+.lp-pedidos-stat-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(47, 65, 86, 0.3);
+}
+
+.lp-pedidos-stat-pendiente .lp-pedidos-stat-number {
+  color: #f59e0b;
+}
+.lp-pedidos-stat-camino .lp-pedidos-stat-number {
+  color: #3b82f6;
+}
+.lp-pedidos-stat-entregado .lp-pedidos-stat-number {
+  color: #22c55e;
+}
+
+/* ============================================================
+   FILTROS
+   ============================================================ */
+
+.lp-pedidos-filtros {
+  background: rgba(47, 65, 86, 0.01);
+  border: 1px solid rgba(47, 65, 86, 0.04);
+  border-radius: 12px;
+  padding: 14px 18px;
+  flex-shrink: 0;
+}
+
+.lp-pedidos-filtros-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lp-pedidos-filtros-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 10px;
+}
+
+.lp-pedidos-filtro-grupo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.lp-pedidos-filtro-grupo-full {
+  grid-column: span 1;
+}
+
+.lp-pedidos-filtro-label {
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(47, 65, 86, 0.2);
+}
+
+.lp-pedidos-select,
+.lp-pedidos-input {
+  padding: 6px 10px;
+  border: 1.5px solid rgba(47, 65, 86, 0.04);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  background: #ffffff;
+  color: #2F4156;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.lp-pedidos-select:focus,
+.lp-pedidos-input:focus {
+  outline: none;
+  border-color: #567C8D;
+  box-shadow: 0 0 0 4px rgba(86, 124, 141, 0.04);
+}
+
+.lp-pedidos-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%232F4156' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 26px;
+}
+
+.lp-pedidos-filtros-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* ============================================================
+   BOTONES
+   ============================================================ */
+
+.lp-pedidos-btn {
+  padding: 5px 18px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Inter', sans-serif;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.lp-pedidos-btn-primary {
+  background: #2F4156;
+  color: white;
+}
+
+.lp-pedidos-btn-primary:hover {
+  background: #1a2a3a;
+  transform: translateY(-1px);
+}
+
+.lp-pedidos-btn-secondary {
+  background: rgba(47, 65, 86, 0.02);
+  color: #2F4156;
+  border: 1px solid rgba(47, 65, 86, 0.04);
+}
+
+.lp-pedidos-btn-secondary:hover {
+  background: rgba(47, 65, 86, 0.04);
+}
+
+/* ============================================================
+   LISTA DE PEDIDOS (UNO DEBAJO DEL OTRO, EN FILA)
+   ============================================================ */
+
+.lp-pedidos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lp-pedidos-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: #ffffff;
+  border: 1px solid rgba(47, 65, 86, 0.04);
+  border-radius: 12px;
+  padding: 12px 18px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.2, 1);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.01);
+}
+
+.lp-pedidos-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  border-color: rgba(86, 124, 141, 0.12);
+}
+
+.lp-pedidos-card-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+  min-width: 0;
+}
+
+.lp-pedidos-card-codigo {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #2F4156;
+  white-space: nowrap;
+}
+
+.lp-pedidos-card-paciente {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.lp-pedidos-card-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(86, 124, 141, 0.06);
+  color: #567C8D;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.lp-pedidos-card-nombre {
+  font-weight: 500;
+  font-size: 0.88rem;
+  color: #2F4156;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lp-pedidos-card-direccion {
+  font-size: 0.72rem;
+  color: rgba(47, 65, 86, 0.3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lp-pedidos-card-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+.lp-pedidos-card-info-item {
+  display: flex;
+  flex-direction: column;
+  min-width: 100px;
+}
+
+.lp-pedidos-card-info-label {
+  font-size: 0.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(47, 65, 86, 0.2);
+}
+
+.lp-pedidos-card-info-value {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #2F4156;
+}
+
+.lp-pedidos-card-sin-asignar {
+  color: rgba(47, 65, 86, 0.2);
+  font-style: italic;
+  font-size: 0.75rem;
+}
+
+.lp-pedidos-card-demora {
+  margin: 0;
+}
+
+.lp-pedidos-card-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.lp-pedidos-card-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.lp-pedidos-card-ver {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background: rgba(86, 124, 141, 0.04);
+  color: #567C8D;
+  font-weight: 600;
+  font-size: 0.72rem;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Inter', sans-serif;
+}
+
+.lp-pedidos-card-ver:hover {
+  background: rgba(86, 124, 141, 0.08);
+}
+
+/* ============================================================
+   DETALLE — DISEÑO SOFISTICADO Y ELEGANTE
+   ============================================================ */
+
+.lp-pedidos-detalle {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%;
+  overflow-y: auto;
+  padding: 20px 0 20px 0;
+}
+
+.lp-pedidos-detalle::-webkit-scrollbar {
+  width: 5px;
+}
+
+.lp-pedidos-detalle::-webkit-scrollbar-track {
+  background: rgba(47, 65, 86, 0.02);
+  border-radius: 10px;
+}
+
+.lp-pedidos-detalle::-webkit-scrollbar-thumb {
+  background: rgba(86, 124, 141, 0.12);
+  border-radius: 10px;
+}
+
+.lp-pedidos-detalle::-webkit-scrollbar-thumb:hover {
+  background: rgba(86, 124, 141, 0.2);
+}
+
+/* Botón volver */
+.lp-pedidos-detalle-volver {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background: rgba(47, 65, 86, 0.02);
+  padding: 8px 18px;
+  border-radius: 10px;
+  color: #567C8D;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.3s ease;
+  width: fit-content;
+  border: 1px solid rgba(47, 65, 86, 0.04);
+  flex-shrink: 0;
+}
+
+.lp-pedidos-detalle-volver:hover {
+  background: rgba(86, 124, 141, 0.08);
+  color: #2F4156;
+  transform: translateX(-4px);
+}
+
+/* Cabecera Hero del detalle */
+.lp-pedidos-detalle-hero {
+  position: relative;
+  width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 15px 40px rgba(47, 65, 86, 0.15);
+  background: linear-gradient(135deg, #2F4156 0%, #4A6B83 100%);
+}
+
+.lp-pedidos-detalle-hero-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 32px;
+}
+
+.lp-pedidos-detalle-hero-left {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.lp-pedidos-detalle-titulo {
+  font-family: 'Fraunces', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.lp-pedidos-detalle-fecha {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+.lp-pedidos-detalle-estado-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+/* >>> CORRECCIÓN SOFISTICADA: Estado y Alarma con glassmorphism <<< */
+.lp-pedidos-detalle-hero .lp-estado-pedido-pill,
+.lp-pedidos-detalle-hero .lp-alarma-demora {
+  background: rgba(255, 255, 255, 0.15); /* Cristal blanco translúcido */
+  backdrop-filter: blur(10px);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.lp-pedidos-detalle-hero .lp-alarma-demora {
+  background: rgba(245, 158, 11, 0.2); /* Cristal amarillo suave */
+  color: #fef3c7;
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+/* >>> CORRECCIÓN: Código de entrega con azul corporativo <<< */
+.lp-pedidos-detalle-codigo {
+  position: relative;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid #567C8D; /* Azul corporativo suave */
+  border-radius: 16px;
+  padding: 12px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin: -30px 32px 0 32px;
+  flex-shrink: 0;
+  box-shadow: 0 8px 24px rgba(86, 124, 141, 0.15); /* Sombra azul suave */
+}
+
+.lp-pedidos-detalle-codigo-label {
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: rgba(47, 65, 86, 0.6);
+  text-transform: uppercase;
+}
+
+.lp-pedidos-detalle-codigo-valor {
+  font-size: 1.8rem;
+  font-weight: 900;
+  letter-spacing: 0.25em;
+  color: #2F4156; /* Azul corporativo principal */
+  font-family: 'Fraunces', serif;
+  text-shadow: 0 2px 6px rgba(47, 65, 86, 0.1);
+}
+
+/* Grid asimétrico de tarjetas */
+.lp-pedidos-detalle-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.lp-pedidos-detalle-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 4px 20px rgba(47, 65, 86, 0.04);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.2, 1);
+}
+
+.lp-pedidos-detalle-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(47, 65, 86, 0.1);
+}
+
+.lp-pedidos-detalle-card-titulo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Fraunces', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2F4156;
+  margin: 0 0 6px 0;
+}
+
+.lp-pedidos-detalle-card-titulo svg {
+  width: 18px;
+  height: 18px;
+  color: #567C8D;
+}
+
+.lp-pedidos-detalle-card-nombre {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #2F4156;
+  margin: 0;
+}
+
+.lp-pedidos-detalle-card-correo {
+  font-size: 0.8rem;
+  color: rgba(47, 65, 86, 0.5);
+  margin: 0;
+}
+
+.lp-pedidos-detalle-card-telefono {
+  font-size: 0.8rem;
+  color: rgba(47, 65, 86, 0.4);
+  margin: 0;
+}
+
+.lp-pedidos-detalle-card-direccion,
+.lp-pedidos-detalle-card-farmacia {
+  font-size: 0.8rem;
+  color: rgba(47, 65, 86, 0.5);
+  margin: 0;
+}
+
+.lp-pedidos-detalle-card-sin {
+  font-size: 0.85rem;
+  color: rgba(47, 65, 86, 0.3);
+  font-style: italic;
+  margin: 0;
+}
+
+.lp-pedidos-detalle-card-docs {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* Medicamentos */
+.lp-pedidos-detalle-medicamentos {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.lp-pedidos-detalle-medicamento {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 14px;
+  background: rgba(86, 124, 141, 0.04);
+  border-radius: 10px;
+  border-left: 3px solid #567C8D;
+  transition: all 0.2s ease;
+}
+
+.lp-pedidos-detalle-medicamento:hover {
+  background: rgba(86, 124, 141, 0.08);
+  transform: translateX(4px);
+}
+
+.lp-pedidos-detalle-medicamento-nombre {
+  font-weight: 600;
+  color: #2F4156;
+  font-size: 0.9rem;
+}
+
+.lp-pedidos-detalle-medicamento-detalle {
+  font-size: 0.78rem;
+  color: rgba(47, 65, 86, 0.5);
+}
+
+.lp-pedidos-detalle-medicamento-posologia {
+  font-size: 0.75rem;
+  color: rgba(47, 65, 86, 0.35);
+  font-style: italic;
+}
+
+/* Seguimiento */
+.lp-pedidos-detalle-seguimiento {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(47, 65, 86, 0.04);
+}
+
+/* ============================================================
+   MINIATURA
+   ============================================================ */
+
+.lp-pedidos-miniatura {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;
+}
+
+.lp-pedidos-miniatura-label {
+  font-size: 0.55rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(47, 65, 86, 0.4);
+  margin-bottom: 4px;
+}
+
+.lp-pedidos-miniatura-img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid rgba(47, 65, 86, 0.08);
+  transition: all 0.2s ease;
+}
+
+.lp-pedidos-miniatura-img:hover {
+  transform: scale(1.05);
+  border-color: #567C8D;
+}
+
+.lp-pedidos-miniatura-empty {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  border: 1.5px dashed rgba(47, 65, 86, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.5rem;
+  color: rgba(47, 65, 86, 0.2);
+  text-align: center;
+}
+
+/* ============================================================
+   ASIGNAR
+   ============================================================ */
+
+.lp-pedidos-asignar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.lp-pedidos-asignar-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.lp-pedidos-asignar-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background: rgba(47, 65, 86, 0.02);
+  border: 1px solid rgba(47, 65, 86, 0.04);
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.lp-pedidos-asignar-item:hover {
+  background: rgba(86, 124, 141, 0.06);
+  border-color: rgba(86, 124, 141, 0.1);
+}
+
+.lp-pedidos-asignar-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.lp-pedidos-asignar-nombre {
+  font-weight: 600;
+  color: #2F4156;
+  font-size: 0.85rem;
+}
+
+.lp-pedidos-asignar-distancia {
+  font-size: 0.75rem;
+  color: #567C8D;
+  font-weight: 500;
+}
+
+/* ============================================================
+   LOADING Y EMPTY
+   ============================================================ */
+
+.lp-pedidos-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 40px 0;
+  color: rgba(47, 65, 86, 0.2);
+}
+
+.lp-pedidos-loading-spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid rgba(86, 124, 141, 0.06);
+  border-top-color: #567C8D;
+  border-radius: 50%;
+  animation: lp-spin 0.8s linear infinite;
+}
+
+@keyframes lp-spin {
+  to { transform: rotate(360deg); }
+}
+
+.lp-pedidos-empty {
+  text-align: center;
+  padding: 40px 20px;
+  background: rgba(47, 65, 86, 0.01);
+  border: 1px solid rgba(47, 65, 86, 0.04);
+  border-radius: 12px;
+}
+
+.lp-pedidos-empty-icon {
+  font-size: 2.8rem;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.lp-pedidos-empty h3 {
+  font-size: 1rem;
+  color: #2F4156;
+  margin: 0 0 2px 0;
+}
+
+.lp-pedidos-empty p {
+  color: rgba(47, 65, 86, 0.25);
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+/* ============================================================
+   ALARMA DEMORA
+   ============================================================ */
+
+.lp-alarma-demora {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  border-radius: 60px;
+  border: 1.5px solid #2F4156;
+  background: rgba(47, 65, 86, 0.02);
+  color: #2F4156;
+  font-size: 0.58rem;
+  font-weight: 700;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1024px) {
+  .lp-pedidos-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .lp-pedidos-card-info {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .lp-pedidos-detalle-grid {
+    grid-template-columns: 1fr;
+  }
+  .lp-pedidos-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .lp-pedidos-icon-side {
+    width: 80px;
+  }
+  .lp-pedidos-icon-img {
+    max-width: 70px;
+  }
+}
+
+@media (max-width: 768px) {
+  .lp-pedidos-wrapper {
+    flex-direction: column;
+  }
+
+  .lp-pedidos-icon-side {
+    position: relative;
+    width: 100%;
+    min-height: auto;
+    height: 60px;
+    padding: 8px 0;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .lp-pedidos-icon-img {
+    max-width: 48px;
+    height: 48px;
+  }
+
+  .lp-pedidos-content {
+    padding: 0 16px 16px 16px;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .lp-pedidos-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .lp-pedidos-title {
+    font-size: 1.3rem;
+  }
+  .lp-pedidos-header-right {
+    width: 100%;
+  }
+  .lp-pedidos-umbral-mini {
+    width: 100%;
+  }
+  .lp-pedidos-filtros-grid {
+    grid-template-columns: 1fr;
+  }
+  .lp-pedidos-filtros-actions {
+    flex-direction: column;
+  }
+  .lp-pedidos-filtros-actions .lp-pedidos-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .lp-pedidos-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .lp-pedidos-detalle-hero-content {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 24px;
+  }
+  .lp-pedidos-detalle-codigo {
+    margin: -20px 24px 0 24px;
+    padding: 10px 16px;
+  }
+  .lp-pedidos-detalle-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .lp-pedidos-asignar-item {
+    flex-direction: column;
+    gap: 4px;
+    align-items: stretch;
+  }
+  .lp-pedidos-asignar-info {
+    flex-direction: column;
+    gap: 2px;
+    align-items: flex-start;
+  }
+  .lp-pedidos-detalle-codigo-valor {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .lp-pedidos-stats {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .lp-pedidos-stat {
+    padding: 8px 12px;
+  }
+  .lp-pedidos-stat-number {
+    font-size: 1.2rem;
+  }
+  .lp-pedidos-card {
+    padding: 12px 14px;
+  }
+  .lp-pedidos-card-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .lp-pedidos-detalle-card {
+    padding: 14px;
+  }
+  .lp-pedidos-detalle-hero-content {
+    padding: 20px;
+  }
+  .lp-pedidos-detalle-codigo {
+    margin: -15px 16px 0 16px;
+    padding: 8px 12px;
+  }
+  .lp-pedidos-detalle-codigo-valor {
+    font-size: 1rem;
+  }
+  .lp-pedidos-miniatura-img,
+  .lp-pedidos-miniatura-empty {
+    width: 48px;
+    height: 48px;
+  }
+  .lp-pedidos-icon-side {
+    height: 50px;
+  }
+  .lp-pedidos-icon-img {
+    max-width: 40px;
+    height: 40px;
+  }
+  .lp-pedidos-content {
+    padding: 0 12px 12px 12px;
+  }
+}

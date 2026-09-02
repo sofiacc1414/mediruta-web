@@ -5,6 +5,7 @@ import { Button } from '../../../shared/components/Button';
 import { Input } from '../../../shared/components/Input';
 import { LockIcon, MailIcon } from '../../../shared/components/icons';
 import { useAuth } from '../hooks/useAuth';
+import './LoginPage.css';
 
 /** G03/G04 de HU-01 — login del panel administrativo (solo ROOT/ADMINISTRADOR). */
 export function LoginPage() {
@@ -31,73 +32,90 @@ export function LoginPage() {
   }
 
   return (
-    <main
-      style={{
-        minHeight: '100svh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 'var(--space-6)',
-      }}
-    >
-      <form
-        onSubmit={onSubmit}
-        style={{
-          width: '100%',
-          maxWidth: 380,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 'var(--space-4)',
-          background: 'var(--color-white)',
-          padding: 'var(--space-8)',
-          borderRadius: 24,
-          boxShadow: '0 4px 24px rgba(47, 65, 86, 0.12)',
-        }}
-      >
-        <img
-          src="/logo-mediruta.png"
-          alt="MediRuta"
-          style={{ height: 40, width: 'auto', margin: '0 auto' }}
-        />
-        <h1 style={{ fontSize: '1.5rem', textAlign: 'center' }}>Iniciar sesión</h1>
-        <p style={{ textAlign: 'center', color: 'var(--color-teal)', marginTop: -8 }}>
-          Bienvenido de nuevo a MediRuta
-        </p>
-
-        {estado.tipo === 'anonimo' && estado.error ? <Alert tono="error">{estado.error}</Alert> : null}
-
-        <Input
-          label="Correo electrónico"
-          type="email"
-          icon={<MailIcon />}
-          autoComplete="email"
-          required
-          value={correo}
-          onChange={(e) => setCorreo(e.target.value)}
-          disabled={enviando}
-        />
-        <Input
-          label="Contraseña"
-          esPassword
-          icon={<LockIcon />}
-          autoComplete="current-password"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          disabled={enviando}
-        />
-
-        <Button type="submit" disabled={enviando}>
-          {enviando ? 'Ingresando…' : 'Entrar'}
-        </Button>
-
-        <Link
-          to="/recuperar-contrasena"
-          style={{ textAlign: 'center', color: 'var(--color-teal)', fontSize: '0.9rem' }}
+    <main className="lp-login-page">
+      <div className="lp-login-container">
+        {/* ===== BOTÓN VOLVER ===== */}
+        <button 
+          className="lp-login-back" 
+          onClick={() => navigate('/')}
+          aria-label="Volver al inicio"
         >
-          Olvidé mi contraseña
-        </Link>
-      </form>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M19 12H5" />
+            <path d="M12 19l-7-7 7-7" />
+          </svg>
+          <span>Volver</span>
+        </button>
+
+        {/* ===== LADO IZQUIERDO: IMAGEN ===== */}
+        <div className="lp-login-image">
+          <div className="lp-login-image-overlay" />
+          <img 
+            src="/images/Login.jpg" 
+            alt="MediRuta - Entrega de medicamentos" 
+            className="lp-login-image-bg"
+          />
+          <div className="lp-login-image-content">
+            <h2>
+              Tu medicamento, <br />
+              <span className="lp-login-image-highlight">contigo y a tiempo.</span>
+            </h2>
+            <p>Accede al panel administrativo de MediRuta</p>
+          </div>
+        </div>
+
+        {/* ===== LADO DERECHO: FORMULARIO ===== */}
+        <div className="lp-login-form">
+          <div className="lp-login-form-header">
+            <h1>Accede a tu cuenta</h1>
+            <p>Ingresa tus credenciales para continuar</p>
+          </div>
+
+          {estado.tipo === 'anonimo' && estado.error ? (
+            <Alert tono="error">{estado.error}</Alert>
+          ) : null}
+
+          <form onSubmit={onSubmit} className="lp-login-form-fields">
+            <Input
+              label="Correo electrónico"
+              type="email"
+              icon={<MailIcon />}
+              autoComplete="email"
+              required
+              value={correo}
+              onChange={(e) => setCorreo(e.target.value)}
+              disabled={enviando}
+              placeholder="tu@correo.com"
+            />
+            <Input
+              label="Contraseña"
+              esPassword
+              icon={<LockIcon />}
+              autoComplete="current-password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              disabled={enviando}
+              placeholder="••••••••"
+            />
+
+            <button type="submit" disabled={enviando} className="lp-login-btn">
+              {enviando ? 'Ingresando…' : 'Entrar'}
+            </button>
+
+            <Link
+              to="/recuperar-contrasena"
+              className="lp-login-forgot"
+            >
+              ¿Olvidaste tu contraseña?
+            </Link>
+          </form>
+
+          <div className="lp-login-form-footer">
+            <p>¿No tienes cuenta? <Link to="/recuperar-contrasena">Contacta con el administrador</Link></p>
+          </div>
+        </div>
+      </div>
     </main>
   );
 }

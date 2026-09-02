@@ -4,6 +4,7 @@ import { Button } from '../../../shared/components/Button';
 import { ApiError, ApiSinConexionError } from '../../../shared/lib/apiError';
 import { useAuth } from '../../usuarios/hooks/useAuth';
 import { listarNovedadesAbiertas, resolverNovedad, type NovedadAbierta } from '../api/pedidosAdminApi';
+import './NovedadesTab.css';
 
 const ETIQUETAS_ORIGEN: Record<NovedadAbierta['origen'], string> = {
   paciente: 'el paciente',
@@ -70,41 +71,57 @@ export function NovedadesTab() {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
-      <div className="admin-page-header">
-        <h1>Novedades</h1>
-        <p>Incidentes reportados por los domiciliarios sobre un pedido en curso.</p>
+    <div className="lp-novedades-wrapper">
+      {/* ===== ÍCONO LATERAL ===== */}
+      <div className="lp-novedades-icon-side">
+        <img 
+          src="/images/Novedades.png" 
+          alt="Novedades"
+          className="lp-novedades-icon-img"
+        />
       </div>
 
-      {error ? <Alert tono="error">{error}</Alert> : null}
-
-      {novedades === null && !error ? <p className="admin-muted">Cargando…</p> : null}
-
-      {novedades?.length === 0 ? (
-        <div className="admin-card admin-empty">No hay novedades pendientes de atender.</div>
-      ) : null}
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
-        {novedades?.map((novedad) => (
-          <div key={novedad.id} className="admin-card" style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div>
-              <div style={{ fontWeight: 700 }}>{novedad.codigoPedido ?? 'Pedido'}</div>
-              <div>{novedad.detalle}</div>
-              <div className="admin-muted">
-                Reportada por {ETIQUETAS_ORIGEN[novedad.origen]} ({novedad.reportadaPorCorreo}) el{' '}
-                {formatearFechaHora(novedad.creadoEn)}
-              </div>
-            </div>
-            <Button
-              variante="secondary"
-              style={{ width: 'auto', flexShrink: 0 }}
-              onClick={() => onResolver(novedad.id)}
-              disabled={resolviendo === novedad.id}
-            >
-              {resolviendo === novedad.id ? 'Resolviendo…' : 'Resolver'}
-            </Button>
+      <div className="lp-novedades-content">
+        <div className="lp-novedades-header">
+          <div className="lp-novedades-header-left">
+            <h1 className="lp-novedades-title">Novedades</h1>
+            <p className="lp-novedades-subtitle">Incidentes reportados por los domiciliarios sobre un pedido en curso.</p>
           </div>
-        ))}
+        </div>
+
+        {error ? <Alert tono="error">{error}</Alert> : null}
+
+        {novedades === null && !error ? <p className="admin-muted">Cargando…</p> : null}
+
+        {novedades?.length === 0 ? (
+          <div className="lp-novedades-vacio">
+            <h3>¡Todo en orden!</h3>
+            <p>No hay novedades pendientes de atender.</p>
+          </div>
+        ) : null}
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          {novedades?.map((novedad) => (
+            <div key={novedad.id} className="lp-novedades-card">
+              <div className="lp-novedades-card-info">
+                <div className="lp-novedades-card-codigo">{novedad.codigoPedido ?? 'Pedido'}</div>
+                <div className="lp-novedades-card-detalle">{novedad.detalle}</div>
+                <div className="lp-novedades-card-meta">
+                  Reportada por {ETIQUETAS_ORIGEN[novedad.origen]} ({novedad.reportadaPorCorreo}) el{' '}
+                  {formatearFechaHora(novedad.creadoEn)}
+                </div>
+              </div>
+              <button
+                type="button"
+                className="lp-novedades-btn lp-novedades-btn-secondary"
+                onClick={() => onResolver(novedad.id)}
+                disabled={resolviendo === novedad.id}
+              >
+                {resolviendo === novedad.id ? 'Resolviendo…' : 'Resolver'}
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

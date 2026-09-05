@@ -7,7 +7,7 @@ import {
   obtenerConfiguracionAdmin,
 } from '../api/configuracionAdminApi';
 import { EstadoPedidoPill } from '../components/EstadoPedidoPill';
-import { DomiciliarioCard, MiniaturaDoc, PacienteCard } from '../components/PedidoResumenCards';
+import { DomiciliarioCard, MedicamentosRecetaCard, PacienteCard } from '../components/PedidoResumenCards';
 import { TrackingTimeline } from '../components/TrackingTimeline';
 import {
   asignarDomiciliario,
@@ -521,27 +521,7 @@ function PedidoDetalle({
           </div>
 
           {/* MEDICAMENTOS */}
-          <div className="lp-pedidos-detalle-card">
-            <h3 className="lp-pedidos-detalle-card-titulo">💊 Medicamentos</h3>
-            {detalle.medicamentos.length === 0 ? (
-              <p className="lp-pedidos-detalle-card-sin">Ninguno cargado</p>
-            ) : (
-              <div className="lp-pedidos-detalle-medicamentos">
-                {detalle.medicamentos.map((m, i) => (
-                  <div key={i} className="lp-pedidos-detalle-medicamento">
-                    <span className="lp-pedidos-detalle-medicamento-nombre">{m.nombre ?? 'Sin nombre'}</span>
-                    <span className="lp-pedidos-detalle-medicamento-detalle">
-                      {[m.concentracion, m.formaFarmaceutica, m.cantidad].filter(Boolean).join(' · ')}
-                    </span>
-                    {m.posologia && (
-                      <span className="lp-pedidos-detalle-medicamento-posologia">Posología: {m.posologia}</span>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-            <MiniaturaDoc etiqueta="Foto de la receta" url={detalle.recetaUrl} />
-          </div>
+          <MedicamentosRecetaCard medicamentos={detalle.medicamentos} recetaUrl={detalle.recetaUrl} />
 
           {/* SEGUIMIENTO */}
           <div className="lp-pedidos-detalle-seguimiento">

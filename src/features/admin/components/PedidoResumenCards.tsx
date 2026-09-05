@@ -20,16 +20,34 @@ type PacienteResumen = {
   cedulaReversoUrl: string | null;
 };
 
+/** HU-07 (ronda 7) — cuál de las 2 columnas de la comparación es esta
+ * tarjeta, para que el resaltado del campo cambiado se distinga entre
+ * "así estaba" y "así queda" sin salir de la paleta oficial (Beige/Teal
+ * para lo anterior, Sky Blue/Navy para lo nuevo — nada de rojo/verde,
+ * context.md Parte A, §4). `undefined` = uso fuera de una comparación
+ * (ej. `PedidosTab.tsx`, que nunca resalta nada), mantiene el resaltado
+ * genérico anterior. */
+type VarianteResaltado = 'anterior' | 'nuevo';
+
+function claseResaltado(activo: boolean, variante?: VarianteResaltado): string {
+  if (!activo) return '';
+  if (variante === 'anterior') return ' lp-resaltado-anterior';
+  if (variante === 'nuevo') return ' lp-resaltado-nuevo';
+  return ' lp-resaltado';
+}
+
 export function PacienteCard({
   paciente,
   direccionEntrega,
   resaltarDireccion = false,
+  variante,
 }: {
   paciente: PacienteResumen;
   direccionEntrega: string | null;
   /** HU-07 (ronda 5) — resalta la línea de dirección cuando es el dato
    * que el paciente pidió corregir (comparación en `NovedadDetalle`). */
   resaltarDireccion?: boolean;
+  variante?: VarianteResaltado;
 }) {
   return (
     <div className="lp-pedidos-detalle-card">
@@ -37,7 +55,7 @@ export function PacienteCard({
       <p className="lp-pedidos-detalle-card-nombre">{paciente.nombre ?? '—'}</p>
       <p className="lp-pedidos-detalle-card-correo">{paciente.correo}</p>
       <p className="lp-pedidos-detalle-card-telefono">{paciente.telefono ?? 'Sin teléfono'}</p>
-      <p className={`lp-pedidos-detalle-card-direccion${resaltarDireccion ? ' lp-resaltado' : ''}`}>
+      <p className={`lp-pedidos-detalle-card-direccion${claseResaltado(resaltarDireccion, variante)}`}>
         📍 Dirección: {direccionEntrega ?? '—'}
       </p>
       <div className="lp-pedidos-detalle-card-docs">
@@ -58,10 +76,12 @@ export function DomiciliarioCard({
   domiciliario,
   direccionFarmacia,
   resaltarFarmacia = false,
+  variante,
 }: {
   domiciliario: DomiciliarioResumen;
   direccionFarmacia: string | null;
   resaltarFarmacia?: boolean;
+  variante?: VarianteResaltado;
 }) {
   return (
     <div className="lp-pedidos-detalle-card">
@@ -75,7 +95,7 @@ export function DomiciliarioCard({
       ) : (
         <p className="lp-pedidos-detalle-card-sin">Todavía sin asignar</p>
       )}
-      <p className={`lp-pedidos-detalle-card-farmacia${resaltarFarmacia ? ' lp-resaltado' : ''}`}>
+      <p className={`lp-pedidos-detalle-card-farmacia${claseResaltado(resaltarFarmacia, variante)}`}>
         🏪 Farmacia: {direccionFarmacia ?? '—'}
       </p>
     </div>
@@ -96,6 +116,7 @@ export function MedicamentosRecetaCard({
   resaltarReceta = false,
   recetaGrande = false,
   onAmpliarReceta,
+  variante,
 }: {
   medicamentos: Medicamento[];
   recetaUrl: string | null;
@@ -103,11 +124,12 @@ export function MedicamentosRecetaCard({
   resaltarReceta?: boolean;
   recetaGrande?: boolean;
   onAmpliarReceta?: (url: string) => void;
+  variante?: VarianteResaltado;
 }) {
   return (
     <div className="lp-pedidos-detalle-card">
       <h3 className="lp-pedidos-detalle-card-titulo">💊 Medicamentos</h3>
-      <div className={resaltarMedicamentos ? 'lp-resaltado' : undefined}>
+      <div className={claseResaltado(resaltarMedicamentos, variante).trim() || undefined}>
         {medicamentos.length === 0 ? (
           <p className="lp-pedidos-detalle-card-sin">Ninguno cargado</p>
         ) : (
@@ -127,7 +149,7 @@ export function MedicamentosRecetaCard({
         )}
       </div>
       <div
-        className={resaltarReceta ? 'lp-resaltado' : undefined}
+        className={claseResaltado(resaltarReceta, variante).trim() || undefined}
         style={{ marginTop: '8px', display: 'block' }}
       >
         <MiniaturaDoc

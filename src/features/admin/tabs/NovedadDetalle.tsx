@@ -203,11 +203,13 @@ export function NovedadDetalle({ novedad, onVolver, onResuelta }: Props) {
                       paciente={pedido.paciente}
                       direccionEntrega={pedido.direccionEntrega}
                       resaltarDireccion={resaltarDireccionEntrega}
+                      variante="anterior"
                     />
                     <DomiciliarioCard
                       domiciliario={pedido.domiciliario}
                       direccionFarmacia={pedido.direccionFarmacia}
                       resaltarFarmacia={resaltarDireccionFarmacia}
+                      variante="anterior"
                     />
                     <MedicamentosRecetaCard
                       medicamentos={pedido.medicamentos}
@@ -215,6 +217,7 @@ export function NovedadDetalle({ novedad, onVolver, onResuelta }: Props) {
                       resaltarMedicamentos={resaltarMedicamentos}
                       resaltarReceta={resaltarReceta}
                       recetaGrande
+                      variante="anterior"
                       onAmpliarReceta={(url) =>
                         setImagenAmpliada({ url, label: 'Receta actual' })
                       }
@@ -226,11 +229,13 @@ export function NovedadDetalle({ novedad, onVolver, onResuelta }: Props) {
                       paciente={pedido.paciente}
                       direccionEntrega={direccionEntregaPropuesta}
                       resaltarDireccion={resaltarDireccionEntrega}
+                      variante="nuevo"
                     />
                     <DomiciliarioCard
                       domiciliario={pedido.domiciliario}
                       direccionFarmacia={direccionFarmaciaPropuesta}
                       resaltarFarmacia={resaltarDireccionFarmacia}
+                      variante="nuevo"
                     />
                     <MedicamentosRecetaCard
                       medicamentos={medicamentosPropuestos}
@@ -238,6 +243,7 @@ export function NovedadDetalle({ novedad, onVolver, onResuelta }: Props) {
                       resaltarMedicamentos={resaltarMedicamentos}
                       resaltarReceta={resaltarReceta}
                       recetaGrande
+                      variante="nuevo"
                       onAmpliarReceta={(url) =>
                         setImagenAmpliada({ url, label: 'Receta propuesta' })
                       }

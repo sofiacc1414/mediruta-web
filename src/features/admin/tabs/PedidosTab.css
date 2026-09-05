@@ -806,6 +806,30 @@
   text-align: center;
 }
 
+/* HU-07 (ronda 5) — variante grande de la miniatura, para la
+   comparación de NovedadDetalle: el admin necesita leer texto escrito
+   en la receta, no solo confirmar que hay una foto. */
+.lp-pedidos-miniatura--grande {
+  width: 100%;
+  align-items: stretch;
+}
+
+.lp-pedidos-miniatura-img--grande {
+  width: 100%;
+  max-width: 360px;
+  height: auto;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.lp-pedidos-miniatura-empty--grande {
+  width: 100%;
+  max-width: 360px;
+  height: 200px;
+  font-size: 0.75rem;
+}
+
 /* ============================================================
    ASIGNAR
    ============================================================ */

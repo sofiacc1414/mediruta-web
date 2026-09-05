@@ -3,7 +3,7 @@ import { Alert } from '../../../shared/components/Alert';
 import { ImageLightbox } from '../../../shared/components/ImageLightbox';
 import { ApiError, ApiSinConexionError } from '../../../shared/lib/apiError';
 import { useAuth } from '../../usuarios/hooks/useAuth';
-import { DomiciliarioCard, PacienteCard } from '../components/PedidoResumenCards';
+import { DomiciliarioCard, MedicamentosRecetaCard, PacienteCard } from '../components/PedidoResumenCards';
 import {
   aprobarEdicionNovedad,
   obtenerDetallePedidoAdmin,
@@ -16,7 +16,6 @@ import {
   type TipoNovedad,
 } from '../api/pedidosAdminApi';
 import { AccionesCodigoEntrega } from './AccionesCodigoEntrega';
-import { DiffEdicionPedido } from './DiffEdicionPedido';
 
 type Props = {
   novedad: NovedadAbierta;
@@ -106,6 +105,22 @@ export function NovedadDetalle({ novedad, onVolver, onResuelta }: Props) {
     novedad.tipo === 'edicion' &&
     (!!novedad.datosPropuestos?.medicamentos || !!novedad.recetaPropuestaUrl);
 
+  // HU-07 (ronda 5) — "pedido con el cambio aplicado": cada campo usa
+  // lo propuesto si el paciente lo pidió, si no cae al valor actual —
+  // así la columna de la derecha siempre muestra el pedido completo,
+  // no solo lo que cambió. `resaltar*` marca qué campo es el que
+  // realmente cambió, en ambas columnas.
+  const resaltarDireccionEntrega = !!novedad.datosPropuestos?.direccionEntrega;
+  const resaltarDireccionFarmacia = !!novedad.datosPropuestos?.direccionFarmacia;
+  const resaltarMedicamentos = !!novedad.datosPropuestos?.medicamentos;
+  const resaltarReceta = !!novedad.recetaPropuestaUrl;
+
+  const direccionEntregaPropuesta = novedad.datosPropuestos?.direccionEntrega ?? pedido?.direccionEntrega ?? null;
+  const direccionFarmaciaPropuesta = novedad.datosPropuestos?.direccionFarmacia ?? pedido?.direccionFarmacia ?? null;
+  const medicamentosPropuestos = novedad.datosPropuestos?.medicamentos ?? pedido?.medicamentos ?? [];
+  const recetaActualUrl = novedad.recetaActualUrl ?? pedido?.recetaUrl ?? null;
+  const recetaPropuestaUrl = novedad.recetaPropuestaUrl ?? recetaActualUrl;
+
   return (
     <div className="lp-novedades-wrapper">
       <div className="lp-novedades-content">
@@ -175,53 +190,64 @@ export function NovedadDetalle({ novedad, onVolver, onResuelta }: Props) {
 
         {novedad.tipo === 'edicion' ? (
           <>
-            <DiffEdicionPedido actuales={novedad.datosActuales} propuestos={novedad.datosPropuestos} />
-
-            {novedad.recetaPropuestaUrl ? (
-              <div>
-                <div className="admin-diff-columna-titulo">Foto de la receta</div>
-                <div style={{ display: 'flex', gap: '16px' }}>
-                  <button
-                    type="button"
-                    className="lp-pedidos-miniatura"
-                    style={{ border: 'none', background: 'none', cursor: 'pointer', padding: 0 }}
-                    onClick={() =>
-                      novedad.recetaActualUrl &&
-                      setImagenAmpliada({ url: novedad.recetaActualUrl, label: 'Receta actual' })
-                    }
-                  >
-                    <span className="lp-pedidos-miniatura-label">Actual</span>
-                    {novedad.recetaActualUrl ? (
-                      <img
-                        src={novedad.recetaActualUrl}
-                        alt="Receta actual"
-                        className="lp-pedidos-miniatura-img"
-                      />
-                    ) : (
-                      <div className="lp-pedidos-miniatura-empty">No subida</div>
-                    )}
-                  </button>
-                  <button
-                    type="button"
-                    className="lp-pedidos-miniatura"
-                    style={{ border: 'none', background: 'none', cursor: 'pointer', padding: 0 }}
-                    onClick={() =>
-                      setImagenAmpliada({
-                        url: novedad.recetaPropuestaUrl!,
-                        label: 'Receta propuesta',
-                      })
-                    }
-                  >
-                    <span className="lp-pedidos-miniatura-label">Propuesta</span>
-                    <img
-                      src={novedad.recetaPropuestaUrl}
-                      alt="Receta propuesta"
-                      className="lp-pedidos-miniatura-img"
+            {/* HU-07 (ronda 5) — pedido completo, actual y con el
+                cambio aplicado, lado a lado dentro de UN solo
+                contenedor con scroll (no dos independientes) para que
+                las dos columnas bajen exactamente igual al comparar. */}
+            {pedido ? (
+              <div className="lp-novedades-comparacion-scroll">
+                <div className="lp-novedades-comparacion-grid">
+                  <div className="lp-novedades-comparacion-columna">
+                    <h2 className="lp-novedades-comparacion-columna-titulo">Pedido actual</h2>
+                    <PacienteCard
+                      paciente={pedido.paciente}
+                      direccionEntrega={pedido.direccionEntrega}
+                      resaltarDireccion={resaltarDireccionEntrega}
                     />
-                  </button>
+                    <DomiciliarioCard
+                      domiciliario={pedido.domiciliario}
+                      direccionFarmacia={pedido.direccionFarmacia}
+                      resaltarFarmacia={resaltarDireccionFarmacia}
+                    />
+                    <MedicamentosRecetaCard
+                      medicamentos={pedido.medicamentos}
+                      recetaUrl={recetaActualUrl}
+                      resaltarMedicamentos={resaltarMedicamentos}
+                      resaltarReceta={resaltarReceta}
+                      recetaGrande
+                      onAmpliarReceta={(url) =>
+                        setImagenAmpliada({ url, label: 'Receta actual' })
+                      }
+                    />
+                  </div>
+                  <div className="lp-novedades-comparacion-columna">
+                    <h2 className="lp-novedades-comparacion-columna-titulo">Con el cambio aplicado</h2>
+                    <PacienteCard
+                      paciente={pedido.paciente}
+                      direccionEntrega={direccionEntregaPropuesta}
+                      resaltarDireccion={resaltarDireccionEntrega}
+                    />
+                    <DomiciliarioCard
+                      domiciliario={pedido.domiciliario}
+                      direccionFarmacia={direccionFarmaciaPropuesta}
+                      resaltarFarmacia={resaltarDireccionFarmacia}
+                    />
+                    <MedicamentosRecetaCard
+                      medicamentos={medicamentosPropuestos}
+                      recetaUrl={recetaPropuestaUrl}
+                      resaltarMedicamentos={resaltarMedicamentos}
+                      resaltarReceta={resaltarReceta}
+                      recetaGrande
+                      onAmpliarReceta={(url) =>
+                        setImagenAmpliada({ url, label: 'Receta propuesta' })
+                      }
+                    />
+                  </div>
                 </div>
               </div>
-            ) : null}
+            ) : (
+              <p className="admin-muted">Cargando pedido…</p>
+            )}
 
             {confirmandoRechazo ? (
               <Alert tono="error">

@@ -322,6 +322,65 @@
 }
 
 /* ============================================================
+   COMPARACIÓN COMPLETA DE PEDIDO (ronda 5)
+   ============================================================ */
+
+/* Un solo contenedor con scroll para las dos columnas — así bajan
+   exactamente igual al comparar, sin sincronizar dos scrolls por JS. */
+.lp-novedades-comparacion-scroll {
+  max-height: 65vh;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.lp-novedades-comparacion-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.lp-novedades-comparacion-columna {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.lp-novedades-comparacion-columna-titulo {
+  font-family: 'Fraunces', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2F4156;
+  margin: 0;
+  position: sticky;
+  top: 0;
+  background: #ffffff;
+  padding-bottom: 4px;
+  z-index: 1;
+}
+
+@media (max-width: 860px) {
+  .lp-novedades-comparacion-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================================
+   RESALTE DE CAMPO CAMBIADO (ronda 5 — comparación completa)
+   ============================================================ */
+
+/* Marca el dato que el paciente pidió corregir, dentro del pedido
+   completo (actual y propuesto) — con borde + fondo de la paleta
+   oficial (--color-sky-blue), no un color nuevo. */
+.lp-resaltado {
+  background: rgba(200, 217, 230, 0.35);
+  border-left: 3px solid var(--color-navy);
+  padding: 6px 10px;
+  border-radius: 6px;
+  margin: -6px -10px;
+}
+
+/* ============================================================
    TIPO DE NOVEDAD Y DIFF DE EDICIÓN (ronda 3)
    ============================================================ */
 

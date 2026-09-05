@@ -9,7 +9,7 @@ import { Navbar } from '../components/Navbar';
 import { ProductShowcase } from '../components/ProductShowcase';
 
 const APK_DOWNLOAD_URL =
-  'https://github.com/sofiacc1414/mediruta-app/releases/download/v1.4.0/mediruta.apk';
+  'https://github.com/sofiacc1414/mediruta-app/releases/download/v1.4.1/mediruta.apk';
 
 export function LandingPage() {
   return (

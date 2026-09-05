@@ -205,6 +205,48 @@
 }
 
 /* ============================================================
+   FILTRO POR ORIGEN (ronda 8)
+   ============================================================ */
+
+.lp-novedades-filtro-origen {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.lp-novedades-filtro-origen-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(47, 65, 86, 0.4);
+  margin-right: 2px;
+}
+
+.lp-novedades-chip {
+  padding: 5px 14px;
+  border: 1px solid rgba(47, 65, 86, 0.12);
+  border-radius: var(--radius-pill, 999px);
+  background: #ffffff;
+  color: #2F4156;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.lp-novedades-chip:hover {
+  border-color: rgba(86, 124, 141, 0.3);
+}
+
+.lp-novedades-chip--activo {
+  background: #2F4156;
+  border-color: #2F4156;
+  color: #ffffff;
+}
+
+/* ============================================================
    FILA DE CASO (lista liviana — click abre el detalle completo)
    ============================================================ */
 

@@ -25,6 +25,17 @@ const ETIQUETAS_ORIGEN: Record<NovedadAbierta['origen'], string> = {
   domiciliario: '🛵 Domiciliario',
 };
 
+/** Filtro por origen — 'todos' + los 2 valores reales de `origen`.
+ * Igual que el filtro por estado, se resuelve en el cliente sobre lo ya
+ * cargado (no hace falta volver a pedirle nada al backend). */
+type FiltroOrigen = 'todos' | NovedadAbierta['origen'];
+
+const OPCIONES_ORIGEN: { value: FiltroOrigen; label: string }[] = [
+  { value: 'todos', label: 'Todos' },
+  { value: 'paciente', label: ETIQUETAS_ORIGEN.paciente },
+  { value: 'domiciliario', label: ETIQUETAS_ORIGEN.domiciliario },
+];
+
 /** HU-07 (ronda 6) — tarjetas de métrica por estado, mismo patrón (y
  * misma dinámica de click-para-filtrar) que las de la pestaña Pedidos:
  * se trae todo una sola vez (`estado=todas`) y tanto los conteos como el
@@ -90,6 +101,7 @@ export function NovedadesTab() {
   const [error, setError] = useState<string | null>(null);
   const [vista, setVista] = useState<Vista>({ tipo: 'lista' });
   const [filtroTarjeta, setFiltroTarjeta] = useState<EstadoNovedadAdmin>('abierta');
+  const [filtroOrigen, setFiltroOrigen] = useState<FiltroOrigen>('todos');
 
   const cargar = useCallback(() => {
     if (estado.tipo !== 'autenticado') return;
@@ -134,8 +146,9 @@ export function NovedadesTab() {
   };
   novedades?.forEach((n) => conteos[estadoDeNovedad(n)]++);
 
-  const novedadesMostradas =
-    filtroTarjeta === 'todas' ? novedades : novedades?.filter((n) => estadoDeNovedad(n) === filtroTarjeta);
+  const novedadesMostradas = novedades
+    ?.filter((n) => filtroTarjeta === 'todas' || estadoDeNovedad(n) === filtroTarjeta)
+    .filter((n) => filtroOrigen === 'todos' || n.origen === filtroOrigen);
 
   return (
     <div className="lp-novedades-wrapper">
@@ -171,6 +184,22 @@ export function NovedadesTab() {
           ))}
         </div>
 
+        {/* Filtro por origen — quién reportó (Paciente/Domiciliario),
+         * independiente del filtro por estado de arriba. */}
+        <div className="lp-novedades-filtro-origen">
+          <span className="lp-novedades-filtro-origen-label">Reportado por</span>
+          {OPCIONES_ORIGEN.map((opcion) => (
+            <button
+              key={opcion.value}
+              type="button"
+              className={`lp-novedades-chip${filtroOrigen === opcion.value ? ' lp-novedades-chip--activo' : ''}`}
+              onClick={() => setFiltroOrigen(opcion.value)}
+            >
+              {opcion.label}
+            </button>
+          ))}
+        </div>
+
         {error ? <Alert tono="error">{error}</Alert> : null}
 
         {novedades === null && !error ? <p className="admin-muted">Cargando…</p> : null}
@@ -178,7 +207,7 @@ export function NovedadesTab() {
         {novedadesMostradas?.length === 0 ? (
           <div className="lp-novedades-vacio">
             <h3>¡Todo en orden!</h3>
-            <p>No hay novedades en este estado.</p>
+            <p>No hay novedades con estos filtros.</p>
           </div>
         ) : null}
 

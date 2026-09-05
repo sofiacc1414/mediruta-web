@@ -46,9 +46,16 @@ export type OrigenNovedad = 'domiciliario' | 'paciente';
  * código de entrega", sin datos propuestos. */
 export type TipoNovedad = 'pregunta' | 'edicion' | 'codigo';
 
+/** Ronda 4 — además de direcciones, ahora también puede traer
+ * `medicamentos` (reemplazo completo de la lista) y/o `recetaPath`
+ * (nunca se expone tal cual — ver `NovedadAbierta.recetaActualUrl`/
+ * `recetaPropuestaUrl`, ya firmadas por la API). Todo opcional: cada
+ * campo presente es un dato que el paciente pidió cambiar. */
 export type DatosEdicionPedido = {
   direccionEntrega: string | null;
   direccionFarmacia: string | null;
+  medicamentos?: Medicamento[];
+  recetaPath?: string;
 };
 
 export type NovedadAbierta = {
@@ -64,6 +71,10 @@ export type NovedadAbierta = {
   /** Código de entrega vigente del pedido — solo relevante cuando
    * `tipo = 'codigo'`. */
   codigoEntrega: string | null;
+  /** URLs firmadas de la receta vigente y de la propuesta (si la hay)
+   * — solo relevante cuando `tipo = 'edicion'`. */
+  recetaActualUrl?: string | null;
+  recetaPropuestaUrl?: string | null;
   creadoEn: string;
 };
 

@@ -445,6 +445,40 @@
   margin: -6px -10px;
 }
 
+/* HU-07 (ronda 7) — variantes de `.lp-resaltado` para distinguir "así
+ * estaba" de "así queda" dentro de la comparación: tono Beige/Teal para
+ * lo anterior, Sky Blue/Navy para lo nuevo (mismos 5 colores oficiales,
+ * nada de naranja/verde) + un ícono en cada uno para que la diferencia
+ * no dependa solo del color (context.md Parte A, §4). */
+.lp-resaltado-anterior,
+.lp-resaltado-nuevo {
+  padding: 6px 10px;
+  border-radius: 6px;
+  margin: -6px -10px;
+}
+
+.lp-resaltado-anterior {
+  background: rgba(245, 239, 235, 0.7);
+  border-left: 3px solid var(--color-teal);
+}
+
+.lp-resaltado-anterior::before {
+  content: '↩ ';
+  color: var(--color-teal);
+  font-weight: 700;
+}
+
+.lp-resaltado-nuevo {
+  background: rgba(200, 217, 230, 0.35);
+  border-left: 3px solid var(--color-navy);
+}
+
+.lp-resaltado-nuevo::before {
+  content: '✓ ';
+  color: var(--color-navy);
+  font-weight: 700;
+}
+
 /* ============================================================
    TIPO DE NOVEDAD Y DIFF DE EDICIÓN (ronda 3)
    ============================================================ */

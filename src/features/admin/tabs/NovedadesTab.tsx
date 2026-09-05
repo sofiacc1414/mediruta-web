@@ -18,23 +18,38 @@ const ETIQUETAS_TIPO: Record<TipoNovedad, string> = {
 };
 
 /** HU-07 (ronda 6) — tarjetas de métrica por estado, mismo patrón (y
- * misma dinámica de click-para-filtrar) que las de la pestaña Pedidos.
- * A diferencia de Pedidos, acá cada tarjeta es 1 estado exacto de la
- * API (sin agrupar varios), así que el click sí dispara un nuevo
- * pedido al backend en vez de filtrar en el cliente. */
+ * misma dinámica de click-para-filtrar) que las de la pestaña Pedidos:
+ * se trae todo una sola vez (`estado=todas`) y tanto los conteos como el
+ * filtro por tarjeta se resuelven en el cliente sobre esa lista — nada
+ * de un roundtrip al backend por cada click. */
 const TARJETAS_ESTADO: { value: EstadoNovedadAdmin; label: string }[] = [
+  { value: 'todas', label: 'Todas' },
   { value: 'abierta', label: 'Abiertas' },
   { value: 'aprobada', label: 'Aprobadas' },
   { value: 'rechazada', label: 'Rechazadas' },
   { value: 'resuelta', label: 'Resueltas' },
-  { value: 'todas', label: 'Todas' },
 ];
 
+/** Estado real de una novedad, igual al valor de `EstadoNovedadAdmin`
+ * salvo 'todas' (que no es un estado, es "sin filtrar"). */
+function estadoDeNovedad(novedad: NovedadAbierta): Exclude<EstadoNovedadAdmin, 'todas'> {
+  if (!novedad.resuelta) return 'abierta';
+  if (novedad.accionEdicion === 'aprobada') return 'aprobada';
+  if (novedad.accionEdicion === 'rechazada') return 'rechazada';
+  return 'resuelta';
+}
+
 function etiquetaEstado(novedad: NovedadAbierta): string {
-  if (!novedad.resuelta) return '⏳ Abierta';
-  if (novedad.accionEdicion === 'aprobada') return '✓ Aprobada';
-  if (novedad.accionEdicion === 'rechazada') return '✕ Rechazada';
-  return '✓ Resuelta';
+  switch (estadoDeNovedad(novedad)) {
+    case 'abierta':
+      return '⏳ Abierta';
+    case 'aprobada':
+      return '✓ Aprobada';
+    case 'rechazada':
+      return '✕ Rechazada';
+    case 'resuelta':
+      return '✓ Resuelta';
+  }
 }
 
 function formatearFechaHora(iso: string) {
@@ -66,29 +81,26 @@ export function NovedadesTab() {
   const [novedades, setNovedades] = useState<NovedadAbierta[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [vista, setVista] = useState<Vista>({ tipo: 'lista' });
-  const [filtroEstado, setFiltroEstado] = useState<EstadoNovedadAdmin>('abierta');
+  const [filtroTarjeta, setFiltroTarjeta] = useState<EstadoNovedadAdmin>('abierta');
 
-  const cargar = useCallback(
-    (estadoFiltro: EstadoNovedadAdmin) => {
-      if (estado.tipo !== 'autenticado') return;
-      setError(null);
-      listarNovedadesAbiertas(estado.accessToken, estadoFiltro)
-        .then(setNovedades)
-        .catch((err: unknown) => {
-          if (err instanceof ApiError || err instanceof ApiSinConexionError) {
-            setError(err.message);
-          } else {
-            throw err;
-          }
-        });
-    },
-    [estado],
-  );
+  const cargar = useCallback(() => {
+    if (estado.tipo !== 'autenticado') return;
+    setError(null);
+    listarNovedadesAbiertas(estado.accessToken, 'todas')
+      .then(setNovedades)
+      .catch((err: unknown) => {
+        if (err instanceof ApiError || err instanceof ApiSinConexionError) {
+          setError(err.message);
+        } else {
+          throw err;
+        }
+      });
+  }, [estado]);
 
   useEffect(() => {
-    cargar(filtroEstado);
+    if (novedades === null) cargar();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filtroEstado]);
+  }, []);
 
   if (estado.tipo !== 'autenticado') return null;
 
@@ -99,11 +111,23 @@ export function NovedadesTab() {
         onVolver={() => setVista({ tipo: 'lista' })}
         onResuelta={() => {
           setVista({ tipo: 'lista' });
-          cargar(filtroEstado);
+          cargar();
         }}
       />
     );
   }
+
+  const conteos: Record<EstadoNovedadAdmin, number> = {
+    todas: novedades?.length ?? 0,
+    abierta: 0,
+    aprobada: 0,
+    rechazada: 0,
+    resuelta: 0,
+  };
+  novedades?.forEach((n) => conteos[estadoDeNovedad(n)]++);
+
+  const novedadesMostradas =
+    filtroTarjeta === 'todas' ? novedades : novedades?.filter((n) => estadoDeNovedad(n) === filtroTarjeta);
 
   return (
     <div className="lp-novedades-wrapper">
@@ -122,17 +146,18 @@ export function NovedadesTab() {
           </div>
         </div>
 
-        {/* HU-07 (ronda 6) — tarjetas de estado, misma dinámica que Pedidos:
-         * click filtra la lista. Acá cada tarjeta es un estado exacto de la
-         * API, así que el click vuelve a pedir al backend con ese filtro. */}
+        {/* HU-07 (ronda 6) — tarjetas de estado con conteo, misma dinámica
+         * que Pedidos: se trae todo una vez y el click filtra en el
+         * cliente (ver `cargar`/`novedadesMostradas` arriba). */}
         <div className="lp-novedades-stats">
           {TARJETAS_ESTADO.map((tarjeta) => (
             <button
               key={tarjeta.value}
               type="button"
-              className={`lp-novedades-stat${filtroEstado === tarjeta.value ? ' lp-novedades-stat--activa' : ''}`}
-              onClick={() => setFiltroEstado(tarjeta.value)}
+              className={`lp-novedades-stat${filtroTarjeta === tarjeta.value ? ' lp-novedades-stat--activa' : ''}`}
+              onClick={() => setFiltroTarjeta(tarjeta.value)}
             >
+              <span className="lp-novedades-stat-number">{conteos[tarjeta.value]}</span>
               <span className="lp-novedades-stat-label">{tarjeta.label}</span>
             </button>
           ))}
@@ -142,7 +167,7 @@ export function NovedadesTab() {
 
         {novedades === null && !error ? <p className="admin-muted">Cargando…</p> : null}
 
-        {novedades?.length === 0 ? (
+        {novedadesMostradas?.length === 0 ? (
           <div className="lp-novedades-vacio">
             <h3>¡Todo en orden!</h3>
             <p>No hay novedades en este estado.</p>
@@ -150,7 +175,7 @@ export function NovedadesTab() {
         ) : null}
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          {novedades?.map((novedad) => (
+          {novedadesMostradas?.map((novedad) => (
             <button
               key={novedad.id}
               type="button"

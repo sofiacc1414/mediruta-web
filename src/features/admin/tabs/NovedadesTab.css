@@ -127,6 +127,15 @@
   background: rgba(200, 217, 230, 0.35);
 }
 
+.lp-novedades-stat-number {
+  display: block;
+  font-family: 'Fraunces', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2F4156;
+  margin-bottom: 2px;
+}
+
 .lp-novedades-stat-label {
   font-size: 0.72rem;
   font-weight: 700;

@@ -17,6 +17,14 @@ const ETIQUETAS_TIPO: Record<TipoNovedad, string> = {
   codigo: 'Código',
 };
 
+/** Quién la reportó — antes solo se veía adentro del detalle
+ * (`NovedadDetalle`); en la lista no había forma de distinguirlo sin
+ * entrar a cada caso. */
+const ETIQUETAS_ORIGEN: Record<NovedadAbierta['origen'], string> = {
+  paciente: '👤 Paciente',
+  domiciliario: '🛵 Domiciliario',
+};
+
 /** HU-07 (ronda 6) — tarjetas de métrica por estado, mismo patrón (y
  * misma dinámica de click-para-filtrar) que las de la pestaña Pedidos:
  * se trae todo una sola vez (`estado=todas`) y tanto los conteos como el
@@ -186,6 +194,7 @@ export function NovedadesTab() {
               <span className={`admin-tag admin-tag--${novedad.tipo}`}>
                 {ETIQUETAS_TIPO[novedad.tipo]}
               </span>
+              <span className="lp-novedades-fila-origen">{ETIQUETAS_ORIGEN[novedad.origen]}</span>
               <span className="lp-novedades-fila-detalle">{novedad.detalle}</span>
               <span className="lp-novedades-fila-estado">{etiquetaEstado(novedad)}</span>
               <span className="lp-novedades-fila-fecha">{formatearFechaHora(novedad.creadoEn)}</span>

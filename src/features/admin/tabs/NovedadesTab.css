@@ -235,6 +235,15 @@
   flex-shrink: 0;
 }
 
+/* Quién la reportó (Paciente/Domiciliario) — antes solo se veía en el
+ * detalle, en la lista no había forma de distinguirlo de un vistazo. */
+.lp-novedades-fila-origen {
+  font-size: 0.75rem;
+  color: rgba(47, 65, 86, 0.5);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
 .lp-novedades-fila-detalle {
   flex: 1;
   min-width: 0;
@@ -258,6 +267,7 @@
 }
 
 @media (max-width: 560px) {
+  .lp-novedades-fila-origen,
   .lp-novedades-fila-fecha {
     display: none;
   }

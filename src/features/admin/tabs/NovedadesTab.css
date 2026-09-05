@@ -140,6 +140,65 @@
 }
 
 /* ============================================================
+   FILA DE CASO (lista liviana — click abre el detalle completo)
+   ============================================================ */
+
+.lp-novedades-fila {
+  width: 100%;
+  background: rgba(47, 65, 86, 0.01);
+  border: 1px solid rgba(47, 65, 86, 0.04);
+  border-radius: 10px;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  text-align: left;
+}
+
+.lp-novedades-fila:hover {
+  border-color: rgba(86, 124, 141, 0.15);
+  background: rgba(86, 124, 141, 0.02);
+}
+
+.lp-novedades-fila-codigo {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #2F4156;
+  flex-shrink: 0;
+}
+
+.lp-novedades-fila-detalle {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.85rem;
+  color: rgba(47, 65, 86, 0.6);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lp-novedades-fila-fecha {
+  font-size: 0.75rem;
+  color: rgba(47, 65, 86, 0.35);
+  flex-shrink: 0;
+}
+
+.lp-novedades-fila-chevron {
+  color: #567C8D;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+@media (max-width: 560px) {
+  .lp-novedades-fila-fecha {
+    display: none;
+  }
+}
+
+/* ============================================================
    ESTADOS VACÍOS Y DE CARGA
    ============================================================ */
 

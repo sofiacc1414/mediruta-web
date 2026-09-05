@@ -7,6 +7,7 @@ import {
   obtenerConfiguracionAdmin,
 } from '../api/configuracionAdminApi';
 import { EstadoPedidoPill } from '../components/EstadoPedidoPill';
+import { DomiciliarioCard, MiniaturaDoc, PacienteCard } from '../components/PedidoResumenCards';
 import { TrackingTimeline } from '../components/TrackingTimeline';
 import {
   asignarDomiciliario,
@@ -512,35 +513,11 @@ function PedidoDetalle({
 
           {/* GRID DE TARJETAS PREMIUM */}
           <div className="lp-pedidos-detalle-grid">
-            <div className="lp-pedidos-detalle-card">
-              <h3 className="lp-pedidos-detalle-card-titulo">👤 Paciente</h3>
-              <p className="lp-pedidos-detalle-card-nombre">{detalle.paciente.nombre ?? '—'}</p>
-              <p className="lp-pedidos-detalle-card-correo">{detalle.paciente.correo}</p>
-              <p className="lp-pedidos-detalle-card-telefono">{detalle.paciente.telefono ?? 'Sin teléfono'}</p>
-              <p className="lp-pedidos-detalle-card-direccion">
-                📍 Dirección: {detalle.direccionEntrega ?? '—'}
-              </p>
-              <div className="lp-pedidos-detalle-card-docs">
-                <MiniaturaDoc etiqueta="Cédula (frente)" url={detalle.paciente.cedulaFrenteUrl} />
-                <MiniaturaDoc etiqueta="Cédula (reverso)" url={detalle.paciente.cedulaReversoUrl} />
-              </div>
-            </div>
-
-            <div className="lp-pedidos-detalle-card">
-              <h3 className="lp-pedidos-detalle-card-titulo">🛵 Domiciliario</h3>
-              {detalle.domiciliario ? (
-                <>
-                  <p className="lp-pedidos-detalle-card-nombre">{detalle.domiciliario.nombre ?? '—'}</p>
-                  <p className="lp-pedidos-detalle-card-correo">{detalle.domiciliario.correo}</p>
-                  <p className="lp-pedidos-detalle-card-telefono">{detalle.domiciliario.telefono ?? 'Sin teléfono'}</p>
-                </>
-              ) : (
-                <p className="lp-pedidos-detalle-card-sin">Todavía sin asignar</p>
-              )}
-              <p className="lp-pedidos-detalle-card-farmacia">
-                🏪 Farmacia: {detalle.direccionFarmacia ?? '—'}
-              </p>
-            </div>
+            <PacienteCard paciente={detalle.paciente} direccionEntrega={detalle.direccionEntrega} />
+            <DomiciliarioCard
+              domiciliario={detalle.domiciliario}
+              direccionFarmacia={detalle.direccionFarmacia}
+            />
           </div>
 
           {/* MEDICAMENTOS */}
@@ -684,21 +661,3 @@ function AsignarDomiciliarioCard({ pedidoId, onAsignado }: { pedidoId: string; o
   );
 }
 
-// ============================================================
-// MINIATURA DE DOCUMENTO
-// ============================================================
-
-function MiniaturaDoc({ etiqueta, url }: { etiqueta: string; url: string | null }) {
-  return (
-    <div className="lp-pedidos-miniatura">
-      <span className="lp-pedidos-miniatura-label">{etiqueta}</span>
-      {url ? (
-        <a href={url} target="_blank" rel="noreferrer" className="lp-pedidos-miniatura-link">
-          <img src={url} alt={etiqueta} className="lp-pedidos-miniatura-img" />
-        </a>
-      ) : (
-        <div className="lp-pedidos-miniatura-empty">No subida</div>
-      )}
-    </div>
-  );
-}

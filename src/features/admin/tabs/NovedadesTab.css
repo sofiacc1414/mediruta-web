@@ -96,6 +96,62 @@
 }
 
 /* ============================================================
+   TARJETAS DE ESTADO (ronda 6 — click filtra la lista)
+   ============================================================ */
+
+.lp-novedades-stats {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.lp-novedades-stat {
+  background: rgba(47, 65, 86, 0.01);
+  border: 1px solid rgba(47, 65, 86, 0.04);
+  border-radius: 12px;
+  padding: 12px 16px;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  font-family: inherit;
+  width: 100%;
+}
+
+.lp-novedades-stat:hover {
+  background: rgba(86, 124, 141, 0.02);
+}
+
+.lp-novedades-stat--activa {
+  border-color: var(--color-navy);
+  background: rgba(200, 217, 230, 0.35);
+}
+
+.lp-novedades-stat-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #2F4156;
+}
+
+@media (max-width: 768px) {
+  .lp-novedades-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Estado de la fila (abierta/aprobada/rechazada/resuelta) — icono +
+ * texto, no color fuera de paleta (context.md Parte A, §4). */
+.lp-novedades-fila-estado {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #2F4156;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* ============================================================
    TARJETAS DE NOVEDADES
    ============================================================ */
 

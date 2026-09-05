@@ -77,6 +77,13 @@ export function PedidosTab() {
   const [filtrosAplicados, setFiltrosAplicados] = useState<FiltrosPedidos>({});
   const [filtroEstado, setFiltroEstado] = useState('');
   const [filtroBusqueda, setFiltroBusqueda] = useState('');
+  /** Tarjeta de métrica seleccionada (Total/Pendientes/En camino/Entregados)
+   * — filtra sobre lo ya cargado, en el cliente: "Pendientes" y "En camino"
+   * agrupan 2 estados cada uno, y la API de pedidos solo filtra por un
+   * único `estado`, así que no vale la pena un roundtrip nuevo por esto. */
+  const [filtroTarjeta, setFiltroTarjeta] = useState<
+    'total' | 'pendientes' | 'en_camino' | 'entregados'
+  >('total');
 
   const [pedidos, setPedidos] = useState<PedidoAdmin[] | null>(null);
   const [errorPedidos, setErrorPedidos] = useState<string | null>(null);
@@ -144,10 +151,20 @@ export function PedidosTab() {
     cargarPedidos({});
   }
 
+  function grupoDelPedido(p: Pick<PedidoAdmin, 'estado'>): 'pendientes' | 'en_camino' | 'entregados' | 'otro' {
+    if (p.estado === 'pendiente_revision' || p.estado === 'en_asignacion') return 'pendientes';
+    if (p.estado === 'asignado_en_camino_farmacia' || p.estado === 'en_camino_entrega') return 'en_camino';
+    if (p.estado === 'entregado') return 'entregados';
+    return 'otro';
+  }
+
   const total = pedidos?.length || 0;
-  const pendientes = pedidos?.filter(p => p.estado === 'pendiente_revision' || p.estado === 'en_asignacion').length || 0;
-  const enCamino = pedidos?.filter(p => p.estado === 'asignado_en_camino_farmacia' || p.estado === 'en_camino_entrega').length || 0;
-  const entregados = pedidos?.filter(p => p.estado === 'entregado').length || 0;
+  const pendientes = pedidos?.filter((p) => grupoDelPedido(p) === 'pendientes').length || 0;
+  const enCamino = pedidos?.filter((p) => grupoDelPedido(p) === 'en_camino').length || 0;
+  const entregados = pedidos?.filter((p) => grupoDelPedido(p) === 'entregados').length || 0;
+
+  const pedidosMostrados =
+    filtroTarjeta === 'total' ? pedidos : pedidos?.filter((p) => grupoDelPedido(p) === filtroTarjeta);
 
   return (
     <div className="lp-pedidos-wrapper">
@@ -174,24 +191,40 @@ export function PedidosTab() {
           </div>
         </div>
 
-        {/* ESTADÍSTICAS */}
+        {/* ESTADÍSTICAS — clicables, filtran la lista de abajo (en el cliente) */}
         <div className="lp-pedidos-stats">
-          <div className="lp-pedidos-stat">
+          <button
+            type="button"
+            className={`lp-pedidos-stat${filtroTarjeta === 'total' ? ' lp-pedidos-stat--activa' : ''}`}
+            onClick={() => setFiltroTarjeta('total')}
+          >
             <span className="lp-pedidos-stat-number">{total}</span>
             <span className="lp-pedidos-stat-label">Total</span>
-          </div>
-          <div className="lp-pedidos-stat lp-pedidos-stat-pendiente">
+          </button>
+          <button
+            type="button"
+            className={`lp-pedidos-stat lp-pedidos-stat-pendiente${filtroTarjeta === 'pendientes' ? ' lp-pedidos-stat--activa' : ''}`}
+            onClick={() => setFiltroTarjeta('pendientes')}
+          >
             <span className="lp-pedidos-stat-number">{pendientes}</span>
             <span className="lp-pedidos-stat-label">Pendientes</span>
-          </div>
-          <div className="lp-pedidos-stat lp-pedidos-stat-camino">
+          </button>
+          <button
+            type="button"
+            className={`lp-pedidos-stat lp-pedidos-stat-camino${filtroTarjeta === 'en_camino' ? ' lp-pedidos-stat--activa' : ''}`}
+            onClick={() => setFiltroTarjeta('en_camino')}
+          >
             <span className="lp-pedidos-stat-number">{enCamino}</span>
             <span className="lp-pedidos-stat-label">En camino</span>
-          </div>
-          <div className="lp-pedidos-stat lp-pedidos-stat-entregado">
+          </button>
+          <button
+            type="button"
+            className={`lp-pedidos-stat lp-pedidos-stat-entregado${filtroTarjeta === 'entregados' ? ' lp-pedidos-stat--activa' : ''}`}
+            onClick={() => setFiltroTarjeta('entregados')}
+          >
             <span className="lp-pedidos-stat-number">{entregados}</span>
             <span className="lp-pedidos-stat-label">Entregados</span>
-          </div>
+          </button>
         </div>
 
         {/* FILTROS */}
@@ -247,7 +280,7 @@ export function PedidosTab() {
             </div>
           )}
 
-          {!cargandoPedidos && pedidos?.length === 0 && (
+          {!cargandoPedidos && pedidosMostrados?.length === 0 && (
             <div className="lp-pedidos-empty">
               <span className="lp-pedidos-empty-icon">📭</span>
               <h3>No hay pedidos</h3>
@@ -255,9 +288,9 @@ export function PedidosTab() {
             </div>
           )}
 
-          {pedidos && pedidos.length > 0 && (
+          {pedidosMostrados && pedidosMostrados.length > 0 && (
             <div className="lp-pedidos-list">
-              {pedidos.map((pedido) => {
+              {pedidosMostrados.map((pedido) => {
                 const demorado = estaDemorado(pedido, umbralMinutos);
                 return (
                   <div

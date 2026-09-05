@@ -76,7 +76,15 @@ export type NovedadAbierta = {
   recetaActualUrl?: string | null;
   recetaPropuestaUrl?: string | null;
   creadoEn: string;
+  /** HU-07 (ronda 6) — si ya fue atendida, y con qué resultado (solo
+   * relevante para `tipo === 'edicion'`). */
+  resuelta: boolean;
+  accionEdicion: 'aprobada' | 'rechazada' | null;
 };
+
+/** HU-07 (ronda 6) — estado por el que se puede filtrar el listado de
+ * novedades del admin. 'abierta' es el default histórico. */
+export type EstadoNovedadAdmin = 'abierta' | 'aprobada' | 'rechazada' | 'resuelta' | 'todas';
 
 export type DomiciliarioCercano = {
   usuarioId: string;
@@ -167,9 +175,12 @@ export function obtenerDetallePedidoAdmin(accessToken: string, pedidoId: string)
   }) as Promise<DetallePedidoAdmin>;
 }
 
-/** HU-07 — novedades reportadas por Domiciliarios, todavía sin resolver. */
-export function listarNovedadesAbiertas(accessToken: string) {
-  return apiClient.get('/admin/novedades', { accessToken }) as Promise<NovedadAbierta[]>;
+/** HU-07 — novedades reportadas por pacientes/domiciliarios. Sin `estado`
+ * trae solo las abiertas (comportamiento histórico); ronda 6 agrega el
+ * filtro para poder repasar aprobadas/rechazadas/resueltas/todas. */
+export function listarNovedadesAbiertas(accessToken: string, estado?: EstadoNovedadAdmin) {
+  const query = estado ? `?estado=${estado}` : '';
+  return apiClient.get(`/admin/novedades${query}`, { accessToken }) as Promise<NovedadAbierta[]>;
 }
 
 /** HU-07 — marca una novedad como atendida. No toca el estado del pedido. */

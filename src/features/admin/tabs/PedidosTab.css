@@ -175,10 +175,19 @@
   padding: 12px 16px;
   text-align: center;
   transition: all 0.3s ease;
+  /* HU-07 (ronda 6) — ahora son botones que filtran la lista */
+  cursor: pointer;
+  font-family: inherit;
+  width: 100%;
 }
 
 .lp-pedidos-stat:hover {
   background: rgba(47, 65, 86, 0.02);
+}
+
+.lp-pedidos-stat--activa {
+  border-color: var(--color-navy);
+  background: rgba(200, 217, 230, 0.35);
 }
 
 .lp-pedidos-stat-number {

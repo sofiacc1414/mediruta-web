@@ -2,7 +2,12 @@ import { useCallback, useEffect, useState } from 'react';
 import { Alert } from '../../../shared/components/Alert';
 import { ApiError, ApiSinConexionError } from '../../../shared/lib/apiError';
 import { useAuth } from '../../usuarios/hooks/useAuth';
-import { listarNovedadesAbiertas, type NovedadAbierta, type TipoNovedad } from '../api/pedidosAdminApi';
+import {
+  listarNovedadesAbiertas,
+  type EstadoNovedadAdmin,
+  type NovedadAbierta,
+  type TipoNovedad,
+} from '../api/pedidosAdminApi';
 import { NovedadDetalle } from './NovedadDetalle';
 import './NovedadesTab.css';
 
@@ -11,6 +16,26 @@ const ETIQUETAS_TIPO: Record<TipoNovedad, string> = {
   edicion: 'Edición',
   codigo: 'Código',
 };
+
+/** HU-07 (ronda 6) — tarjetas de métrica por estado, mismo patrón (y
+ * misma dinámica de click-para-filtrar) que las de la pestaña Pedidos.
+ * A diferencia de Pedidos, acá cada tarjeta es 1 estado exacto de la
+ * API (sin agrupar varios), así que el click sí dispara un nuevo
+ * pedido al backend en vez de filtrar en el cliente. */
+const TARJETAS_ESTADO: { value: EstadoNovedadAdmin; label: string }[] = [
+  { value: 'abierta', label: 'Abiertas' },
+  { value: 'aprobada', label: 'Aprobadas' },
+  { value: 'rechazada', label: 'Rechazadas' },
+  { value: 'resuelta', label: 'Resueltas' },
+  { value: 'todas', label: 'Todas' },
+];
+
+function etiquetaEstado(novedad: NovedadAbierta): string {
+  if (!novedad.resuelta) return '⏳ Abierta';
+  if (novedad.accionEdicion === 'aprobada') return '✓ Aprobada';
+  if (novedad.accionEdicion === 'rechazada') return '✕ Rechazada';
+  return '✓ Resuelta';
+}
 
 function formatearFechaHora(iso: string) {
   return new Date(iso).toLocaleString('es-CO', {
@@ -41,25 +66,29 @@ export function NovedadesTab() {
   const [novedades, setNovedades] = useState<NovedadAbierta[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [vista, setVista] = useState<Vista>({ tipo: 'lista' });
+  const [filtroEstado, setFiltroEstado] = useState<EstadoNovedadAdmin>('abierta');
 
-  const cargar = useCallback(() => {
-    if (estado.tipo !== 'autenticado') return;
-    setError(null);
-    listarNovedadesAbiertas(estado.accessToken)
-      .then(setNovedades)
-      .catch((err: unknown) => {
-        if (err instanceof ApiError || err instanceof ApiSinConexionError) {
-          setError(err.message);
-        } else {
-          throw err;
-        }
-      });
-  }, [estado]);
+  const cargar = useCallback(
+    (estadoFiltro: EstadoNovedadAdmin) => {
+      if (estado.tipo !== 'autenticado') return;
+      setError(null);
+      listarNovedadesAbiertas(estado.accessToken, estadoFiltro)
+        .then(setNovedades)
+        .catch((err: unknown) => {
+          if (err instanceof ApiError || err instanceof ApiSinConexionError) {
+            setError(err.message);
+          } else {
+            throw err;
+          }
+        });
+    },
+    [estado],
+  );
 
   useEffect(() => {
-    if (novedades === null) cargar();
+    cargar(filtroEstado);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [filtroEstado]);
 
   if (estado.tipo !== 'autenticado') return null;
 
@@ -70,7 +99,7 @@ export function NovedadesTab() {
         onVolver={() => setVista({ tipo: 'lista' })}
         onResuelta={() => {
           setVista({ tipo: 'lista' });
-          cargar();
+          cargar(filtroEstado);
         }}
       />
     );
@@ -93,6 +122,22 @@ export function NovedadesTab() {
           </div>
         </div>
 
+        {/* HU-07 (ronda 6) — tarjetas de estado, misma dinámica que Pedidos:
+         * click filtra la lista. Acá cada tarjeta es un estado exacto de la
+         * API, así que el click vuelve a pedir al backend con ese filtro. */}
+        <div className="lp-novedades-stats">
+          {TARJETAS_ESTADO.map((tarjeta) => (
+            <button
+              key={tarjeta.value}
+              type="button"
+              className={`lp-novedades-stat${filtroEstado === tarjeta.value ? ' lp-novedades-stat--activa' : ''}`}
+              onClick={() => setFiltroEstado(tarjeta.value)}
+            >
+              <span className="lp-novedades-stat-label">{tarjeta.label}</span>
+            </button>
+          ))}
+        </div>
+
         {error ? <Alert tono="error">{error}</Alert> : null}
 
         {novedades === null && !error ? <p className="admin-muted">Cargando…</p> : null}
@@ -100,7 +145,7 @@ export function NovedadesTab() {
         {novedades?.length === 0 ? (
           <div className="lp-novedades-vacio">
             <h3>¡Todo en orden!</h3>
-            <p>No hay novedades pendientes de atender.</p>
+            <p>No hay novedades en este estado.</p>
           </div>
         ) : null}
 
@@ -117,6 +162,7 @@ export function NovedadesTab() {
                 {ETIQUETAS_TIPO[novedad.tipo]}
               </span>
               <span className="lp-novedades-fila-detalle">{novedad.detalle}</span>
+              <span className="lp-novedades-fila-estado">{etiquetaEstado(novedad)}</span>
               <span className="lp-novedades-fila-fecha">{formatearFechaHora(novedad.creadoEn)}</span>
               <span className="lp-novedades-fila-chevron">›</span>
             </button>

@@ -1,4 +1,4 @@
-import { DeliveredScreen, PhoneMockup, TrackingScreen, UploadScreen } from './PhoneMockup';
+import { DeliveredScreen, TrackingScreen, UploadScreen } from './PhoneMockup';
 import { Reveal, RevealScale } from './Reveal';
 
 const SCREENS = [

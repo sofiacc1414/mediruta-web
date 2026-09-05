@@ -13,6 +13,7 @@ type Props<TKey extends string> = {
   onSelect: (key: TKey) => void;
   correo: string;
   rolPrincipal: string;
+  fotoPerfilUrl: string | null;
   onLogout: () => void;
 };
 
@@ -27,6 +28,7 @@ export function Sidebar<TKey extends string>({
   onSelect,
   correo,
   rolPrincipal,
+  fotoPerfilUrl,
   onLogout,
 }: Props<TKey>) {
   const inicial = correo.trim().charAt(0).toUpperCase() || '?';
@@ -34,16 +36,12 @@ export function Sidebar<TKey extends string>({
   return (
     <aside className="admin-sidebar">
       <div className="admin-sidebar-brand">
-        <span
-          style={{
-            fontFamily: 'var(--font-heading)',
-            fontSize: '1.4rem',
-            fontWeight: 700,
-            color: 'var(--color-white)',
-          }}
-        >
-          MediRuta
-        </span>
+        {/* >>> AQUÍ SE PONE EL LOGO EN BLANCO <<< */}
+        <img 
+          src="/images/LogoEnBlanco.png" 
+          alt="MediRuta" 
+          className="admin-sidebar-logo"
+        />
       </div>
 
       <nav className="admin-nav">
@@ -64,7 +62,7 @@ export function Sidebar<TKey extends string>({
 
       <div className="admin-account">
         <div className="admin-avatar-circle" aria-hidden>
-          {inicial}
+          {fotoPerfilUrl ? <img src={fotoPerfilUrl} alt="" /> : inicial}
         </div>
         <div className="admin-account-text">
           <span className="admin-account-correo">{correo}</span>

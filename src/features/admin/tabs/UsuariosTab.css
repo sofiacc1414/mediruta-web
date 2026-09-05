@@ -1,0 +1,398 @@
+/* ============================================================
+   USUARIOS TAB — FONDO BLANCO CON ÍCONO LATERAL
+   ============================================================ */
+
+/* ===== WRAPPER ===== */
+.lp-usuarios-wrapper {
+  position: relative;
+  display: flex;
+  gap: 0;
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  background: #ffffff;
+}
+
+/* ============================================================
+   ÍCONO LATERAL (Grande, Transparente)
+   ============================================================ */
+
+.lp-usuarios-icon-side {
+  position: sticky;
+  top: 0;
+  flex-shrink: 0;
+  width: 180px; 
+  height: 100%;
+  min-height: 400px;
+  display: flex;
+  align-items: flex-start; 
+  justify-content: flex-start;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+}
+
+.lp-usuarios-icon-img {
+  width: 100%;
+  max-width: 160px;
+  height: auto;
+  object-fit: contain;
+  opacity: 0.85;
+  display: block;
+  filter: drop-shadow(0 2px 8px rgba(47, 65, 86, 0.04));
+  margin-top: 10px;
+}
+
+/* ============================================================
+   CONTENIDO PRINCIPAL
+   ============================================================ */
+
+.lp-usuarios-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 24px 24px 0;
+  height: 100%;
+  max-height: 100vh; 
+  min-width: 0;
+  background: #ffffff;
+  overflow-y: auto;
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.lp-usuarios-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  flex-shrink: 0;
+  padding-top: 24px;
+}
+
+.lp-usuarios-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lp-usuarios-title {
+  font-family: 'Fraunces', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2F4156;
+  margin: 0;
+}
+
+.lp-usuarios-subtitle {
+  color: rgba(47, 65, 86, 0.35);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* ============================================================
+   FILTROS DE ROL Y BÚSQUEDA
+   ============================================================ */
+
+.lp-usuarios-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.lp-usuarios-filtro-btn {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 60px;
+  border: 1.5px solid #2F4156;
+  cursor: pointer;
+  background: transparent;
+  color: #2F4156;
+  transition: all 0.2s ease;
+}
+
+.lp-usuarios-filtro-btn:hover {
+  background: rgba(47, 65, 86, 0.04);
+}
+
+.lp-usuarios-filtro-btn[data-activo='true'] {
+  background: #2F4156;
+  color: #ffffff;
+}
+
+.lp-usuarios-busqueda-form {
+  margin-left: auto;
+}
+
+.lp-usuarios-busqueda-input {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  padding: 10px 14px;
+  border-radius: 60px;
+  border: 1px solid #2F4156;
+  background: #ffffff;
+  color: #2F4156;
+  min-width: 220px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.lp-usuarios-busqueda-input:focus {
+  border-color: #567C8D;
+}
+
+/* ============================================================
+   TABLA
+   ============================================================ */
+
+.lp-usuarios-tabla-container {
+  background: #ffffff;
+  border: 1px solid rgba(47, 65, 86, 0.04);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.lp-usuarios-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.lp-usuarios-tabla th {
+  text-align: left;
+  padding: 14px 18px;
+  color: rgba(47, 65, 86, 0.4);
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid rgba(47, 65, 86, 0.06);
+  background: rgba(47, 65, 86, 0.01);
+}
+
+.lp-usuarios-tabla td {
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(47, 65, 86, 0.03);
+  color: #2F4156;
+  vertical-align: middle;
+}
+
+.lp-usuarios-tabla tbody tr {
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.lp-usuarios-tabla tbody tr:hover {
+  background: rgba(47, 65, 86, 0.02);
+}
+
+.lp-usuarios-tabla tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ============================================================
+   TARJETAS Y DETALLES (Formularios, Fichas)
+   ============================================================ */
+
+.lp-usuarios-card {
+  background: rgba(47, 65, 86, 0.01);
+  border: 1px solid rgba(47, 65, 86, 0.04);
+  border-radius: 12px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 560px;
+}
+
+.lp-usuarios-card-titulo {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2F4156;
+  margin: 0 0 4px 0;
+}
+
+.lp-usuarios-card-texto {
+  font-size: 0.85rem;
+  color: #2F4156;
+  margin: 0;
+}
+
+.lp-usuarios-card-muted {
+  font-size: 0.8rem;
+  color: rgba(47, 65, 86, 0.4);
+  margin: 0;
+}
+
+/* ============================================================
+   FICHA DE USUARIO (Detalle)
+   ============================================================ */
+
+.lp-usuarios-perfil-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 4px;
+}
+
+.lp-usuarios-avatar-grande {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(86, 124, 141, 0.06);
+  color: #2F4156;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.lp-usuarios-nombre-perfil {
+  font-family: 'Fraunces', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #2F4156;
+  margin: 0 0 2px 0;
+}
+
+/* ============================================================
+   BOTONES Y ACCIONES
+   ============================================================ */
+
+.lp-usuarios-btn {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Inter', sans-serif;
+  width: auto;
+  align-self: flex-start;
+}
+
+.lp-usuarios-btn-primary {
+  background: #2F4156;
+  color: white;
+}
+
+.lp-usuarios-btn-primary:hover:not(:disabled) {
+  background: #1a2a3a;
+}
+
+.lp-usuarios-btn-secondary {
+  background: rgba(47, 65, 86, 0.02);
+  color: #2F4156;
+  border: 1px solid rgba(47, 65, 86, 0.08);
+}
+
+.lp-usuarios-btn-secondary:hover:not(:disabled) {
+  background: rgba(47, 65, 86, 0.04);
+}
+
+.lp-usuarios-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   MINIATURA DOCUMENTO
+   ============================================================ */
+
+.lp-usuarios-miniatura {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.lp-usuarios-miniatura-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid rgba(47, 65, 86, 0.1);
+}
+
+.lp-usuarios-miniatura-vacia {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  border: 1.5px dashed rgba(47, 65, 86, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(47, 65, 86, 0.4);
+  font-size: 0.7rem;
+  text-align: center;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1024px) {
+  .lp-usuarios-icon-side {
+    width: 80px;
+  }
+  .lp-usuarios-icon-img {
+    max-width: 70px;
+  }
+}
+
+@media (max-width: 768px) {
+  .lp-usuarios-wrapper {
+    flex-direction: column;
+  }
+
+  .lp-usuarios-icon-side {
+    position: relative;
+    width: 100%;
+    min-height: auto;
+    height: 60px;
+    padding: 8px 0;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .lp-usuarios-icon-img {
+    max-width: 48px;
+    height: 48px;
+  }
+
+  .lp-usuarios-content {
+    padding: 0 16px 16px 16px;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .lp-usuarios-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .lp-usuarios-title {
+    font-size: 1.3rem;
+  }
+
+  .lp-usuarios-busqueda-form {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .lp-usuarios-busqueda-input {
+    width: 100%;
+    min-width: 100%;
+  }
+}

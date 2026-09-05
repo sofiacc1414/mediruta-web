@@ -1,0 +1,341 @@
+/* ============================================================
+   NOVEDADES TAB — FONDO BLANCO CON ÍCONO LATERAL
+   ============================================================ */
+
+/* ===== WRAPPER ===== */
+.lp-novedades-wrapper {
+  position: relative;
+  display: flex;
+  gap: 0;
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  background: #ffffff;
+}
+
+/* ============================================================
+   ÍCONO LATERAL (Grande, Transparente)
+   ============================================================ */
+
+.lp-novedades-icon-side {
+  position: sticky;
+  top: 0;
+  flex-shrink: 0;
+  width: 180px; 
+  height: 100%;
+  min-height: 400px;
+  display: flex;
+  align-items: flex-start; 
+  justify-content: flex-start;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+}
+
+.lp-novedades-icon-img {
+  width: 100%;
+  max-width: 160px;
+  height: auto;
+  object-fit: contain;
+  opacity: 0.85;
+  display: block;
+  filter: drop-shadow(0 2px 8px rgba(47, 65, 86, 0.04));
+  margin-top: 10px;
+}
+
+/* ============================================================
+   CONTENIDO PRINCIPAL
+   ============================================================ */
+
+.lp-novedades-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 24px 24px 0;
+  height: 100%;
+  max-height: 100vh; 
+  min-width: 0;
+  background: #ffffff;
+  overflow-y: auto;
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.lp-novedades-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  flex-shrink: 0;
+  padding-top: 24px;
+}
+
+.lp-novedades-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lp-novedades-title {
+  font-family: 'Fraunces', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2F4156;
+  margin: 0;
+}
+
+.lp-novedades-subtitle {
+  color: rgba(47, 65, 86, 0.35);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* ============================================================
+   TARJETAS DE NOVEDADES
+   ============================================================ */
+
+.lp-novedades-card {
+  background: rgba(47, 65, 86, 0.01);
+  border: 1px solid rgba(47, 65, 86, 0.04);
+  border-radius: 12px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  transition: all 0.2s ease;
+}
+
+.lp-novedades-card:hover {
+  border-color: rgba(86, 124, 141, 0.15);
+  background: rgba(86, 124, 141, 0.02);
+}
+
+.lp-novedades-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.lp-novedades-card-codigo {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #2F4156;
+}
+
+.lp-novedades-card-detalle {
+  font-size: 0.85rem;
+  color: #2F4156;
+}
+
+.lp-novedades-card-meta {
+  font-size: 0.8rem;
+  color: rgba(47, 65, 86, 0.4);
+}
+
+/* ============================================================
+   ESTADOS VACÍOS Y DE CARGA
+   ============================================================ */
+
+.lp-novedades-vacio {
+  text-align: center;
+  padding: 40px 20px;
+  background: rgba(47, 65, 86, 0.01);
+  border: 1px solid rgba(47, 65, 86, 0.04);
+  border-radius: 12px;
+}
+
+.lp-novedades-vacio h3 {
+  font-size: 1rem;
+  color: #2F4156;
+  margin: 0 0 2px 0;
+}
+
+.lp-novedades-vacio p {
+  color: rgba(47, 65, 86, 0.25);
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+/* ============================================================
+   BOTONES
+   ============================================================ */
+
+.lp-novedades-btn {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Inter', sans-serif;
+  width: auto;
+  flex-shrink: 0;
+}
+
+.lp-novedades-btn-primary {
+  background: #2F4156;
+  color: white;
+}
+
+.lp-novedades-btn-primary:hover:not(:disabled) {
+  background: #1a2a3a;
+}
+
+.lp-novedades-btn-secondary {
+  background: rgba(47, 65, 86, 0.02);
+  color: #2F4156;
+  border: 1px solid rgba(47, 65, 86, 0.08);
+}
+
+.lp-novedades-btn-secondary:hover:not(:disabled) {
+  background: rgba(47, 65, 86, 0.04);
+}
+
+.lp-novedades-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1024px) {
+  .lp-novedades-icon-side {
+    width: 80px;
+  }
+  .lp-novedades-icon-img {
+    max-width: 70px;
+  }
+}
+
+@media (max-width: 768px) {
+  .lp-novedades-wrapper {
+    flex-direction: column;
+  }
+
+  .lp-novedades-icon-side {
+    position: relative;
+    width: 100%;
+    min-height: auto;
+    height: 60px;
+    padding: 8px 0;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .lp-novedades-icon-img {
+    max-width: 48px;
+    height: 48px;
+  }
+
+  .lp-novedades-content {
+    padding: 0 16px 16px 16px;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .lp-novedades-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .lp-novedades-title {
+    font-size: 1.3rem;
+  }
+
+  .lp-novedades-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .lp-novedades-btn {
+    width: 100%;
+  }
+}
+
+/* ============================================================
+   TIPO DE NOVEDAD Y DIFF DE EDICIÓN (ronda 3)
+   ============================================================ */
+
+/* HU-07 (ronda 3) — tag de "tipo de novedad". Distingue los 3 tipos
+ * con contraste, no con un color fuera de la paleta — mismo criterio
+ * que el resto del proyecto (context.md Parte A, §4). */
+.admin-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px var(--space-2);
+  border-radius: var(--radius-pill);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.admin-tag--pregunta {
+  background: var(--color-beige);
+  color: var(--color-navy);
+}
+
+.admin-tag--edicion {
+  background: var(--color-sky-blue);
+  color: var(--color-navy);
+}
+
+.admin-tag--codigo {
+  background: var(--color-navy);
+  color: var(--color-white);
+}
+
+/* HU-07 (ronda 3) — diff "antes / propuesto" de una solicitud de edición. */
+.admin-diff-edicion {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.admin-diff-columna {
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--color-beige);
+}
+
+.admin-diff-columna--propuesto {
+  background: var(--color-sky-blue);
+}
+
+.admin-diff-columna-titulo {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-teal);
+  margin-bottom: 4px;
+}
+
+.admin-diff-campo {
+  font-size: 0.85rem;
+  color: var(--color-navy);
+}
+
+.admin-diff-campo strong {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--color-teal);
+}
+
+@media (max-width: 560px) {
+  .admin-diff-edicion {
+    grid-template-columns: 1fr;
+  }
+}

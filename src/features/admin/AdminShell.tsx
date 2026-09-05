@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AlertTriangleIcon, MopedIcon, PackageIcon, PersonIcon, UsersIcon } from '../../shared/components/icons';
 import { useAuth } from '../usuarios/hooks/useAuth';
@@ -17,23 +17,14 @@ const ETIQUETAS_ROL: Record<string, string> = {
   ADMINISTRADOR: 'Administrador',
 };
 
-/**
- * Panel admin — un solo contenedor navegable por tabs (el sidebar ES
- * la lista de tabs, en vez de un menú que navega a rutas separadas).
- *
- * Requisito crítico: cambiar de tab y volver no debe perder el estado
- * de la tab anterior (filtros, datos ya cargados, texto en inputs). En
- * vez de desmontar el contenido inactivo (lo que harían unos Tabs con
- * renderizado condicional típico), cada sección se queda montada desde
- * la primera vez que se visita (`visited`) y solo se oculta con
- * `display: none` — nunca se vuelve a crear el componente, así que su
- * estado interno (y lo que ya pidió al backend) sigue intacto.
- */
 export function AdminShell() {
   const { estado, logout } = useAuth();
   const navigate = useNavigate();
   const [tab, setTab] = useState<TabKey>('pedidos');
   const [visited, setVisited] = useState<Set<TabKey>>(() => new Set<TabKey>(['pedidos']));
+  
+  // >>> SE CARGA LA IMAGEN FIJA PARA EL SIDEBAR <<<
+  const [fotoPerfilUrl] = useState<string | null>('/images/ADMINISTRADORA.jpg');
 
   if (estado.tipo !== 'autenticado') return null;
 
@@ -53,9 +44,6 @@ export function AdminShell() {
     { key: 'pedidos', label: 'Pedidos', icon: <PackageIcon /> },
     { key: 'novedades', label: 'Novedades', icon: <AlertTriangleIcon /> },
     { key: 'domiciliarios', label: 'Domiciliarios', icon: <MopedIcon /> },
-    // Ver/bloquear cuentas Paciente/Domiciliario es para cualquier
-    // admin; crear o bloquear una cuenta Administrador sigue siendo
-    // solo ROOT (lo exige la propia UsuariosTab con `esRoot`).
     { key: 'usuarios', label: 'Usuarios', icon: <UsersIcon /> },
     { key: 'perfil', label: 'Mi perfil', icon: <PersonIcon /> },
   ];
@@ -68,6 +56,7 @@ export function AdminShell() {
         onSelect={irA}
         correo={estado.usuario.correo}
         rolPrincipal={rolPrincipal ? (ETIQUETAS_ROL[rolPrincipal] ?? rolPrincipal) : ''}
+        fotoPerfilUrl={fotoPerfilUrl} // >>> SE ENVÍA LA IMAGEN <<<
         onLogout={onLogout}
       />
       <main className="admin-content">

@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Alert } from '../../../shared/components/Alert';
-import { Button } from '../../../shared/components/Button';
 import { ApiError, ApiSinConexionError } from '../../../shared/lib/apiError';
 import { useAuth } from '../../usuarios/hooks/useAuth';
 import {
@@ -15,6 +14,7 @@ import {
 } from '../api/pedidosAdminApi';
 import { AccionesCodigoEntrega } from './AccionesCodigoEntrega';
 import { DiffEdicionPedido } from './DiffEdicionPedido';
+import './NovedadesTab.css';
 
 const ETIQUETAS_ORIGEN: Record<NovedadAbierta['origen'], string> = {
   paciente: 'el paciente',
@@ -103,118 +103,131 @@ export function NovedadesTab() {
     }
   }
 
-  if (estado.tipo !== 'autenticado') return null;
   const accessToken = estado.accessToken;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
-      <div className="admin-page-header">
-        <h1>Novedades</h1>
-        <p>Lo que pacientes y domiciliarios reportan sobre un pedido en curso.</p>
+    <div className="lp-novedades-wrapper">
+      {/* ===== ÍCONO LATERAL ===== */}
+      <div className="lp-novedades-icon-side">
+        <img src="/images/Novedades.png" alt="Novedades" className="lp-novedades-icon-img" />
       </div>
 
-      {error ? <Alert tono="error">{error}</Alert> : null}
-      {exito ? <Alert tono="exito">{exito}</Alert> : null}
+      <div className="lp-novedades-content">
+        <div className="lp-novedades-header">
+          <div className="lp-novedades-header-left">
+            <h1 className="lp-novedades-title">Novedades</h1>
+            <p className="lp-novedades-subtitle">
+              Lo que pacientes y domiciliarios reportan sobre un pedido en curso.
+            </p>
+          </div>
+        </div>
 
-      {novedades === null && !error ? <p className="admin-muted">Cargando…</p> : null}
+        {error ? <Alert tono="error">{error}</Alert> : null}
+        {exito ? <Alert tono="exito">{exito}</Alert> : null}
 
-      {novedades?.length === 0 ? (
-        <div className="admin-card admin-empty">No hay novedades pendientes de atender.</div>
-      ) : null}
+        {novedades === null && !error ? <p className="admin-muted">Cargando…</p> : null}
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
-        {novedades?.map((novedad) => {
-          const enProceso = procesando === novedad.id;
-          return (
-            <div key={novedad.id} className="admin-card">
-              <div className="admin-card-header">
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
-                    <span style={{ fontWeight: 700 }}>{novedad.codigoPedido ?? 'Pedido'}</span>
-                    <span className={`admin-tag admin-tag--${novedad.tipo}`}>
-                      {ETIQUETAS_TIPO[novedad.tipo]}
-                    </span>
+        {novedades?.length === 0 ? (
+          <div className="lp-novedades-vacio">
+            <h3>¡Todo en orden!</h3>
+            <p>No hay novedades pendientes de atender.</p>
+          </div>
+        ) : null}
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          {novedades?.map((novedad) => {
+            const enProceso = procesando === novedad.id;
+            return (
+              <div
+                key={novedad.id}
+                className="lp-novedades-card"
+                style={{ flexDirection: 'column', alignItems: 'stretch', gap: '12px' }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '16px' }}>
+                  <div className="lp-novedades-card-info">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span className="lp-novedades-card-codigo">{novedad.codigoPedido ?? 'Pedido'}</span>
+                      <span className={`admin-tag admin-tag--${novedad.tipo}`}>
+                        {ETIQUETAS_TIPO[novedad.tipo]}
+                      </span>
+                    </div>
+                    <div className="lp-novedades-card-detalle">{novedad.detalle}</div>
+                    <div className="lp-novedades-card-meta">
+                      Reportada por {ETIQUETAS_ORIGEN[novedad.origen]} ({novedad.reportadaPorCorreo}) el{' '}
+                      {formatearFechaHora(novedad.creadoEn)}
+                    </div>
                   </div>
-                  <div>{novedad.detalle}</div>
-                  <div className="admin-muted">
-                    Reportada por {ETIQUETAS_ORIGEN[novedad.origen]} ({novedad.reportadaPorCorreo}) el{' '}
-                    {formatearFechaHora(novedad.creadoEn)}
-                  </div>
+
+                  {novedad.tipo === 'pregunta' || novedad.tipo === 'codigo' ? (
+                    <button
+                      type="button"
+                      className="lp-novedades-btn lp-novedades-btn-secondary"
+                      onClick={() =>
+                        ejecutar(novedad.id, () => resolverNovedad(accessToken, novedad.id))
+                      }
+                      disabled={enProceso}
+                    >
+                      {enProceso ? 'Resolviendo…' : 'Resolver'}
+                    </button>
+                  ) : null}
                 </div>
 
-                {novedad.tipo === 'pregunta' || novedad.tipo === 'codigo' ? (
-                  <Button
-                    variante="secondary"
-                    style={{ width: 'auto', flexShrink: 0 }}
-                    onClick={() =>
-                      ejecutar(novedad.id, () => resolverNovedad(accessToken, novedad.id))
+                {novedad.tipo === 'edicion' ? (
+                  <>
+                    <DiffEdicionPedido
+                      actuales={novedad.datosActuales}
+                      propuestos={novedad.datosPropuestos}
+                    />
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <button
+                        type="button"
+                        className="lp-novedades-btn lp-novedades-btn-primary"
+                        onClick={() =>
+                          ejecutar(novedad.id, () => aprobarEdicionNovedad(accessToken, novedad.id))
+                        }
+                        disabled={enProceso}
+                      >
+                        {enProceso ? 'Aplicando…' : 'Aprobar'}
+                      </button>
+                      <button
+                        type="button"
+                        className="lp-novedades-btn lp-novedades-btn-secondary"
+                        onClick={() =>
+                          ejecutar(novedad.id, () => rechazarEdicionNovedad(accessToken, novedad.id))
+                        }
+                        disabled={enProceso}
+                      >
+                        {enProceso ? 'Rechazando…' : 'Rechazar'}
+                      </button>
+                    </div>
+                  </>
+                ) : null}
+
+                {novedad.tipo === 'codigo' ? (
+                  <AccionesCodigoEntrega
+                    codigoEntrega={novedad.codigoEntrega}
+                    regenerando={enProceso}
+                    reenviando={enProceso}
+                    onRegenerar={() =>
+                      ejecutar(
+                        novedad.id,
+                        () => regenerarCodigoEntrega(accessToken, novedad.solicitudId),
+                        { recargar: false },
+                      )
                     }
-                    disabled={enProceso}
-                  >
-                    {enProceso ? 'Resolviendo…' : 'Resolver'}
-                  </Button>
+                    onReenviar={() =>
+                      ejecutar(
+                        novedad.id,
+                        () => reenviarCodigoEntregaCorreo(accessToken, novedad.solicitudId),
+                        { recargar: false },
+                      )
+                    }
+                  />
                 ) : null}
               </div>
-
-              {novedad.tipo === 'edicion' ? (
-                <>
-                  <DiffEdicionPedido
-                    actuales={novedad.datosActuales}
-                    propuestos={novedad.datosPropuestos}
-                  />
-                  <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
-                    <Button
-                      variante="primary"
-                      style={{ width: 'auto', flexShrink: 0 }}
-                      onClick={() =>
-                        ejecutar(novedad.id, () =>
-                          aprobarEdicionNovedad(accessToken, novedad.id),
-                        )
-                      }
-                      disabled={enProceso}
-                    >
-                      {enProceso ? 'Aplicando…' : 'Aprobar'}
-                    </Button>
-                    <Button
-                      variante="secondary"
-                      style={{ width: 'auto', flexShrink: 0 }}
-                      onClick={() =>
-                        ejecutar(novedad.id, () =>
-                          rechazarEdicionNovedad(accessToken, novedad.id),
-                        )
-                      }
-                      disabled={enProceso}
-                    >
-                      {enProceso ? 'Rechazando…' : 'Rechazar'}
-                    </Button>
-                  </div>
-                </>
-              ) : null}
-
-              {novedad.tipo === 'codigo' ? (
-                <AccionesCodigoEntrega
-                  codigoEntrega={novedad.codigoEntrega}
-                  regenerando={enProceso}
-                  reenviando={enProceso}
-                  onRegenerar={() =>
-                    ejecutar(
-                      novedad.id,
-                      () => regenerarCodigoEntrega(accessToken, novedad.solicitudId),
-                      { recargar: false },
-                    )
-                  }
-                  onReenviar={() =>
-                    ejecutar(
-                      novedad.id,
-                      () => reenviarCodigoEntregaCorreo(accessToken, novedad.solicitudId),
-                      { recargar: false },
-                    )
-                  }
-                />
-              ) : null}
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </div>
   );

@@ -1,0 +1,357 @@
+/* ============================================================
+   DOMICILIARIOS TAB — FONDO BLANCO CON ÍCONO LATERAL
+   ============================================================ */
+
+/* ===== WRAPPER ===== */
+.lp-domiciliarios-wrapper {
+  position: relative;
+  display: flex;
+  gap: 0;
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  background: #ffffff;
+}
+
+/* ============================================================
+   ÍCONO LATERAL (Grande, Transparente)
+   ============================================================ */
+
+.lp-domiciliarios-icon-side {
+  position: sticky;
+  top: 0;
+  flex-shrink: 0;
+  width: 180px; 
+  height: 100%;
+  min-height: 400px;
+  display: flex;
+  align-items: flex-start; 
+  justify-content: flex-start;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+}
+
+.lp-domiciliarios-icon-img {
+  width: 100%;
+  max-width: 160px;
+  height: auto;
+  object-fit: contain;
+  opacity: 0.85;
+  display: block;
+  filter: drop-shadow(0 2px 8px rgba(47, 65, 86, 0.04));
+  margin-top: 10px;
+}
+
+/* ============================================================
+   CONTENIDO PRINCIPAL (ocupa el resto del ancho)
+   ============================================================ */
+
+.lp-domiciliarios-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 24px 24px 0;
+  height: 100%;
+  max-height: 100vh; 
+  min-width: 0;
+  background: #ffffff;
+  overflow-y: auto;
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.lp-domiciliarios-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  flex-shrink: 0;
+  padding-top: 24px;
+}
+
+.lp-domiciliarios-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lp-domiciliarios-title {
+  font-family: 'Fraunces', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2F4156;
+  margin: 0;
+}
+
+.lp-domiciliarios-subtitle {
+  color: rgba(47, 65, 86, 0.35);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* ============================================================
+   TABLA
+   ============================================================ */
+
+.lp-domiciliarios-tabla-container {
+  background: #ffffff;
+  border: 1px solid rgba(47, 65, 86, 0.04);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.lp-domiciliarios-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.lp-domiciliarios-tabla th {
+  text-align: left;
+  padding: 14px 18px;
+  color: rgba(47, 65, 86, 0.4);
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid rgba(47, 65, 86, 0.06);
+  background: rgba(47, 65, 86, 0.01);
+}
+
+.lp-domiciliarios-tabla td {
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(47, 65, 86, 0.03);
+  color: #2F4156;
+  vertical-align: middle;
+}
+
+.lp-domiciliarios-tabla tbody tr {
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.lp-domiciliarios-tabla tbody tr:hover {
+  background: rgba(47, 65, 86, 0.02);
+}
+
+.lp-domiciliarios-tabla tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ============================================================
+   ESTILOS DE DETALLE (Cards)
+   ============================================================ */
+
+.lp-domiciliarios-detalle-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 18px;
+  background: rgba(47, 65, 86, 0.01);
+  border: 1px solid rgba(47, 65, 86, 0.04);
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.lp-domiciliarios-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(86, 124, 141, 0.06);
+  color: #567C8D;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 24px;
+}
+
+.lp-domiciliarios-detalle-titulo {
+  font-family: 'Fraunces', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #2F4156;
+  margin: 0 0 2px 0;
+}
+
+.lp-domiciliarios-detalle-estado {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #567C8D;
+}
+
+.lp-domiciliarios-card {
+  background: rgba(47, 65, 86, 0.01);
+  border: 1px solid rgba(47, 65, 86, 0.04);
+  border-radius: 12px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lp-domiciliarios-card-titulo {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #2F4156;
+  margin: 0 0 4px 0;
+}
+
+.lp-domiciliarios-card-texto {
+  font-size: 0.85rem;
+  color: #2F4156;
+  margin: 0;
+}
+
+.lp-domiciliarios-card-muted {
+  font-size: 0.8rem;
+  color: rgba(47, 65, 86, 0.4);
+  margin: 0;
+}
+
+/* ============================================================
+   DOCUMENTOS (Grid 3 columnas)
+   ============================================================ */
+
+.lp-domiciliarios-docs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 14px;
+}
+
+.lp-domiciliarios-doc-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  background: #ffffff;
+  border: 1px solid rgba(47, 65, 86, 0.04);
+  border-radius: 10px;
+  text-decoration: none;
+  color: #2F4156;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lp-domiciliarios-doc-item:hover {
+  border-color: rgba(86, 124, 141, 0.2);
+  background: rgba(86, 124, 141, 0.02);
+}
+
+.lp-domiciliarios-doc-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(86, 124, 141, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   ACCIONES (BOTONES)
+   ============================================================ */
+
+.lp-domiciliarios-acciones {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.lp-domiciliarios-btn {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Inter', sans-serif;
+}
+
+.lp-domiciliarios-btn-primary {
+  background: #2F4156;
+  color: white;
+}
+
+.lp-domiciliarios-btn-primary:hover:not(:disabled) {
+  background: #1a2a3a;
+}
+
+.lp-domiciliarios-btn-secondary {
+  background: rgba(47, 65, 86, 0.02);
+  color: #2F4156;
+  border: 1px solid rgba(47, 65, 86, 0.08);
+}
+
+.lp-domiciliarios-btn-secondary:hover:not(:disabled) {
+  background: rgba(47, 65, 86, 0.04);
+}
+
+.lp-domiciliarios-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1024px) {
+  .lp-domiciliarios-icon-side {
+    width: 80px;
+  }
+  .lp-domiciliarios-icon-img {
+    max-width: 70px;
+  }
+  .lp-domiciliarios-docs-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .lp-domiciliarios-wrapper {
+    flex-direction: column;
+  }
+
+  .lp-domiciliarios-icon-side {
+    position: relative;
+    width: 100%;
+    min-height: auto;
+    height: 60px;
+    padding: 8px 0;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .lp-domiciliarios-icon-img {
+    max-width: 48px;
+    height: 48px;
+  }
+
+  .lp-domiciliarios-content {
+    padding: 0 16px 16px 16px;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .lp-domiciliarios-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .lp-domiciliarios-title {
+    font-size: 1.3rem;
+  }
+  .lp-domiciliarios-docs-grid {
+    grid-template-columns: 1fr;
+  }
+}

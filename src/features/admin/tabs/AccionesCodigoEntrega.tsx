@@ -1,5 +1,3 @@
-import { Button } from '../../../shared/components/Button';
-
 type Props = {
   codigoEntrega: string | null;
   regenerando: boolean;
@@ -30,23 +28,23 @@ export function AccionesCodigoEntrega({
           {codigoEntrega}
         </div>
       ) : null}
-      <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
-        <Button
-          variante="secondary"
-          style={{ width: 'auto', flexShrink: 0 }}
+      <div style={{ display: 'flex', gap: '8px' }}>
+        <button
+          type="button"
+          className="lp-novedades-btn lp-novedades-btn-secondary"
           onClick={onRegenerar}
           disabled={regenerando || reenviando}
         >
           {regenerando ? 'Regenerando…' : 'Regenerar código'}
-        </Button>
-        <Button
-          variante="secondary"
-          style={{ width: 'auto', flexShrink: 0 }}
+        </button>
+        <button
+          type="button"
+          className="lp-novedades-btn lp-novedades-btn-secondary"
           onClick={onReenviar}
           disabled={regenerando || reenviando}
         >
           {reenviando ? 'Enviando…' : 'Reenviar por correo'}
-        </Button>
+        </button>
       </div>
     </div>
   );

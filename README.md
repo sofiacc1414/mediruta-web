@@ -28,10 +28,11 @@ Producción actual: https://mediruta-web-seven.vercel.app
 | Historia | Estado | Notas |
 |---|---|---|
 | **HU-01** — Gestión de acceso a la plataforma (login, refresh, cambio/recuperación de contraseña, logout) | ✅ Completa | Panel restringido a ROOT/ADMINISTRADOR — cualquier otro rol nunca llega a `autenticado` (`AuthProvider`). |
-| **HU-06** — Revisión y aprobación de solicitudes | 🔜 Próxima | — |
+| **HU-06** — Gestión y resolución de novedades (tickets) reportadas por Paciente/Domiciliario | ✅ Completa | Panel de novedades del Administrador — ajustes visuales en curso. |
+| **HU-07** — Consulta y actualización del estado del proceso | ✅ Completa | Panel de novedades del Administrador — ajustes visuales en curso. |
 | **HU-08** — Supervisión y trazabilidad administrativa (validación de domiciliarios) | ✅ Completa | Ver detalle abajo. |
-| **HU-09** — Asignación y gestión del domiciliario | 🔜 Próxima | — |
-| **HU-10** — Control del proceso de entrega | 🔜 Próxima | — |
+| **HU-09** — Asignación y gestión del domiciliario | ✅ Completa | Visibilidad administrativa de la asignación — ajustes visuales en curso. |
+| **HU-10** — Control del proceso de entrega | ✅ Completa | Ajustes visuales en curso. |
 
 ### HU-08 — qué incluye
 

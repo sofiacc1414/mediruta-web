@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AlertTriangleIcon, MopedIcon, PackageIcon, PersonIcon, UsersIcon } from '../../shared/components/icons';
 import { useAuth } from '../usuarios/hooks/useAuth';

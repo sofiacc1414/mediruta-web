@@ -1,7 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Alert } from '../../../shared/components/Alert';
-import { Button } from '../../../shared/components/Button';
 import { Input } from '../../../shared/components/Input';
 import { LockIcon } from '../../../shared/components/icons';
 import { ApiError, ApiSinConexionError } from '../../../shared/lib/apiError';

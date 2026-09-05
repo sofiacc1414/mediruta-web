@@ -1,7 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Alert } from '../../../shared/components/Alert';
-import { Button } from '../../../shared/components/Button';
 import { Input } from '../../../shared/components/Input';
 import { LockIcon, MailIcon } from '../../../shared/components/icons';
 import { useAuth } from '../hooks/useAuth';

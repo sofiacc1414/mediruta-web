@@ -21,7 +21,7 @@ npm run build      # genera dist/
 npx vercel --prod   # despliega a producción (requiere sesión de Vercel)
 ```
 
-Producción actual: https://mediruta-web-seven.vercel.app
+Producción actual: https://mediruta-web.vercel.app
 
 ## Estado del proyecto
 

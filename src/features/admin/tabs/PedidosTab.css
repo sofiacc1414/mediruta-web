@@ -163,7 +163,7 @@
 
 .lp-pedidos-stats {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 12px;
   flex-shrink: 0;
 }
@@ -214,6 +214,9 @@
 }
 .lp-pedidos-stat-entregado .lp-pedidos-stat-number {
   color: #22c55e;
+}
+.lp-pedidos-stat-cancelado .lp-pedidos-stat-number {
+  color: var(--color-teal);
 }
 
 /* ============================================================
@@ -332,6 +335,17 @@
 /* ============================================================
    LISTA DE PEDIDOS (UNO DEBAJO DEL OTRO, EN FILA)
    ============================================================ */
+
+/* La lista vive dentro de `.lp-pedidos-content`, que tiene
+ * `overflow: hidden` (para que el header/stats/filtros no se muevan) —
+ * a este contenedor le faltaba `overflow-y: auto` y `min-height: 0`
+ * (indispensable en un hijo flex para que el scroll interno funcione),
+ * así que con muchos pedidos la lista se cortaba sin forma de bajar. */
+.lp-pedidos-scroll-container {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
 
 .lp-pedidos-list {
   display: flex;

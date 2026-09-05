@@ -82,7 +82,7 @@ export function PedidosTab() {
    * agrupan 2 estados cada uno, y la API de pedidos solo filtra por un
    * único `estado`, así que no vale la pena un roundtrip nuevo por esto. */
   const [filtroTarjeta, setFiltroTarjeta] = useState<
-    'total' | 'pendientes' | 'en_camino' | 'entregados'
+    'total' | 'pendientes' | 'en_camino' | 'entregados' | 'cancelados'
   >('total');
 
   const [pedidos, setPedidos] = useState<PedidoAdmin[] | null>(null);
@@ -151,17 +151,27 @@ export function PedidosTab() {
     cargarPedidos({});
   }
 
-  function grupoDelPedido(p: Pick<PedidoAdmin, 'estado'>): 'pendientes' | 'en_camino' | 'entregados' | 'otro' {
+  // Las 4 tarjetas deben partir el universo completo de estados que trae
+  // `listarPedidosAdmin` (todos salvo 'borrador', que ni siquiera llega acá
+  // — el backend solo devuelve pedidos ya enviados, con código asignado).
+  // Antes "en_camino" solo cubría 2 de los 4 estados intermedios y no
+  // existía una tarjeta para "cancelada", así que el Total nunca coincidía
+  // con la suma de las demás tarjetas.
+  function grupoDelPedido(
+    p: Pick<PedidoAdmin, 'estado'>,
+  ): 'pendientes' | 'en_camino' | 'entregados' | 'cancelados' {
     if (p.estado === 'pendiente_revision' || p.estado === 'en_asignacion') return 'pendientes';
-    if (p.estado === 'asignado_en_camino_farmacia' || p.estado === 'en_camino_entrega') return 'en_camino';
     if (p.estado === 'entregado') return 'entregados';
-    return 'otro';
+    if (p.estado === 'cancelada') return 'cancelados';
+    // asignado_en_camino_farmacia | medicamentos_recogidos | en_camino_entrega | en_sitio
+    return 'en_camino';
   }
 
   const total = pedidos?.length || 0;
   const pendientes = pedidos?.filter((p) => grupoDelPedido(p) === 'pendientes').length || 0;
   const enCamino = pedidos?.filter((p) => grupoDelPedido(p) === 'en_camino').length || 0;
   const entregados = pedidos?.filter((p) => grupoDelPedido(p) === 'entregados').length || 0;
+  const cancelados = pedidos?.filter((p) => grupoDelPedido(p) === 'cancelados').length || 0;
 
   const pedidosMostrados =
     filtroTarjeta === 'total' ? pedidos : pedidos?.filter((p) => grupoDelPedido(p) === filtroTarjeta);
@@ -224,6 +234,14 @@ export function PedidosTab() {
           >
             <span className="lp-pedidos-stat-number">{entregados}</span>
             <span className="lp-pedidos-stat-label">Entregados</span>
+          </button>
+          <button
+            type="button"
+            className={`lp-pedidos-stat lp-pedidos-stat-cancelado${filtroTarjeta === 'cancelados' ? ' lp-pedidos-stat--activa' : ''}`}
+            onClick={() => setFiltroTarjeta('cancelados')}
+          >
+            <span className="lp-pedidos-stat-number">{cancelados}</span>
+            <span className="lp-pedidos-stat-label">Cancelados</span>
           </button>
         </div>
 

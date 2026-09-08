@@ -449,6 +449,20 @@ function CuentaFicha({
                   >
                     {procesando ? 'Desbloqueando…' : 'Desbloquear cuenta'}
                   </Button>
+                ) : ficha.estadoCuenta === 'desactivada' ? (
+                  // Antes una cuenta autodesactivada (HU-05) no tenía
+                  // ninguna acción admin disponible — `onDesbloquear`
+                  // llama al mismo endpoint que ahora también revierte
+                  // este estado, no solo 'bloqueada'.
+                  <Button
+                    variante="secondary"
+                    style={{ width: 'auto', alignSelf: 'flex-start' }}
+                    disabled={procesando}
+                    onClick={onDesbloquear}
+                    className="lp-usuarios-btn"
+                  >
+                    {procesando ? 'Reactivando…' : 'Reactivar cuenta'}
+                  </Button>
                 ) : (
                   <Button
                     variante="secondary"

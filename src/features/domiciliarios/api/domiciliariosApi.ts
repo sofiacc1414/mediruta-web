@@ -30,6 +30,21 @@ export type DetalleDomiciliario = {
   historial: ValidacionHistorial[];
 };
 
+/** Ronda 9 — estado por el que se puede filtrar el listado general. */
+export type EstadoDomiciliarioAdmin = 'pendiente_validacion' | 'habilitado' | 'rechazado' | 'todos';
+
+/** Ronda 9 — una fila del listado general (a diferencia de
+ * `DomiciliarioPendiente`, cualquier estado, no solo pendiente). */
+export type DomiciliarioAdmin = {
+  usuarioId: string;
+  nombreCompleto: string | null;
+  correo: string;
+  telefono: string | null;
+  estado: 'pendiente_validacion' | 'habilitado' | 'rechazado';
+  solicitadoEn: string;
+  actualizadoEn: string;
+};
+
 type MensajeResultado = { message: string };
 
 /** G01 — domiciliarios con validación pendiente, más antiguos primero. */
@@ -37,6 +52,15 @@ export function listarDomiciliariosPendientes(accessToken: string) {
   return apiClient.get('/admin/domiciliarios/pendientes', {
     accessToken,
   }) as Promise<DomiciliarioPendiente[]>;
+}
+
+/** Ronda 9 — listado general con filtro de estado; sin `estado` trae
+ * solo los pendientes (comportamiento histórico). */
+export function listarDomiciliariosAdmin(accessToken: string, estado?: EstadoDomiciliarioAdmin) {
+  const query = estado ? `?estado=${estado}` : '';
+  return apiClient.get(`/admin/domiciliarios${query}`, {
+    accessToken,
+  }) as Promise<DomiciliarioAdmin[]>;
 }
 
 /** G02/G06 — detalle (documentos como URL firmada) + historial de decisiones. */

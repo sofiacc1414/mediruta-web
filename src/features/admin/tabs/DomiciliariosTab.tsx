@@ -7,13 +7,24 @@ import { ApiError, ApiSinConexionError } from '../../../shared/lib/apiError';
 import { useAuth } from '../../usuarios/hooks/useAuth';
 import {
   aprobarDomiciliario,
-  listarDomiciliariosPendientes,
+  listarDomiciliariosAdmin,
   obtenerDetalleDomiciliario,
   rechazarDomiciliario,
   type DetalleDomiciliario,
-  type DomiciliarioPendiente,
+  type DomiciliarioAdmin,
+  type EstadoDomiciliarioAdmin,
 } from '../../domiciliarios/api/domiciliariosApi';
 import './DomiciliariosTab.css';
+
+/** Ronda 9 — tarjetas de estado con conteo, mismo patrón que Pedidos/
+ * Novedades: se trae todo una vez (`estado=todos`) y tanto los
+ * conteos como el filtro por tarjeta se resuelven en el cliente. */
+const TARJETAS_ESTADO: { value: EstadoDomiciliarioAdmin; label: string }[] = [
+  { value: 'todos', label: 'Todos' },
+  { value: 'pendiente_validacion', label: 'Pendientes' },
+  { value: 'habilitado', label: 'Aceptados' },
+  { value: 'rechazado', label: 'Rechazados' },
+];
 
 type Documento = { label: string; url: string | null };
 
@@ -89,14 +100,15 @@ export function DomiciliariosTab() {
   const [vista, setVista] = useState<{ tipo: 'lista' } | { tipo: 'detalle'; id: string }>({
     tipo: 'lista',
   });
-  const [pendientes, setPendientes] = useState<DomiciliarioPendiente[] | null>(null);
+  const [domiciliarios, setDomiciliarios] = useState<DomiciliarioAdmin[] | null>(null);
   const [errorLista, setErrorLista] = useState<string | null>(null);
+  const [filtroTarjeta, setFiltroTarjeta] = useState<EstadoDomiciliarioAdmin>('pendiente_validacion');
 
   const cargarLista = useCallback(() => {
     if (estado.tipo !== 'autenticado') return;
     setErrorLista(null);
-    listarDomiciliariosPendientes(estado.accessToken)
-      .then(setPendientes)
+    listarDomiciliariosAdmin(estado.accessToken, 'todos')
+      .then(setDomiciliarios)
       .catch((err: unknown) => {
         if (err instanceof ApiError || err instanceof ApiSinConexionError) {
           setErrorLista(err.message);
@@ -107,7 +119,7 @@ export function DomiciliariosTab() {
   }, [estado]);
 
   useEffect(() => {
-    if (pendientes === null) cargarLista();
+    if (domiciliarios === null) cargarLista();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -123,12 +135,24 @@ export function DomiciliariosTab() {
     );
   }
 
+  const conteos: Record<EstadoDomiciliarioAdmin, number> = {
+    todos: domiciliarios?.length ?? 0,
+    pendiente_validacion: 0,
+    habilitado: 0,
+    rechazado: 0,
+  };
+  domiciliarios?.forEach((d) => conteos[d.estado]++);
+
+  const visibles = domiciliarios?.filter(
+    (d) => filtroTarjeta === 'todos' || d.estado === filtroTarjeta,
+  );
+
   return (
     <div className="lp-domiciliarios-wrapper">
       {/* ===== ÍCONO LATERAL (Grande) ===== */}
       <div className="lp-domiciliarios-icon-side">
-        <img 
-          src="/images/Domiciliarios.png" 
+        <img
+          src="/images/Domiciliarios.png"
           alt="Domiciliarios"
           className="lp-domiciliarios-icon-img"
         />
@@ -137,38 +161,56 @@ export function DomiciliariosTab() {
       <div className="lp-domiciliarios-content">
         <div className="lp-domiciliarios-header">
           <div className="lp-domiciliarios-header-left">
-            <h1 className="lp-domiciliarios-title">Domiciliarios pendientes</h1>
+            <h1 className="lp-domiciliarios-title">Domiciliarios</h1>
             <p className="lp-domiciliarios-subtitle">Revisá y decidí las solicitudes de validación de Domiciliario.</p>
           </div>
         </div>
 
+        {/* Tarjetas de estado con conteo — click filtra la tabla de
+         * abajo, en el cliente, sobre lo ya cargado (ver `cargarLista`). */}
+        <div className="lp-domiciliarios-stats">
+          {TARJETAS_ESTADO.map((tarjeta) => (
+            <button
+              key={tarjeta.value}
+              type="button"
+              className={`lp-domiciliarios-stat${filtroTarjeta === tarjeta.value ? ' lp-domiciliarios-stat--activa' : ''}`}
+              onClick={() => setFiltroTarjeta(tarjeta.value)}
+            >
+              <span className="lp-domiciliarios-stat-number">{conteos[tarjeta.value]}</span>
+              <span className="lp-domiciliarios-stat-label">{tarjeta.label}</span>
+            </button>
+          ))}
+        </div>
+
         {errorLista ? <Alert tono="error">{errorLista}</Alert> : null}
 
-        {pendientes === null && !errorLista ? <p className="admin-muted">Cargando…</p> : null}
+        {domiciliarios === null && !errorLista ? <p className="admin-muted">Cargando…</p> : null}
 
-        {pendientes?.length === 0 ? (
-          <div className="admin-card admin-empty">No hay domiciliarios pendientes de validación por ahora.</div>
+        {visibles?.length === 0 ? (
+          <div className="admin-card admin-empty">No hay domiciliarios en este estado.</div>
         ) : null}
 
-        {pendientes && pendientes.length > 0 ? (
+        {visibles && visibles.length > 0 ? (
           <div className="lp-domiciliarios-tabla-container">
             <table className="lp-domiciliarios-tabla">
               <thead>
                 <tr>
                   <th>Nombre</th>
                   <th>Teléfono</th>
+                  <th>Estado</th>
                   <th>Solicitado</th>
                   <th />
                 </tr>
               </thead>
               <tbody>
-                {pendientes.map((domiciliario) => (
+                {visibles.map((domiciliario) => (
                   <tr
                     key={domiciliario.usuarioId}
                     onClick={() => setVista({ tipo: 'detalle', id: domiciliario.usuarioId })}
                   >
                     <td style={{ fontWeight: 600 }}>{domiciliario.nombreCompleto ?? 'Sin nombre registrado'}</td>
                     <td>{domiciliario.telefono ?? '—'}</td>
+                    <td>{ETIQUETAS_ESTADO[domiciliario.estado]}</td>
                     <td style={{ color: 'rgba(47, 65, 86, 0.4)' }}>{formatearFecha(domiciliario.solicitadoEn)}</td>
                     <td style={{ color: '#2F4156', fontWeight: 600, textAlign: 'right' }}>Revisar →</td>
                   </tr>

@@ -9,6 +9,11 @@ import {
   type Usuario,
 } from '../api/auth.api';
 import { AuthContext, type AuthEstado } from './authContext';
+import {
+  guardarRefreshToken,
+  leerRefreshToken,
+  limpiarRefreshToken,
+} from './refreshTokenStorage';
 
 /** Únicos roles que pueden usar el panel — la API no filtra por rol al
  * loguear (cualquier credencial válida entra), así que este chequeo lo
@@ -32,18 +37,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [estado]);
 
   const cerrarSesionLocal = useCallback((error?: string) => {
+    limpiarRefreshToken();
     setEstado({ tipo: 'anonimo', error });
   }, []);
 
   useEffect(() => {
     apiClient.onSesionExpirada = async () => {
+      const refreshToken = leerRefreshToken();
+      if (!refreshToken) {
+        cerrarSesionLocal();
+        return null;
+      }
       try {
-        const { accessToken } = await refrescarSesionRequest();
+        const nuevosTokens = await refrescarSesionRequest(refreshToken);
+        guardarRefreshToken(nuevosTokens.refreshToken);
         const actual = estadoRef.current;
         if (actual.tipo === 'autenticado') {
-          setEstado({ ...actual, accessToken });
+          setEstado({ ...actual, accessToken: nuevosTokens.accessToken });
         }
-        return accessToken;
+        return nuevosTokens.accessToken;
       } catch {
         cerrarSesionLocal();
         return null;
@@ -54,26 +66,41 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
   }, [cerrarSesionLocal]);
 
-  // Bootstrap: al abrir el panel, intenta restaurar sesión con la cookie
-  // de refresh (el access token nunca se persiste, solo vive en memoria).
+  // Bootstrap: al abrir el panel, intenta restaurar sesión con el
+  // refresh token guardado en localStorage (ver refreshTokenStorage.ts —
+  // se abandonó la cookie HttpOnly cross-site porque Vercel/Render son
+  // dominios distintos y los navegadores la bloquean cada vez más como
+  // cookie "de tercero", rompiendo la persistencia entre recargas).
   useEffect(() => {
     let cancelado = false;
 
     async function restaurar() {
+      const refreshToken = leerRefreshToken();
+      if (!refreshToken) {
+        if (!cancelado) setEstado({ tipo: 'anonimo' });
+        return;
+      }
       try {
-        const { accessToken } = await refrescarSesionRequest();
-        const { usuario } = await obtenerSesionActual(accessToken);
+        const nuevosTokens = await refrescarSesionRequest(refreshToken);
+        const { usuario } = await obtenerSesionActual(nuevosTokens.accessToken);
         if (cancelado) return;
+        guardarRefreshToken(nuevosTokens.refreshToken);
 
         if (!tieneAccesoAlPanel(usuario)) {
-          await cerrarSesionRequest(accessToken).catch(() => undefined);
-          if (!cancelado) setEstado({ tipo: 'anonimo' });
+          await cerrarSesionRequest(nuevosTokens.accessToken).catch(() => undefined);
+          if (!cancelado) {
+            limpiarRefreshToken();
+            setEstado({ tipo: 'anonimo' });
+          }
           return;
         }
 
-        setEstado({ tipo: 'autenticado', usuario, accessToken });
+        setEstado({ tipo: 'autenticado', usuario, accessToken: nuevosTokens.accessToken });
       } catch {
-        if (!cancelado) setEstado({ tipo: 'anonimo' });
+        if (!cancelado) {
+          limpiarRefreshToken();
+          setEstado({ tipo: 'anonimo' });
+        }
       }
     }
 
@@ -85,7 +112,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = useCallback(async (correo: string, password: string) => {
     try {
-      const { accessToken, usuario } = await iniciarSesionRequest(correo, password);
+      const { accessToken, refreshToken, usuario } = await iniciarSesionRequest(correo, password);
 
       if (!tieneAccesoAlPanel(usuario)) {
         // La API sí autenticó — la cuenta existe y la contraseña es
@@ -96,6 +123,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return;
       }
 
+      guardarRefreshToken(refreshToken);
       setEstado({ tipo: 'autenticado', usuario, accessToken });
     } catch (error) {
       if (error instanceof ApiError) {
@@ -115,6 +143,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (actual.tipo === 'autenticado') {
       await cerrarSesionRequest(actual.accessToken).catch(() => undefined);
     }
+    limpiarRefreshToken();
     setEstado({ tipo: 'anonimo' });
   }, []);
 

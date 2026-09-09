@@ -14,13 +14,15 @@ export type Usuario = {
 
 type LoginResultado = {
   accessToken: string;
+  // Mismo flujo que la App Flutter (ver refreshTokenStorage.ts): viaja
+  // en el body, no por cookie HttpOnly.
+  refreshToken: string;
   usuario: Usuario;
-  // El refreshToken NUNCA llega acá — el flujo Web lo recibe por cookie
-  // HttpOnly (X-Client-Type: web, ver apiClient.ts).
 };
 
 type RefrescarResultado = {
   accessToken: string;
+  refreshToken: string;
 };
 
 type MensajeResultado = {
@@ -34,9 +36,10 @@ export function iniciarSesion(correo: string, password: string) {
   return apiClient.post('/auth/login', { correo, password }) as Promise<LoginResultado>;
 }
 
-/** Restaura sesión al abrir el panel usando la cookie de refresh (silent refresh). */
-export function refrescarSesion() {
-  return apiClient.post('/auth/refrescar') as Promise<RefrescarResultado>;
+/** Restaura sesión al abrir el panel usando el refresh token guardado
+ * en localStorage (silent refresh, ver refreshTokenStorage.ts). */
+export function refrescarSesion(refreshToken: string) {
+  return apiClient.post('/auth/refrescar', { refreshToken }) as Promise<RefrescarResultado>;
 }
 
 /** Identidad + roles del usuario autenticado. */

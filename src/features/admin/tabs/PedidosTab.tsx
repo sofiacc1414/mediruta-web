@@ -92,20 +92,30 @@ export function PedidosTab() {
   const [umbralMinutos, setUmbralMinutos] = useState<number | null>(null);
 
   const cargarPedidos = useCallback(
-    (filtros: FiltrosPedidos) => {
+    (filtros: FiltrosPedidos, opciones?: { silencioso?: boolean }) => {
       if (estado.tipo !== 'autenticado') return;
-      setCargandoPedidos(true);
-      setErrorPedidos(null);
+      // El refresco automático (ver más abajo) no debe prender el
+      // spinner ni el banner de error — solo actualiza la lista en
+      // silencio; un error transitorio de esa llamada no debe tapar
+      // datos que ya se estaban mostrando bien.
+      const silencioso = opciones?.silencioso ?? false;
+      if (!silencioso) {
+        setCargandoPedidos(true);
+        setErrorPedidos(null);
+      }
       listarPedidosAdmin(estado.accessToken, filtros)
         .then(setPedidos)
         .catch((err: unknown) => {
+          if (silencioso) return;
           if (err instanceof ApiError || err instanceof ApiSinConexionError) {
             setErrorPedidos(err.message);
           } else {
             throw err;
           }
         })
-        .finally(() => setCargandoPedidos(false));
+        .finally(() => {
+          if (!silencioso) setCargandoPedidos(false);
+        });
     },
     [estado],
   );
@@ -113,6 +123,19 @@ export function PedidosTab() {
   useEffect(() => {
     if (pedidos === null) cargarPedidos(filtrosAplicados);
   }, []);
+
+  // Los estados de los pedidos los cambian el domiciliario y el paciente
+  // desde sus propias apps — sin esto, el admin solo los veía cambiar
+  // recargando la página a mano. Se refresca en silencio cada 15s, y
+  // solo en la vista de lista (en el detalle ya hay su propio refresco
+  // tras cada acción).
+  useEffect(() => {
+    if (vista.tipo !== 'lista') return;
+    const intervalo = window.setInterval(() => {
+      cargarPedidos(filtrosAplicados, { silencioso: true });
+    }, 15000);
+    return () => window.clearInterval(intervalo);
+  }, [vista.tipo, filtrosAplicados, cargarPedidos]);
 
   useEffect(() => {
     if (estado.tipo !== 'autenticado') return;

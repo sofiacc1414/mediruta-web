@@ -5,10 +5,11 @@ import { ApiError, ApiSinConexionError } from './apiError';
  * (ver .env.example) — nunca se llama a Supabase directamente desde aquí
  * (DOCS/context.md, Parte B, sección 4.1).
  *
- * Este cliente es exclusivo del flujo Web: todas las llamadas van con
- * `credentials: 'include'` y el header `X-Client-Type: web`, que le pide a
- * la API que entregue el refresh token por cookie HttpOnly en vez de en el
- * body JSON (nunca llega a este archivo ni a ningún otro JS del navegador).
+ * Sin header `X-Client-Type: web` a propósito: la API lo usa para decidir
+ * si entrega el refresh token por cookie HttpOnly (flujo descartado, ver
+ * refreshTokenStorage.ts) en vez de en el body — acá se lo trata igual
+ * que a la App Flutter, así que no hace falta `credentials: 'include'`
+ * tampoco (no depende de ninguna cookie cross-site).
  */
 const API_URL = import.meta.env.VITE_API_URL as string | undefined;
 
@@ -25,9 +26,7 @@ type RequestOptions = {
 };
 
 async function request(path: string, options: RequestOptions, esReintento = false): Promise<unknown> {
-  const headers: Record<string, string> = {
-    'X-Client-Type': 'web',
-  };
+  const headers: Record<string, string> = {};
   if (options.accessToken) {
     headers.Authorization = `Bearer ${options.accessToken}`;
   }
@@ -44,7 +43,6 @@ async function request(path: string, options: RequestOptions, esReintento = fals
   try {
     respuesta = await fetch(`${apiClient.baseUrl}${path}`, {
       method: options.method,
-      credentials: 'include',
       headers,
       body: esFormData
         ? (options.body as FormData)

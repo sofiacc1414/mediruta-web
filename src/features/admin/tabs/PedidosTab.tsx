@@ -124,10 +124,20 @@ export function PedidosTab() {
 
   // Los estados de los pedidos los cambian el domiciliario y el paciente
   // desde sus propias apps — sin esto, el admin solo los veía cambiar
-  // recargando la página a mano. Se refresca en silencio apenas la API
-  // avisa por WebSocket que algún pedido cambió (ver EventosGateway del
-  // lado API y useEventosSocket), solo en la vista de lista (en el
-  // detalle ya hay su propio refresco tras cada acción).
+  // recargando la página a mano. Se refresca en silencio cada 15s como
+  // red de seguridad (en algunas redes el WebSocket no llega a
+  // conectar), y solo en la vista de lista.
+  useEffect(() => {
+    if (vista.tipo !== 'lista') return;
+    const intervalo = window.setInterval(() => {
+      cargarPedidos(filtrosAplicados, { silencioso: true });
+    }, 15000);
+    return () => window.clearInterval(intervalo);
+  }, [vista.tipo, filtrosAplicados, cargarPedidos]);
+
+  // Además del poll de arriba, refresca apenas la API avisa por
+  // WebSocket que algún pedido cambió — ver EventosGateway del lado
+  // API y useEventosSocket.
   useEventosSocket(
     estado.tipo === 'autenticado' ? estado.accessToken : null,
     useCallback(() => {

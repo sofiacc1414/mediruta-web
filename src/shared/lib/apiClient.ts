@@ -19,7 +19,7 @@ if (!API_URL) {
 }
 
 type RequestOptions = {
-  method: 'GET' | 'POST' | 'PATCH';
+  method: 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
   body?: unknown;
   /** Access token en memoria (nunca localStorage) para endpoints protegidos. */
   accessToken?: string | null;
@@ -110,6 +110,14 @@ export const apiClient = {
 
   patch(path: string, body?: unknown, opts?: { accessToken?: string | null }) {
     return request(path, { method: 'PATCH', body, accessToken: opts?.accessToken });
+  },
+
+  put(path: string, body?: unknown, opts?: { accessToken?: string | null }) {
+    return request(path, { method: 'PUT', body, accessToken: opts?.accessToken });
+  },
+
+  delete(path: string, opts?: { accessToken?: string | null }) {
+    return request(path, { method: 'DELETE', accessToken: opts?.accessToken });
   },
 
   /** Subida de archivo (foto de perfil, documentos, etc.) — multipart,

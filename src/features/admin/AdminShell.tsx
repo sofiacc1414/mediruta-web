@@ -1,16 +1,24 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AlertTriangleIcon, MopedIcon, PackageIcon, PersonIcon, UsersIcon } from '../../shared/components/icons';
+import {
+  AlertTriangleIcon,
+  MopedIcon,
+  PackageIcon,
+  PersonIcon,
+  SettingsIcon,
+  UsersIcon,
+} from '../../shared/components/icons';
 import { useAuth } from '../usuarios/hooks/useAuth';
 import './admin.css';
 import { Sidebar, type SidebarItem } from './components/Sidebar';
+import { ConfiguracionTab } from './tabs/ConfiguracionTab';
 import { DomiciliariosTab } from './tabs/DomiciliariosTab';
 import { NovedadesTab } from './tabs/NovedadesTab';
 import { PedidosTab } from './tabs/PedidosTab';
 import { PerfilTab } from './tabs/PerfilTab';
 import { UsuariosTab } from './tabs/UsuariosTab';
 
-type TabKey = 'pedidos' | 'novedades' | 'domiciliarios' | 'usuarios' | 'perfil';
+type TabKey = 'pedidos' | 'novedades' | 'domiciliarios' | 'usuarios' | 'configuracion' | 'perfil';
 
 const ETIQUETAS_ROL: Record<string, string> = {
   ROOT: 'Root',
@@ -45,6 +53,7 @@ export function AdminShell() {
     { key: 'novedades', label: 'Novedades', icon: <AlertTriangleIcon /> },
     { key: 'domiciliarios', label: 'Domiciliarios', icon: <MopedIcon /> },
     { key: 'usuarios', label: 'Usuarios', icon: <UsersIcon /> },
+    { key: 'configuracion', label: 'Configuración', icon: <SettingsIcon /> },
     { key: 'perfil', label: 'Mi perfil', icon: <PersonIcon /> },
   ];
 
@@ -72,6 +81,9 @@ export function AdminShell() {
           </div>
           <div style={{ display: tab === 'usuarios' ? 'block' : 'none' }}>
             {visited.has('usuarios') ? <UsuariosTab /> : null}
+          </div>
+          <div style={{ display: tab === 'configuracion' ? 'block' : 'none' }}>
+            {visited.has('configuracion') ? <ConfiguracionTab /> : null}
           </div>
           <div style={{ display: tab === 'perfil' ? 'block' : 'none' }}>
             {visited.has('perfil') ? <PerfilTab /> : null}

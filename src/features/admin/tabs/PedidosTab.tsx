@@ -2,10 +2,7 @@ import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { Alert } from '../../../shared/components/Alert';
 import { ApiError, ApiSinConexionError } from '../../../shared/lib/apiError';
 import { useAuth } from '../../usuarios/hooks/useAuth';
-import {
-  actualizarConfiguracionAdmin,
-  obtenerConfiguracionAdmin,
-} from '../api/configuracionAdminApi';
+import { obtenerConfiguracionAdmin } from '../api/configuracionAdminApi';
 import { EstadoPedidoPill } from '../components/EstadoPedidoPill';
 import { DomiciliarioCard, MedicamentosRecetaCard, PacienteCard } from '../components/PedidoResumenCards';
 import { TrackingTimeline } from '../components/TrackingTimeline';
@@ -220,7 +217,7 @@ export function PedidosTab() {
             <p className="lp-pedidos-subtitle">Visualiza y gestiona todos los pedidos de MediRuta</p>
           </div>
           <div className="lp-pedidos-header-right">
-            <ConfiguracionUmbral umbralMinutos={umbralMinutos} onActualizado={setUmbralMinutos} />
+            <ConfiguracionUmbral umbralMinutos={umbralMinutos} />
           </div>
         </div>
 
@@ -405,81 +402,16 @@ export function PedidosTab() {
 // CONFIGURACIÓN UMBRAL
 // ============================================================
 
-function ConfiguracionUmbral({
-  umbralMinutos,
-  onActualizado,
-}: {
-  umbralMinutos: number | null;
-  onActualizado: (umbral: number) => void;
-}) {
-  const { estado } = useAuth();
-  const [editando, setEditando] = useState(false);
-  const [valor, setValor] = useState('');
-  const [guardando, setGuardando] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  if (estado.tipo !== 'autenticado') return null;
-
-  async function onGuardar(evento: FormEvent) {
-    evento.preventDefault();
-    if (estado.tipo !== 'autenticado') return;
-    const numero = Number(valor);
-    if (!Number.isInteger(numero) || numero < 1) {
-      setError('Ingresá un número entero de minutos, mayor a 0.');
-      return;
-    }
-    setGuardando(true);
-    setError(null);
-    try {
-      await actualizarConfiguracionAdmin(estado.accessToken, numero);
-      onActualizado(numero);
-      setEditando(false);
-    } catch (err) {
-      if (err instanceof ApiError || err instanceof ApiSinConexionError) {
-        setError(err.message);
-      } else {
-        throw err;
-      }
-    } finally {
-      setGuardando(false);
-    }
-  }
-
+// Editable desde el tab "Configuración" (junto con las tarifas de
+// domicilio y los niveles de copago, que viven en el mismo formulario
+// de configuración) — acá queda de solo lectura para no tener el
+// mismo valor editable en dos lugares distintos.
+function ConfiguracionUmbral({ umbralMinutos }: { umbralMinutos: number | null }) {
   return (
     <div className="lp-pedidos-umbral-mini">
-      {editando ? (
-        <form onSubmit={onGuardar} className="lp-pedidos-umbral-mini-form">
-          <span className="lp-pedidos-umbral-mini-label">⏱️</span>
-          <input
-            type="number"
-            min={1}
-            max={1440}
-            value={valor}
-            onChange={(e) => setValor(e.target.value)}
-            className="lp-pedidos-umbral-mini-input"
-            autoFocus
-          />
-          <span className="lp-pedidos-umbral-mini-label">min</span>
-          <button type="submit" className="lp-pedidos-btn lp-pedidos-btn-primary" disabled={guardando}>
-            💾
-          </button>
-          <button type="button" className="lp-pedidos-btn lp-pedidos-btn-secondary" onClick={() => setEditando(false)}>
-            ✕
-          </button>
-          {error && <Alert tono="error">{error}</Alert>}
-        </form>
-      ) : (
-        <button
-          type="button"
-          className="lp-pedidos-umbral-mini-btn"
-          onClick={() => {
-            setValor(String(umbralMinutos ?? 15));
-            setEditando(true);
-          }}
-        >
-          ⏱️ {umbralMinutos === null ? 'cargando…' : `${umbralMinutos} min`}
-        </button>
-      )}
+      <span className="lp-pedidos-umbral-mini-btn" title="Editable en el tab Configuración">
+        ⏱️ {umbralMinutos === null ? 'cargando…' : `${umbralMinutos} min`}
+      </span>
     </div>
   );
 }

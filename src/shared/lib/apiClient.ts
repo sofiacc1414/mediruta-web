@@ -25,6 +25,30 @@ type RequestOptions = {
   accessToken?: string | null;
 };
 
+/**
+ * Renovación en vuelo compartida entre requests concurrentes — el
+ * refresh token de la API es de un solo uso (rota en cada llamada a
+ * /auth/refrescar), así que si dos componentes piden datos al mismo
+ * tiempo y ambos reciben 401 porque el access token venció (típico al
+ * entrar al panel, donde varios tabs/tarjetas disparan requests
+ * autenticados juntos), sin esto cada uno llamaría a onSesionExpirada
+ * por su cuenta con el mismo refresh token viejo: el primero gana y lo
+ * rota, el segundo llega con el token ya usado y la API lo rechaza con
+ * 401 — un "No autorizado." visible pese a que la sesión sigue siendo
+ * válida. Con esto, todos esperan el mismo resultado de la única
+ * renovación en curso.
+ */
+let renovacionEnCurso: Promise<string | null> | null = null;
+
+function renovarSesion(): Promise<string | null> {
+  if (!renovacionEnCurso) {
+    renovacionEnCurso = apiClient.onSesionExpirada!().finally(() => {
+      renovacionEnCurso = null;
+    });
+  }
+  return renovacionEnCurso;
+}
+
 async function request(path: string, options: RequestOptions, esReintento = false): Promise<unknown> {
   const headers: Record<string, string> = {};
   if (options.accessToken) {
@@ -60,7 +84,7 @@ async function request(path: string, options: RequestOptions, esReintento = fals
     !esReintento &&
     apiClient.onSesionExpirada
   ) {
-    const nuevoAccessToken = await apiClient.onSesionExpirada();
+    const nuevoAccessToken = await renovarSesion();
     if (nuevoAccessToken) {
       return request(path, { ...options, accessToken: nuevoAccessToken }, true);
     }

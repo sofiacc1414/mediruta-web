@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { Alert } from '../../../shared/components/Alert';
 import { ApiError, ApiSinConexionError } from '../../../shared/lib/apiError';
+import { useEventosSocket } from '../../../shared/lib/useEventosSocket';
 import { useAuth } from '../../usuarios/hooks/useAuth';
 import { obtenerConfiguracionAdmin } from '../api/configuracionAdminApi';
 import { EstadoPedidoPill } from '../components/EstadoPedidoPill';
@@ -123,16 +124,17 @@ export function PedidosTab() {
 
   // Los estados de los pedidos los cambian el domiciliario y el paciente
   // desde sus propias apps — sin esto, el admin solo los veía cambiar
-  // recargando la página a mano. Se refresca en silencio cada 15s, y
-  // solo en la vista de lista (en el detalle ya hay su propio refresco
-  // tras cada acción).
-  useEffect(() => {
-    if (vista.tipo !== 'lista') return;
-    const intervalo = window.setInterval(() => {
+  // recargando la página a mano. Se refresca en silencio apenas la API
+  // avisa por WebSocket que algún pedido cambió (ver EventosGateway del
+  // lado API y useEventosSocket), solo en la vista de lista (en el
+  // detalle ya hay su propio refresco tras cada acción).
+  useEventosSocket(
+    estado.tipo === 'autenticado' ? estado.accessToken : null,
+    useCallback(() => {
+      if (vista.tipo !== 'lista') return;
       cargarPedidos(filtrosAplicados, { silencioso: true });
-    }, 15000);
-    return () => window.clearInterval(intervalo);
-  }, [vista.tipo, filtrosAplicados, cargarPedidos]);
+    }, [vista.tipo, filtrosAplicados, cargarPedidos]),
+  );
 
   useEffect(() => {
     if (estado.tipo !== 'autenticado') return;
@@ -452,6 +454,11 @@ function PedidoDetalle({
   useEffect(() => {
     cargar();
   }, [cargar]);
+
+  // Ver EventosGateway/useEventosSocket — refresca este pedido puntual
+  // si cambia mientras el admin lo tiene abierto (ej. el domiciliario
+  // avanza un paso, o el paciente reporta una novedad).
+  useEventosSocket(estado.tipo === 'autenticado' ? estado.accessToken : null, cargar);
 
   if (estado.tipo !== 'autenticado') return null;
 

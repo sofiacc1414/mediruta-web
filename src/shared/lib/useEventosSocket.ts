@@ -4,11 +4,11 @@ import { apiClient } from './apiClient';
 
 /**
  * Aviso instantáneo de "algo cambió en algún pedido" vía WebSocket (ver
- * `EventosGateway`/`EventosTiempoRealPort` en la API) — se usa junto al
- * poll de 15s que ya tienen las pantallas del panel (ej. `PedidosTab`),
- * nunca en su reemplazo: si el socket se cae (red, deploy de la API,
- * etc.) el poll sigue refrescando solo, esto es pura ganancia de
- * latencia.
+ * `EventosGateway`/`EventosTiempoRealPort` en la API) — reemplaza el
+ * poll fijo que tenían las pantallas del panel (ej. `PedidosTab`): ya no
+ * hace falta, porque esto también cubre el caso que cubría el poll
+ * (perderse un cambio por una desconexión pasajera) refrescando también
+ * al reconectar, no solo ante el evento.
  *
  * El evento (`pedido:actualizado`) no trae datos — cada pantalla que se
  * suscribe con este hook ya sabe qué volver a pedir para sí misma
@@ -32,6 +32,11 @@ export function useEventosSocket(accessToken: string | null, onPedidoActualizado
       auth: { token: accessToken },
     });
 
+    // `connect` dispara tanto en la primera conexión como en cada
+    // reconexión automática de socket.io-client — en ambos casos vale
+    // la pena refrescar, por si se perdió algún evento mientras estuvo
+    // desconectado.
+    socket.on('connect', () => callbackRef.current());
     socket.on('pedido:actualizado', () => callbackRef.current());
 
     return () => {

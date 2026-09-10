@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Alert } from '../../../shared/components/Alert';
 import { ApiError, ApiSinConexionError } from '../../../shared/lib/apiError';
+import { useEventosSocket } from '../../../shared/lib/useEventosSocket';
 import { useAuth } from '../../usuarios/hooks/useAuth';
 import {
   listarNovedadesAbiertas,
@@ -121,6 +122,18 @@ export function NovedadesTab() {
     if (novedades === null) cargar();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Ver EventosGateway/useEventosSocket — refresca la lista en silencio
+  // apenas cambia algo (ej. un paciente reporta una novedad nueva),
+  // solo mientras se está viendo la lista (el detalle refresca por su
+  // cuenta tras cada acción propia).
+  useEventosSocket(
+    estado.tipo === 'autenticado' ? estado.accessToken : null,
+    useCallback(() => {
+      if (vista.tipo !== 'lista') return;
+      cargar();
+    }, [vista.tipo, cargar]),
+  );
 
   if (estado.tipo !== 'autenticado') return null;
 

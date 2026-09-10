@@ -26,9 +26,12 @@ export function useEventosSocket(accessToken: string | null, onPedidoActualizado
   useEffect(() => {
     if (!accessToken) return;
 
+    // Sin restringir transports a solo 'websocket': el cliente arranca
+    // con polling HTTP y recién ahí sube a websocket — el default de
+    // socket.io. Forzar 'websocket' desde el arranque salta ese
+    // handshake inicial y puede no conectar detrás de ciertos proxies.
     const socket: Socket = io(apiClient.baseUrl, {
       path: '/ws',
-      transports: ['websocket'],
       auth: { token: accessToken },
     });
 

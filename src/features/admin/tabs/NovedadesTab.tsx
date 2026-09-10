@@ -123,10 +123,19 @@ export function NovedadesTab() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Ver EventosGateway/useEventosSocket — refresca la lista en silencio
-  // apenas cambia algo (ej. un paciente reporta una novedad nueva),
-  // solo mientras se está viendo la lista (el detalle refresca por su
-  // cuenta tras cada acción propia).
+  // Red de seguridad — en algunas redes el WebSocket de abajo no llega
+  // a conectar, así que esto es lo único que garantiza que la lista se
+  // actualice sola tarde o temprano.
+  useEffect(() => {
+    if (vista.tipo !== 'lista') return;
+    const intervalo = window.setInterval(cargar, 15000);
+    return () => window.clearInterval(intervalo);
+  }, [vista.tipo, cargar]);
+
+  // Además del poll de arriba, ver EventosGateway/useEventosSocket —
+  // refresca la lista apenas cambia algo (ej. un paciente reporta una
+  // novedad nueva), solo mientras se está viendo la lista (el detalle
+  // refresca por su cuenta tras cada acción propia).
   useEventosSocket(
     estado.tipo === 'autenticado' ? estado.accessToken : null,
     useCallback(() => {

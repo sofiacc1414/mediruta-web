@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { Alert } from '../../../shared/components/Alert';
 import { ApiError, ApiSinConexionError } from '../../../shared/lib/apiError';
+import { useEventosSocket } from '../../../shared/lib/useEventosSocket';
 import { useAuth } from '../../usuarios/hooks/useAuth';
 import { obtenerConfiguracionAdmin } from '../api/configuracionAdminApi';
 import { EstadoPedidoPill } from '../components/EstadoPedidoPill';
@@ -133,6 +134,17 @@ export function PedidosTab() {
     }, 15000);
     return () => window.clearInterval(intervalo);
   }, [vista.tipo, filtrosAplicados, cargarPedidos]);
+
+  // Además del poll de arriba (que queda como red de seguridad),
+  // refresca apenas la API avisa por WebSocket que algún pedido cambió
+  // — ver EventosGateway del lado API y useEventosSocket.
+  useEventosSocket(
+    estado.tipo === 'autenticado' ? estado.accessToken : null,
+    useCallback(() => {
+      if (vista.tipo !== 'lista') return;
+      cargarPedidos(filtrosAplicados, { silencioso: true });
+    }, [vista.tipo, filtrosAplicados, cargarPedidos]),
+  );
 
   useEffect(() => {
     if (estado.tipo !== 'autenticado') return;

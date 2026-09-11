@@ -27,9 +27,14 @@ const CAMPOS_PRECIO: {
   { key: 'umbralDemoraAsignacionMinutos', label: 'Umbral de demora (alarma "sin domiciliario")', sufijo: 'min', min: 1 },
   { key: 'tarifaBaseDomicilio', label: 'Tarifa base del domicilio', sufijo: '$', min: 0 },
   { key: 'tarifaPorKm', label: 'Tarifa por km', sufijo: '$/km', min: 0 },
-  { key: 'tarifaPorMinuto', label: 'Tarifa por minuto', sufijo: '$/min', min: 0 },
-  { key: 'tiempoBaseFarmaciaMin', label: 'Tiempo base en la farmacia', sufijo: 'min', min: 0 },
-  { key: 'velocidadPromedioKmh', label: 'Velocidad promedio', sufijo: 'km/h', min: 0.1 },
+  // Estos 3 ya no afectan el precio (se sacó el componente de tiempo
+  // de la fórmula — ver CalcularPrecioPedidoUseCase: el precio se
+  // muestra antes de que exista un domiciliario asignado, así que no
+  // puede depender de nada relacionado a su posición/velocidad real).
+  // Quedan en el formulario sin usarse por ahora, marcados como tal.
+  { key: 'tarifaPorMinuto', label: 'Tarifa por minuto (no afecta el precio)', sufijo: '$/min', min: 0 },
+  { key: 'tiempoBaseFarmaciaMin', label: 'Tiempo base en la farmacia (no afecta el precio)', sufijo: 'min', min: 0 },
+  { key: 'velocidadPromedioKmh', label: 'Velocidad promedio (no afecta el precio)', sufijo: 'km/h', min: 0.1 },
   { key: 'distanciaIncluidaKm', label: 'Distancia incluida (sin excedente)', sufijo: 'km', min: 0 },
   { key: 'tarifaPorKmExcedente', label: 'Tarifa por km excedente', sufijo: '$/km', min: 0 },
 ];

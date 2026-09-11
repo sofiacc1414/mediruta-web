@@ -15,7 +15,7 @@ import { ProductShowcase } from '../components/ProductShowcase';
 // terminar instalando el APK viejo otra vez. Con un nombre distinto por
 // versión, cada release es una descarga nueva sin ambigüedad.
 const APK_DOWNLOAD_URL =
-  'https://github.com/sofiacc1414/mediruta-app/releases/download/v1.14.1/mediruta-v1.14.1.apk';
+  'https://github.com/sofiacc1414/mediruta-app/releases/download/v1.14.2/mediruta-v1.14.2.apk';
 
 export function LandingPage() {
   return (

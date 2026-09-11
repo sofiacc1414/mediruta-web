@@ -206,14 +206,16 @@
   color: rgba(47, 65, 86, 0.3);
 }
 
+/* Las 4 tarjetas se distinguen por peso/ícono, no por un hue nuevo por
+ * estado (context.md, Parte A, sección 4) — todas navy/teal oficiales. */
 .lp-pedidos-stat-pendiente .lp-pedidos-stat-number {
-  color: #f59e0b;
+  color: var(--color-navy);
 }
 .lp-pedidos-stat-camino .lp-pedidos-stat-number {
-  color: #3b82f6;
+  color: var(--color-teal);
 }
 .lp-pedidos-stat-entregado .lp-pedidos-stat-number {
-  color: #22c55e;
+  color: var(--color-navy);
 }
 .lp-pedidos-stat-cancelado .lp-pedidos-stat-number {
   color: var(--color-teal);
@@ -612,11 +614,9 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.lp-pedidos-detalle-hero .lp-alarma-demora {
-  background: rgba(245, 158, 11, 0.2); /* Cristal amarillo suave */
-  color: #fef3c7;
-  border-color: rgba(245, 158, 11, 0.4);
-}
+/* Antes tenía su propio "cristal amarillo" (fuera de paleta) — se
+ * distingue de la píldora de estado de al lado solo por el ícono
+ * ⚠️ que ya trae el texto, no por un color nuevo. */
 
 /* >>> CORRECCIÓN: Código de entrega con azul corporativo <<< */
 .lp-pedidos-detalle-codigo {

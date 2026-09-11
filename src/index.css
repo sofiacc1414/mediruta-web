@@ -33,6 +33,29 @@ button {
   font-family: var(--font-body);
 }
 
+/* Sin este reset, Chrome/Firefox pintan naranja/rojo por su cuenta en
+ * inputs "inválidos" (ej. un <input type="number"> con `min` mientras
+ * se está editando, o cualquier campo `required` vacío) — un color que
+ * no elegimos nosotros y que no está en la paleta oficial. El estado
+ * de error real lo comunican los componentes propios (`Input`, con su
+ * borde navy más grueso; `Alert`, con fondo sky-blue), nunca el
+ * navegador. */
+input:invalid,
+input:out-of-range,
+input:user-invalid,
+select:invalid,
+textarea:invalid {
+  box-shadow: none;
+  outline: none;
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--color-teal);
+  outline-offset: 1px;
+}
+
 #root {
   min-height: 100svh;
 }

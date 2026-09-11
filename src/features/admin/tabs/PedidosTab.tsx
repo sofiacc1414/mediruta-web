@@ -20,16 +20,19 @@ import {
 } from '../api/pedidosAdminApi';
 import './PedidosTab.css';
 
-const OPCIONES_ESTADO: { value: EstadoPedido | ''; label: string; color: string }[] = [
-  { value: '', label: 'Todos', color: '#6b7280' },
-  { value: 'pendiente_revision', label: 'Generado', color: '#f59e0b' },
-  { value: 'en_asignacion', label: 'Buscando', color: '#8b5cf6' },
-  { value: 'asignado_en_camino_farmacia', label: 'A farmacia', color: '#3b82f6' },
-  { value: 'medicamentos_recogidos', label: 'Recogido', color: '#06b6d4' },
-  { value: 'en_camino_entrega', label: 'En camino', color: '#6366f1' },
-  { value: 'en_sitio', label: 'En sitio', color: '#22c55e' },
-  { value: 'entregado', label: 'Entregado', color: '#22c55e' },
-  { value: 'cancelada', label: 'Cancelada', color: '#ef4444' },
+// `color` no se usa (el <select> nativo no lo aplica) — se saca en vez
+// de dejar colores fuera de paleta sin ningún efecto, para no repetir
+// esta lista mal calibrada si alguna vez se usa de verdad.
+const OPCIONES_ESTADO: { value: EstadoPedido | ''; label: string }[] = [
+  { value: '', label: 'Todos' },
+  { value: 'pendiente_revision', label: 'Generado' },
+  { value: 'en_asignacion', label: 'Buscando' },
+  { value: 'asignado_en_camino_farmacia', label: 'A farmacia' },
+  { value: 'medicamentos_recogidos', label: 'Recogido' },
+  { value: 'en_camino_entrega', label: 'En camino' },
+  { value: 'en_sitio', label: 'En sitio' },
+  { value: 'entregado', label: 'Entregado' },
+  { value: 'cancelada', label: 'Cancelada' },
 ];
 
 function formatearFechaHora(iso: string) {

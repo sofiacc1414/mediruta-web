@@ -1,0 +1,19 @@
+.lp-mapa-seguimiento {
+  grid-column: 1 / -1;
+}
+
+.lp-mapa-seguimiento-mapa {
+  width: 100%;
+  height: 320px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.lp-mapa-icono-domiciliario,
+.lp-mapa-icono-punto {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  filter: drop-shadow(0 2px 3px rgba(47, 65, 86, 0.35));
+}

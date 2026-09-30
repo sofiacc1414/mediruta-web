@@ -5,6 +5,7 @@ import { useEventosSocket } from '../../../shared/lib/useEventosSocket';
 import { useAuth } from '../../usuarios/hooks/useAuth';
 import { obtenerConfiguracionAdmin } from '../api/configuracionAdminApi';
 import { EstadoPedidoPill } from '../components/EstadoPedidoPill';
+import { MapaSeguimientoAdmin } from '../components/MapaSeguimientoAdmin';
 import { DomiciliarioCard, MedicamentosRecetaCard, PacienteCard } from '../components/PedidoResumenCards';
 import { TrackingTimeline } from '../components/TrackingTimeline';
 import {
@@ -545,6 +546,11 @@ function PedidoDetalle({
               direccionFarmacia={detalle.direccionFarmacia}
             />
           </div>
+
+          {/* SEGUIMIENTO GPS EN VIVO — solo mientras está en camino */}
+          {detalle.estado === 'en_camino_entrega' && (
+            <MapaSeguimientoAdmin solicitudId={detalle.id} />
+          )}
 
           {/* MEDICAMENTOS */}
           <MedicamentosRecetaCard medicamentos={detalle.medicamentos} recetaUrl={detalle.recetaUrl} />

@@ -4,6 +4,7 @@ import { ApiError, ApiSinConexionError } from '../../../shared/lib/apiError';
 import { useEventosSocket } from '../../../shared/lib/useEventosSocket';
 import { useAuth } from '../../usuarios/hooks/useAuth';
 import { obtenerConfiguracionAdmin } from '../api/configuracionAdminApi';
+import { ChatAuditoriaPanel } from '../components/ChatAuditoriaPanel';
 import { EstadoPedidoPill } from '../components/EstadoPedidoPill';
 import { MapaSeguimientoAdmin } from '../components/MapaSeguimientoAdmin';
 import { DomiciliarioCard, MedicamentosRecetaCard, PacienteCard } from '../components/PedidoResumenCards';
@@ -551,6 +552,11 @@ function PedidoDetalle({
           {detalle.estado === 'en_camino_entrega' && (
             <MapaSeguimientoAdmin solicitudId={detalle.id} />
           )}
+
+          {/* CHAT (auditoría, solo lectura) — solo tiene sentido una vez
+              que hay domiciliario asignado, que es cuando la API crea
+              el chat del pedido. */}
+          {detalle.domiciliario && <ChatAuditoriaPanel solicitudId={detalle.id} />}
 
           {/* MEDICAMENTOS */}
           <MedicamentosRecetaCard medicamentos={detalle.medicamentos} recetaUrl={detalle.recetaUrl} />

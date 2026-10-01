@@ -1,0 +1,70 @@
+.lp-chat-auditoria {
+  grid-column: 1 / -1;
+}
+
+.lp-chat-auditoria-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.lp-chat-auditoria-refrescar {
+  padding: 6px 14px;
+  font-size: 0.85rem;
+}
+
+.lp-chat-auditoria-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 360px;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.lp-chat-burbuja {
+  max-width: 75%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lp-chat-burbuja--paciente {
+  align-self: flex-start;
+  background: var(--color-sky-blue);
+  border-bottom-left-radius: 4px;
+}
+
+.lp-chat-burbuja--domiciliario {
+  align-self: flex-end;
+  background: var(--color-beige);
+  border: 1px solid var(--color-teal);
+  border-bottom-right-radius: 4px;
+}
+
+.lp-chat-burbuja-rol {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-teal);
+}
+
+.lp-chat-burbuja-contenido {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--color-navy);
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.lp-chat-burbuja-hora {
+  font-size: 0.7rem;
+  color: var(--color-navy);
+  opacity: 0.6;
+  align-self: flex-end;
+}

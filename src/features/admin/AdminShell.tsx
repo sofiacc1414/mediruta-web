@@ -6,6 +6,7 @@ import {
   PackageIcon,
   PersonIcon,
   SettingsIcon,
+  StoreIcon,
   UsersIcon,
 } from '../../shared/components/icons';
 import { useAuth } from '../usuarios/hooks/useAuth';
@@ -13,12 +14,20 @@ import './admin.css';
 import { Sidebar, type SidebarItem } from './components/Sidebar';
 import { ConfiguracionTab } from './tabs/ConfiguracionTab';
 import { DomiciliariosTab } from './tabs/DomiciliariosTab';
+import { FarmaciasAliadasTab } from './tabs/FarmaciasAliadasTab';
 import { NovedadesTab } from './tabs/NovedadesTab';
 import { PedidosTab } from './tabs/PedidosTab';
 import { PerfilTab } from './tabs/PerfilTab';
 import { UsuariosTab } from './tabs/UsuariosTab';
 
-type TabKey = 'pedidos' | 'novedades' | 'domiciliarios' | 'usuarios' | 'configuracion' | 'perfil';
+type TabKey =
+  | 'pedidos'
+  | 'novedades'
+  | 'domiciliarios'
+  | 'usuarios'
+  | 'configuracion'
+  | 'farmaciasAliadas'
+  | 'perfil';
 
 const ETIQUETAS_ROL: Record<string, string> = {
   ROOT: 'Root',
@@ -54,6 +63,7 @@ export function AdminShell() {
     { key: 'domiciliarios', label: 'Domiciliarios', icon: <MopedIcon /> },
     { key: 'usuarios', label: 'Usuarios', icon: <UsersIcon /> },
     { key: 'configuracion', label: 'Configuración', icon: <SettingsIcon /> },
+    { key: 'farmaciasAliadas', label: 'Farmacias aliadas', icon: <StoreIcon /> },
     { key: 'perfil', label: 'Mi perfil', icon: <PersonIcon /> },
   ];
 
@@ -84,6 +94,9 @@ export function AdminShell() {
           </div>
           <div style={{ display: tab === 'configuracion' ? 'block' : 'none' }}>
             {visited.has('configuracion') ? <ConfiguracionTab /> : null}
+          </div>
+          <div style={{ display: tab === 'farmaciasAliadas' ? 'block' : 'none' }}>
+            {visited.has('farmaciasAliadas') ? <FarmaciasAliadasTab /> : null}
           </div>
           <div style={{ display: tab === 'perfil' ? 'block' : 'none' }}>
             {visited.has('perfil') ? <PerfilTab /> : null}

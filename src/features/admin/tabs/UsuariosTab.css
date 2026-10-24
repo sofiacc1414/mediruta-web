@@ -11,7 +11,7 @@
   width: 100%;
   padding: 0;
   margin: 0;
-  background: #ffffff;
+  background: var(--color-white);
 }
 
 /* ============================================================
@@ -40,7 +40,7 @@
   object-fit: contain;
   opacity: 0.85;
   display: block;
-  filter: drop-shadow(0 2px 8px rgba(47, 65, 86, 0.04));
+  filter: drop-shadow(0 2px 8px color-mix(in srgb, var(--color-navy) 4%, transparent));
   margin-top: 10px;
 }
 
@@ -57,7 +57,7 @@
   height: 100%;
   max-height: 100vh; 
   min-width: 0;
-  background: #ffffff;
+  background: var(--color-white);
   overflow-y: auto;
 }
 
@@ -85,12 +85,12 @@
   font-family: 'Fraunces', serif;
   font-size: 1.5rem;
   font-weight: 700;
-  color: #2F4156;
+  color: var(--color-navy);
   margin: 0;
 }
 
 .lp-usuarios-subtitle {
-  color: rgba(47, 65, 86, 0.35);
+  color: var(--color-text-secondary);
   font-size: 0.85rem;
   margin: 0;
 }
@@ -112,20 +112,20 @@
   font-weight: 600;
   padding: 8px 16px;
   border-radius: 60px;
-  border: 1.5px solid #2F4156;
+  border: 1.5px solid var(--color-navy);
   cursor: pointer;
   background: transparent;
-  color: #2F4156;
+  color: var(--color-navy);
   transition: all 0.2s ease;
 }
 
 .lp-usuarios-filtro-btn:hover {
-  background: rgba(47, 65, 86, 0.04);
+  background: color-mix(in srgb, var(--color-navy) 4%, transparent);
 }
 
 .lp-usuarios-filtro-btn[data-activo='true'] {
-  background: #2F4156;
-  color: #ffffff;
+  background: var(--color-enfasis);
+  color: var(--color-sobre-enfasis);
 }
 
 .lp-usuarios-busqueda-form {
@@ -137,16 +137,16 @@
   font-size: 0.9rem;
   padding: 10px 14px;
   border-radius: 60px;
-  border: 1px solid #2F4156;
-  background: #ffffff;
-  color: #2F4156;
+  border: 1px solid var(--color-navy);
+  background: var(--color-white);
+  color: var(--color-navy);
   min-width: 220px;
   outline: none;
   transition: border-color 0.2s ease;
 }
 
 .lp-usuarios-busqueda-input:focus {
-  border-color: #567C8D;
+  border-color: var(--color-teal);
 }
 
 /* ============================================================
@@ -154,8 +154,8 @@
    ============================================================ */
 
 .lp-usuarios-tabla-container {
-  background: #ffffff;
-  border: 1px solid rgba(47, 65, 86, 0.04);
+  background: var(--color-white);
+  border: 1px solid color-mix(in srgb, var(--color-navy) 4%, transparent);
   border-radius: 12px;
   overflow: hidden;
 }
@@ -169,19 +169,19 @@
 .lp-usuarios-tabla th {
   text-align: left;
   padding: 14px 18px;
-  color: rgba(47, 65, 86, 0.4);
+  color: var(--color-text-secondary);
   font-weight: 700;
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  border-bottom: 1px solid rgba(47, 65, 86, 0.06);
-  background: rgba(47, 65, 86, 0.01);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-navy) 6%, transparent);
+  background: color-mix(in srgb, var(--color-navy) 1%, transparent);
 }
 
 .lp-usuarios-tabla td {
   padding: 14px 18px;
-  border-bottom: 1px solid rgba(47, 65, 86, 0.03);
-  color: #2F4156;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-navy) 3%, transparent);
+  color: var(--color-navy);
   vertical-align: middle;
 }
 
@@ -191,7 +191,7 @@
 }
 
 .lp-usuarios-tabla tbody tr:hover {
-  background: rgba(47, 65, 86, 0.02);
+  background: color-mix(in srgb, var(--color-navy) 2%, transparent);
 }
 
 .lp-usuarios-tabla tbody tr:last-child td {
@@ -203,8 +203,8 @@
    ============================================================ */
 
 .lp-usuarios-card {
-  background: rgba(47, 65, 86, 0.01);
-  border: 1px solid rgba(47, 65, 86, 0.04);
+  background: color-mix(in srgb, var(--color-navy) 1%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-navy) 4%, transparent);
   border-radius: 12px;
   padding: 16px 18px;
   display: flex;
@@ -216,19 +216,19 @@
 .lp-usuarios-card-titulo {
   font-size: 1rem;
   font-weight: 700;
-  color: #2F4156;
+  color: var(--color-navy);
   margin: 0 0 4px 0;
 }
 
 .lp-usuarios-card-texto {
   font-size: 0.85rem;
-  color: #2F4156;
+  color: var(--color-navy);
   margin: 0;
 }
 
 .lp-usuarios-card-muted {
   font-size: 0.8rem;
-  color: rgba(47, 65, 86, 0.4);
+  color: var(--color-text-secondary);
   margin: 0;
 }
 
@@ -247,8 +247,8 @@
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: rgba(86, 124, 141, 0.06);
-  color: #2F4156;
+  background: color-mix(in srgb, var(--color-teal) 6%, transparent);
+  color: var(--color-navy);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -262,7 +262,7 @@
   font-family: 'Fraunces', serif;
   font-size: 1.3rem;
   font-weight: 700;
-  color: #2F4156;
+  color: var(--color-navy);
   margin: 0 0 2px 0;
 }
 
@@ -284,22 +284,22 @@
 }
 
 .lp-usuarios-btn-primary {
-  background: #2F4156;
-  color: white;
+  background: var(--color-enfasis);
+  color: var(--color-sobre-enfasis);
 }
 
 .lp-usuarios-btn-primary:hover:not(:disabled) {
-  background: #1a2a3a;
+  background: color-mix(in srgb, var(--color-enfasis) 85%, black 15%);
 }
 
 .lp-usuarios-btn-secondary {
-  background: rgba(47, 65, 86, 0.02);
-  color: #2F4156;
-  border: 1px solid rgba(47, 65, 86, 0.08);
+  background: color-mix(in srgb, var(--color-navy) 2%, transparent);
+  color: var(--color-navy);
+  border: 1px solid color-mix(in srgb, var(--color-navy) 8%, transparent);
 }
 
 .lp-usuarios-btn-secondary:hover:not(:disabled) {
-  background: rgba(47, 65, 86, 0.04);
+  background: color-mix(in srgb, var(--color-navy) 4%, transparent);
 }
 
 .lp-usuarios-btn:disabled {
@@ -322,18 +322,18 @@
   height: 80px;
   object-fit: cover;
   border-radius: 8px;
-  border: 1px solid rgba(47, 65, 86, 0.1);
+  border: 1px solid color-mix(in srgb, var(--color-navy) 10%, transparent);
 }
 
 .lp-usuarios-miniatura-vacia {
   width: 80px;
   height: 80px;
   border-radius: 8px;
-  border: 1.5px dashed rgba(47, 65, 86, 0.1);
+  border: 1.5px dashed color-mix(in srgb, var(--color-navy) 10%, transparent);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(47, 65, 86, 0.4);
+  color: var(--color-text-secondary);
   font-size: 0.7rem;
   text-align: center;
 }

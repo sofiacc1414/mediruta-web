@@ -39,6 +39,27 @@ const CAMPOS_PRECIO: {
   { key: 'tarifaPorKmExcedente', label: 'Tarifa por km excedente', sufijo: '$/km', min: 0 },
 ];
 
+/** Módulo 3/4 — comisión que retiene la app sobre el costo del
+ * domicilio, y el tope de efectivo recaudado que bloquea al
+ * Domiciliario (ver `app.entregar_pedido`/`app.aceptar_pedido`). */
+const CAMPOS_PAGO: {
+  key: keyof ConfiguracionAdmin;
+  label: string;
+  sufijo: string;
+  min: number;
+  max?: number;
+  step: string;
+}[] = [
+  { key: 'comisionAppPorcentaje', label: 'Comisión de la app sobre el domicilio', sufijo: 'fracción 0-1', min: 0, max: 1, step: '0.01' },
+  { key: 'topeRecaudoEfectivo', label: 'Tope de efectivo recaudado antes de bloquear', sufijo: '$', min: 0.01, step: 'any' },
+];
+
+const TOGGLES_MEDIO_PAGO: { key: keyof ConfiguracionAdmin; label: string }[] = [
+  { key: 'pagoEfectivoHabilitado', label: 'Efectivo' },
+  { key: 'pagoTarjetaHabilitado', label: 'Tarjeta (simulada)' },
+  { key: 'pagoTransferenciaHabilitado', label: 'Transferencia' },
+];
+
 /** Panel admin — parámetros del precio del pedido (copago + domicilio,
  * ver `CalcularPrecioPedidoUseCase` de la API): las 7 tarifas del
  * domicilio (+ el umbral de demora, que vive en la misma fila
@@ -113,6 +134,11 @@ export function ConfiguracionTab() {
     setConfig({ ...config, [key]: Number.isNaN(numero) ? 0 : numero });
   }
 
+  function onCambiarToggle(key: keyof ConfiguracionAdmin, valor: boolean) {
+    if (config === null) return;
+    setConfig({ ...config, [key]: valor });
+  }
+
   return (
     <div className="lp-config-page">
       {errorCarga ? <Alert tono="error">{errorCarga}</Alert> : null}
@@ -137,6 +163,45 @@ export function ConfiguracionTab() {
               type="number"
               min={campo.min}
               step="any"
+              required
+              value={config ? String(config[campo.key]) : ''}
+              onChange={(e) => onCambiarCampo(campo.key, e.target.value)}
+              disabled={config === null || guardandoConfig}
+            />
+          ))}
+        </div>
+
+        <h2 className="lp-config-card-titulo lp-config-card-subtitulo">
+          <SettingsIcon /> Billetera y pasarela de pagos
+        </h2>
+        <p className="lp-config-card-ayuda">
+          Qué medios de pago puede elegir el Paciente al pedir, la comisión que retiene la app sobre el
+          domicilio, y el tope de efectivo recaudado antes de bloquear a un Domiciliario.
+        </p>
+
+        <div className="lp-config-toggles-medio-pago">
+          {TOGGLES_MEDIO_PAGO.map((toggle) => (
+            <label key={toggle.key} className="lp-config-toggle">
+              <input
+                type="checkbox"
+                checked={config ? Boolean(config[toggle.key]) : false}
+                onChange={(e) => onCambiarToggle(toggle.key, e.target.checked)}
+                disabled={config === null || guardandoConfig}
+              />
+              {toggle.label}
+            </label>
+          ))}
+        </div>
+
+        <div className="lp-config-grid-campos">
+          {CAMPOS_PAGO.map((campo) => (
+            <Input
+              key={campo.key}
+              label={`${campo.label} (${campo.sufijo})`}
+              type="number"
+              min={campo.min}
+              max={campo.max}
+              step={campo.step}
               required
               value={config ? String(config[campo.key]) : ''}
               onChange={(e) => onCambiarCampo(campo.key, e.target.value)}

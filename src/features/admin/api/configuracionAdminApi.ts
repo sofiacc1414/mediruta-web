@@ -12,6 +12,14 @@ export type ParametrosPrecioDomicilio = {
 
 export type ConfiguracionAdmin = ParametrosPrecioDomicilio & {
   umbralDemoraAsignacionMinutos: number;
+  /** Módulo 4 — % (0-1) del costo del domicilio que retiene la app. */
+  comisionAppPorcentaje: number;
+  /** Módulo 3 — deuda de efectivo a partir de la cual se bloquea al
+   * Domiciliario para nuevos pedidos. */
+  topeRecaudoEfectivo: number;
+  pagoEfectivoHabilitado: boolean;
+  pagoTarjetaHabilitado: boolean;
+  pagoTransferenciaHabilitado: boolean;
 };
 
 export type NivelCopago = {

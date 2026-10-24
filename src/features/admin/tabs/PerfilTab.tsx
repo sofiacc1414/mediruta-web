@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
 import { Alert } from '../../../shared/components/Alert';
 import { Input } from '../../../shared/components/Input';
-import { LockResetIcon, MailIcon, PersonIcon, PinIcon } from '../../../shared/components/icons';
+import { Switch } from '../../../shared/components/Switch';
+import { LockResetIcon, MailIcon, MoonIcon, PersonIcon, PinIcon } from '../../../shared/components/icons';
+import { useTema } from '../../../shared/hooks/useTema';
 import { ApiError, ApiSinConexionError } from '../../../shared/lib/apiError';
 import { validarPassword } from '../../../shared/lib/politicaContrasena';
 import { cambiarContrasena } from '../../usuarios/api/auth.api';
@@ -21,6 +23,7 @@ const ETIQUETAS_ROL: Record<string, string> = {
 
 export function PerfilTab() {
   const { estado } = useAuth();
+  const { oscuro, alternar } = useTema();
   const inputArchivoRef = useRef<HTMLInputElement>(null);
 
   const [perfil, setPerfil] = useState<Perfil | null>(null);
@@ -268,6 +271,19 @@ export function PerfilTab() {
               {cambiandoPassword ? 'Guardando…' : 'Cambiar contraseña'}
             </button>
           </form>
+
+          <div className="lp-perfil-card">
+            <h2 className="lp-perfil-card-titulo">
+              <MoonIcon /> Apariencia
+            </h2>
+
+            <Switch
+              id="switch-modo-oscuro"
+              label="Modo oscuro"
+              checked={oscuro}
+              onChange={alternar}
+            />
+          </div>
         </div>
       </div>
     </div>

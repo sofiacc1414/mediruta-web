@@ -211,8 +211,8 @@ export function DomiciliariosTab() {
                     <td style={{ fontWeight: 600 }}>{domiciliario.nombreCompleto ?? 'Sin nombre registrado'}</td>
                     <td>{domiciliario.telefono ?? '—'}</td>
                     <td>{ETIQUETAS_ESTADO[domiciliario.estado]}</td>
-                    <td style={{ color: 'rgba(47, 65, 86, 0.4)' }}>{formatearFecha(domiciliario.solicitadoEn)}</td>
-                    <td style={{ color: '#2F4156', fontWeight: 600, textAlign: 'right' }}>Revisar →</td>
+                    <td style={{ color: 'var(--color-text-secondary)' }}>{formatearFecha(domiciliario.solicitadoEn)}</td>
+                    <td style={{ color: 'var(--color-navy)', fontWeight: 600, textAlign: 'right' }}>Revisar →</td>
                   </tr>
                 ))}
               </tbody>
@@ -399,7 +399,7 @@ function DomiciliarioDetalle({
                     {doc.url ? '' : ' — no subido'}
                   </span>
                   {doc.url ? (
-                    <div style={{ width: 20, height: 20, color: '#567C8D', flexShrink: 0 }}>
+                    <div style={{ width: 20, height: 20, color: 'var(--color-teal)', flexShrink: 0 }}>
                       <ZoomInIcon />
                     </div>
                   ) : null}
@@ -417,7 +417,7 @@ function DomiciliarioDetalle({
                 background: 'transparent',
                 padding: 0,
                 font: 'inherit',
-                color: doc.url ? '#2F4156' : 'rgba(47, 65, 86, 0.4)',
+                color: doc.url ? 'var(--color-navy)' : 'var(--color-text-secondary)',
                 cursor: doc.url ? 'pointer' : 'default',
               };
 
@@ -461,7 +461,7 @@ function DomiciliarioDetalle({
                 </Button>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', textAlign: 'left', width: '100%' }}>
-                  <label htmlFor="motivo-rechazo" style={{ fontSize: '0.875rem', color: '#2F4156' }}>
+                  <label htmlFor="motivo-rechazo" style={{ fontSize: '0.875rem', color: 'var(--color-navy)' }}>
                     Motivo del rechazo
                   </label>
                   <textarea
@@ -475,15 +475,15 @@ function DomiciliarioDetalle({
                       fontSize: '1rem',
                       padding: '10px',
                       borderRadius: '8px',
-                      border: `${errorMotivo ? 2 : 1}px solid #2F4156`,
-                      background: 'rgba(47, 65, 86, 0.01)',
-                      color: '#2F4156',
+                      border: `${errorMotivo ? 2 : 1}px solid var(--color-navy)`,
+                      background: 'color-mix(in srgb, var(--color-navy) 1%, transparent)',
+                      color: 'var(--color-navy)',
                       resize: 'vertical',
                       width: '100%',
                     }}
                   />
                   {errorMotivo ? (
-                    <span style={{ fontSize: '0.8rem', color: '#2F4156', fontWeight: 600 }}>
+                    <span style={{ fontSize: '0.8rem', color: 'var(--color-navy)', fontWeight: 600 }}>
                       ⚠ {errorMotivo}
                     </span>
                   ) : null}
@@ -514,13 +514,17 @@ function DomiciliarioDetalle({
             <h2 className="lp-domiciliarios-card-titulo">Historial</h2>
             {detalle.historial.map((item, indice) => (
               <div key={indice} style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
-                <div style={{ width: 20, height: 20, color: '#2F4156', flexShrink: 0 }}>
+                <div style={{ width: 20, height: 20, color: 'var(--color-navy)', flexShrink: 0 }}>
                   {item.decision === 'aprobado' ? <CheckCircleIcon /> : <XCircleIcon />}
                 </div>
                 <div>
                   <strong>{item.decision === 'aprobado' ? 'Aprobado' : 'Rechazado'}</strong> por{' '}
                   {item.adminCorreo} el {formatearFechaHora(item.creadoEn)}
-                  {item.motivo ? <div style={{ color: 'rgba(47, 65, 86, 0.6)' }}>Motivo: {item.motivo}</div> : null}
+                  {item.motivo ? (
+                    <div style={{ color: 'var(--color-text-secondary)' }}>
+                      Motivo: {item.motivo}
+                    </div>
+                  ) : null}
                 </div>
               </div>
             ))}

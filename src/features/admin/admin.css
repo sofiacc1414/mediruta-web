@@ -7,10 +7,17 @@
   background: var(--color-beige);
 }
 
+/* `--color-barra-navegacion` en vez de `--color-navy`: el logo quemado en
+   el sidebar (`LogoEnBlanco.png`) solo existe en blanco, así que esta barra
+   nunca puede volverse clara como `--color-navy` invertido (el logo blanco
+   desaparecería) — pero sí debe pasar a gris en modo oscuro (no quedarse
+   navy fijo), igual que `AppBottomNavBar` en la app Flutter. El resto del
+   sidebar (texto, íconos, avatar) sigue en `--color-sobre-enfasis` (blanco
+   fijo), que mantiene buen contraste tanto sobre navy como sobre gris. */
 .admin-sidebar {
   width: 248px;
   flex-shrink: 0;
-  background: var(--color-navy);
+  background: var(--color-barra-navegacion);
   display: flex;
   flex-direction: column;
   padding: var(--space-6) var(--space-4);
@@ -34,7 +41,7 @@
   border-left: 3px solid transparent;
   border-radius: var(--radius-md);
   background: transparent;
-  color: var(--color-sky-blue);
+  color: color-mix(in srgb, var(--color-sobre-enfasis) 75%, transparent);
   font-family: var(--font-body);
   font-size: 0.95rem;
   font-weight: 500;
@@ -44,14 +51,14 @@
 }
 
 .admin-nav-item:hover {
-  background: color-mix(in srgb, var(--color-white) 8%, transparent);
-  color: var(--color-white);
+  background: color-mix(in srgb, var(--color-sobre-enfasis) 8%, transparent);
+  color: var(--color-sobre-enfasis);
 }
 
 .admin-nav-item[data-activo='true'] {
-  background: color-mix(in srgb, var(--color-white) 12%, transparent);
-  border-left-color: var(--color-sky-blue);
-  color: var(--color-white);
+  background: color-mix(in srgb, var(--color-sobre-enfasis) 12%, transparent);
+  border-left-color: var(--color-sobre-enfasis);
+  color: var(--color-sobre-enfasis);
 }
 
 .admin-nav-item svg,
@@ -66,7 +73,7 @@
   align-items: center;
   gap: var(--space-3);
   padding-top: var(--space-4);
-  border-top: 1px solid color-mix(in srgb, var(--color-white) 15%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--color-sobre-enfasis) 15%, transparent);
 }
 
 /* ============================================================
@@ -78,8 +85,8 @@
   height: 36px;
   border-radius: 50%;
   flex-shrink: 0;
-  background: var(--color-sky-blue);
-  color: var(--color-navy);
+  background: var(--color-sobre-enfasis);
+  color: var(--color-enfasis);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -103,7 +110,7 @@
 }
 
 .admin-account-correo {
-  color: var(--color-white);
+  color: var(--color-sobre-enfasis);
   font-size: 0.85rem;
   font-weight: 600;
   overflow: hidden;
@@ -112,7 +119,7 @@
 }
 
 .admin-account-rol {
-  color: var(--color-sky-blue);
+  color: color-mix(in srgb, var(--color-sobre-enfasis) 75%, transparent);
   font-size: 0.75rem;
 }
 
@@ -123,7 +130,7 @@
   border-radius: 50%;
   border: none;
   background: transparent;
-  color: var(--color-sky-blue);
+  color: color-mix(in srgb, var(--color-sobre-enfasis) 75%, transparent);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -132,8 +139,8 @@
 }
 
 .admin-logout-button:hover {
-  background: color-mix(in srgb, var(--color-white) 12%, transparent);
-  color: var(--color-white);
+  background: color-mix(in srgb, var(--color-sobre-enfasis) 12%, transparent);
+  color: var(--color-sobre-enfasis);
 }
 
 .admin-logout-button svg {
@@ -151,8 +158,8 @@
   width: 100%;
   max-width: 100%;
   margin: 0;
-  height: 100%; 
-  background: #ffffff;
+  height: 100%;
+  background: var(--color-fondo-pagina);
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
@@ -194,7 +201,7 @@
 
   .admin-nav-item[data-activo='true'] {
     border-left-color: transparent;
-    border-bottom-color: var(--color-sky-blue);
+    border-bottom-color: var(--color-sobre-enfasis);
   }
 
   .admin-account {

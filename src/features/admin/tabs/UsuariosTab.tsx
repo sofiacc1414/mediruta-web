@@ -187,9 +187,9 @@ export function UsuariosTab() {
                   >
                     <td style={{ fontWeight: 600 }}>{cuenta.nombreCompleto ?? 'Sin nombre registrado'}</td>
                     <td>{cuenta.correo}</td>
-                    <td style={{ color: 'rgba(47, 65, 86, 0.4)' }}>{cuenta.roles.map((r) => ETIQUETAS_ROL[r]).join(', ')}</td>
+                    <td style={{ color: 'var(--color-text-secondary)' }}>{cuenta.roles.map((r) => ETIQUETAS_ROL[r]).join(', ')}</td>
                     <td>{ETIQUETAS_ESTADO_CUENTA[cuenta.estadoCuenta] ?? cuenta.estadoCuenta}</td>
-                    <td style={{ color: 'rgba(47, 65, 86, 0.4)' }}>{formatearFecha(cuenta.creadoEn)}</td>
+                    <td style={{ color: 'var(--color-text-secondary)' }}>{formatearFecha(cuenta.creadoEn)}</td>
                   </tr>
                 ))}
               </tbody>

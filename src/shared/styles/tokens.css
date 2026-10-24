@@ -15,6 +15,25 @@
   --color-beige: #f5efeb;
   --color-white: #ffffff;
 
+  /* Roles adicionales — mismo mapeo que `app_colors.dart` en la app Flutter,
+     para que el panel admin pueda tener modo oscuro alineado. */
+  --color-fondo-pagina: #ffffff;
+  --color-border: rgba(47, 65, 86, 0.2);
+  --color-text-secondary: #6b7280;
+  --color-shadow: rgba(0, 0, 0, 0.05);
+
+  /* Relleno fijo de botones primarios/CTA/tabs seleccionadas — NO se
+     invierte entre temas (ver bloque [data-theme="dark"] más abajo). */
+  --color-enfasis: #2f4156;
+  --color-sobre-enfasis: #ffffff;
+
+  /* Fondo de la barra de navegación (sidebar admin) — en claro es el mismo
+     navy que `--color-enfasis`, pero en oscuro pasa a gris (no se queda
+     navy): mismo criterio que `AppBottomNavBar` en la app Flutter. Token
+     aparte en vez de reusar `--color-enfasis` directo porque ahí SÍ debe
+     cambiar entre temas, a diferencia de un botón CTA. */
+  --color-barra-navegacion: var(--color-enfasis);
+
   /* Tipografía (context.md Parte A, sección 6) */
   --font-heading: "Times New Roman MT Condensed", "Times New Roman", serif;
   --font-body: "Poppins", system-ui, sans-serif;
@@ -36,4 +55,25 @@
   --radius-md: 12px;
   --radius-lg: 18px;
   --radius-pill: 999px;
+}
+
+/* Modo oscuro — SOLO aplica dentro de /admin (ver `TemaProvider`, montado en
+   `AdminShell`), nunca a landing/login/recuperar/restablecer contraseña.
+   Mismos valores que `app_colors.dart` en la app Flutter, ya depurados ahí
+   tras varias rondas de corrección de contraste. `--color-enfasis` y
+   `--color-sobre-enfasis` quedan fijos: ver nota arriba. */
+:root[data-theme='dark'] {
+  --color-navy: #e9eef3;
+  --color-teal: #8fb4c4;
+  --color-sky-blue: #24384a;
+  --color-beige: #55504a;
+  --color-white: #5c5c5c;
+
+  --color-fondo-pagina: #4a4a4a;
+  --color-border: #7a7a7a;
+  --color-text-secondary: #b7c3cc;
+  --color-shadow: rgba(0, 0, 0, 0.35);
+
+  /* Mismo gris que usa `AppBottomNavBar` en la app Flutter en modo oscuro. */
+  --color-barra-navegacion: #3a3a3a;
 }

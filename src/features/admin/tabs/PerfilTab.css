@@ -12,7 +12,7 @@
   width: 100%;
   padding: 0;
   margin: 0;
-  background: #f7f9fc;
+  background: var(--color-fondo-pagina);
   overflow: hidden;
 }
 
@@ -31,7 +31,7 @@
 .lp-perfil-page::before {
   width: 400px;
   height: 400px;
-  background: #c9d8e3;
+  background: var(--color-sky-blue);
   top: -50px;
   right: -50px;
 }
@@ -39,7 +39,7 @@
 .lp-perfil-page::after {
   width: 300px;
   height: 300px;
-  background: #b9d0dd;
+  background: var(--color-sky-blue);
   bottom: -50px;
   left: 30%;
 }
@@ -159,9 +159,9 @@
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  border: 2px solid #ffffff;
-  background: #2F4156;
-  color: #ffffff;
+  border: 2px solid var(--color-sobre-enfasis);
+  background: var(--color-enfasis);
+  color: var(--color-sobre-enfasis);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -172,7 +172,7 @@
 }
 
 .lp-perfil-avatar-edit:hover:not(:disabled) {
-  background: #567C8D;
+  background: color-mix(in srgb, var(--color-enfasis) 80%, white 20%);
   transform: scale(1.1) rotate(10deg);
 }
 
@@ -231,22 +231,22 @@
 
 /* Tarjetas con efecto "Glass" ligero y bordes suaves */
 .lp-perfil-card {
-  background: rgba(255, 255, 255, 0.7);
+  background: color-mix(in srgb, var(--color-white) 70%, transparent);
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  border: 1px solid color-mix(in srgb, var(--color-white) 80%, transparent);
   border-radius: 24px;
   padding: 32px;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  box-shadow: 0 12px 40px rgba(47, 65, 86, 0.06);
+  box-shadow: 0 12px 40px var(--color-shadow);
   transition: all 0.4s cubic-bezier(0.16, 1, 0.2, 1);
 }
 
 .lp-perfil-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 24px 60px rgba(47, 65, 86, 0.12);
-  border-color: rgba(86, 124, 141, 0.2);
+  box-shadow: 0 24px 60px var(--color-shadow);
+  border-color: color-mix(in srgb, var(--color-teal) 20%, transparent);
 }
 
 /* Título de tarjeta con estilo editorial */
@@ -257,14 +257,14 @@
   font-family: 'Fraunces', serif;
   font-size: 1.5rem;
   font-weight: 700;
-  color: #2F4156;
+  color: var(--color-navy);
   margin: 0 0 8px 0;
 }
 
 .lp-perfil-card-titulo svg {
   width: 24px;
   height: 24px;
-  color: #567C8D;
+  color: var(--color-teal);
   flex-shrink: 0;
 }
 
@@ -276,27 +276,27 @@
 .lp-perfil-card input,
 .lp-perfil-card select,
 .lp-perfil-card textarea {
-  background-color: #ffffff !important; /* Fuerza el blanco puro */
-  border: 1px solid rgba(86, 124, 141, 0.15) !important; /* Borde suave */
-  color: #2F4156 !important; /* Texto azul oscuro */
-  box-shadow: 0 2px 6px rgba(47, 65, 86, 0.02) !important; /* Sombra muy sutil */
+  background-color: var(--color-white) !important;
+  border: 1px solid color-mix(in srgb, var(--color-teal) 15%, transparent) !important;
+  color: var(--color-navy) !important;
+  box-shadow: 0 2px 6px var(--color-shadow) !important;
 }
 
 /* Quitar el fondo beige en el foco */
 .lp-perfil-card input:focus,
 .lp-perfil-card select:focus,
 .lp-perfil-card textarea:focus {
-  background-color: #ffffff !important;
-  border-color: #567C8D !important;
-  box-shadow: 0 0 0 4px rgba(86, 124, 141, 0.1) !important;
+  background-color: var(--color-white) !important;
+  border-color: var(--color-teal) !important;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-teal) 10%, transparent) !important;
 }
 
 /* Quitar el fondo beige en autocompletado del navegador (¡importante!) */
 .lp-perfil-card input:-webkit-autofill,
 .lp-perfil-card input:-webkit-autofill:hover,
 .lp-perfil-card input:-webkit-autofill:focus {
-  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
-  -webkit-text-fill-color: #2F4156 !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--color-white) inset !important;
+  -webkit-text-fill-color: var(--color-navy) !important;
   transition: background-color 5000s ease-in-out 0s;
 }
 
@@ -316,8 +316,12 @@
 }
 
 .lp-perfil-btn-primary {
-  background: linear-gradient(135deg, #2F4156 0%, #4A6B83 100%);
-  color: #ffffff;
+  background: linear-gradient(
+    135deg,
+    var(--color-enfasis) 0%,
+    color-mix(in srgb, var(--color-enfasis) 75%, white 25%) 100%
+  );
+  color: var(--color-sobre-enfasis);
   box-shadow: 0 10px 24px rgba(47, 65, 86, 0.2);
 }
 

@@ -11,7 +11,7 @@
   width: 100%;
   padding: 0;
   margin: 0;
-  background: #ffffff;
+  background: var(--color-white);
 }
 
 /* ============================================================
@@ -40,7 +40,7 @@
   object-fit: contain;
   opacity: 0.85;
   display: block;
-  filter: drop-shadow(0 2px 8px rgba(47, 65, 86, 0.04));
+  filter: drop-shadow(0 2px 8px color-mix(in srgb, var(--color-navy) 4%, transparent));
   margin-top: 10px;
 }
 
@@ -57,7 +57,7 @@
   height: 100%;
   max-height: 100vh; 
   min-width: 0;
-  background: #ffffff;
+  background: var(--color-white);
   overflow: hidden;
 }
 
@@ -85,12 +85,12 @@
   font-family: 'Fraunces', serif;
   font-size: 1.5rem;
   font-weight: 700;
-  color: #2F4156;
+  color: var(--color-navy);
   margin: 0;
 }
 
 .lp-pedidos-subtitle {
-  color: rgba(47, 65, 86, 0.35);
+  color: var(--color-text-secondary);
   font-size: 0.85rem;
   margin: 0;
 }
@@ -106,8 +106,8 @@
    ============================================================ */
 
 .lp-pedidos-umbral-mini {
-  background: rgba(47, 65, 86, 0.02);
-  border: 1px solid rgba(47, 65, 86, 0.04);
+  background: color-mix(in srgb, var(--color-navy) 2%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-navy) 4%, transparent);
   border-radius: 10px;
   padding: 4px 12px;
 }
@@ -117,7 +117,7 @@
   border: none;
   font-size: 0.75rem;
   font-weight: 600;
-  color: #2F4156;
+  color: var(--color-navy);
   cursor: pointer;
   padding: 4px 8px;
   border-radius: 6px;
@@ -126,7 +126,7 @@
 }
 
 .lp-pedidos-umbral-mini-btn:hover {
-  background: rgba(86, 124, 141, 0.04);
+  background: color-mix(in srgb, var(--color-teal) 4%, transparent);
 }
 
 .lp-pedidos-umbral-mini-form {
@@ -137,24 +137,24 @@
 
 .lp-pedidos-umbral-mini-label {
   font-size: 0.65rem;
-  color: rgba(47, 65, 86, 0.4);
+  color: var(--color-text-secondary);
 }
 
 .lp-pedidos-umbral-mini-input {
   width: 38px;
   padding: 2px 4px;
-  border: 1.5px solid rgba(47, 65, 86, 0.06);
+  border: 1.5px solid color-mix(in srgb, var(--color-navy) 6%, transparent);
   border-radius: 6px;
   font-size: 0.7rem;
   text-align: center;
   font-weight: 600;
-  background: #ffffff;
-  color: #2F4156;
+  background: var(--color-white);
+  color: var(--color-navy);
 }
 
 .lp-pedidos-umbral-mini-input:focus {
   outline: none;
-  border-color: #567C8D;
+  border-color: var(--color-teal);
 }
 
 /* ============================================================
@@ -169,8 +169,8 @@
 }
 
 .lp-pedidos-stat {
-  background: rgba(47, 65, 86, 0.01);
-  border: 1px solid rgba(47, 65, 86, 0.04);
+  background: color-mix(in srgb, var(--color-navy) 1%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-navy) 4%, transparent);
   border-radius: 12px;
   padding: 12px 16px;
   text-align: center;
@@ -182,12 +182,12 @@
 }
 
 .lp-pedidos-stat:hover {
-  background: rgba(47, 65, 86, 0.02);
+  background: color-mix(in srgb, var(--color-navy) 2%, transparent);
 }
 
 .lp-pedidos-stat--activa {
   border-color: var(--color-navy);
-  background: rgba(200, 217, 230, 0.35);
+  background: color-mix(in srgb, var(--color-sky-blue) 35%, transparent);
 }
 
 .lp-pedidos-stat-number {
@@ -195,7 +195,7 @@
   font-family: 'Fraunces', serif;
   font-size: 1.5rem;
   font-weight: 700;
-  color: #2F4156;
+  color: var(--color-navy);
 }
 
 .lp-pedidos-stat-label {
@@ -203,7 +203,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: rgba(47, 65, 86, 0.3);
+  color: var(--color-text-secondary);
 }
 
 /* Las 4 tarjetas se distinguen por peso/ícono, no por un hue nuevo por
@@ -226,8 +226,8 @@
    ============================================================ */
 
 .lp-pedidos-filtros {
-  background: rgba(47, 65, 86, 0.01);
-  border: 1px solid rgba(47, 65, 86, 0.04);
+  background: color-mix(in srgb, var(--color-navy) 1%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-navy) 4%, transparent);
   border-radius: 12px;
   padding: 14px 18px;
   flex-shrink: 0;
@@ -260,17 +260,17 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: rgba(47, 65, 86, 0.2);
+  color: var(--color-text-secondary);
 }
 
 .lp-pedidos-select,
 .lp-pedidos-input {
   padding: 6px 10px;
-  border: 1.5px solid rgba(47, 65, 86, 0.04);
+  border: 1.5px solid color-mix(in srgb, var(--color-navy) 4%, transparent);
   border-radius: 8px;
   font-size: 0.85rem;
-  background: #ffffff;
-  color: #2F4156;
+  background: var(--color-white);
+  color: var(--color-navy);
   font-family: 'Inter', sans-serif;
   transition: all 0.3s ease;
   width: 100%;
@@ -279,8 +279,8 @@
 .lp-pedidos-select:focus,
 .lp-pedidos-input:focus {
   outline: none;
-  border-color: #567C8D;
-  box-shadow: 0 0 0 4px rgba(86, 124, 141, 0.04);
+  border-color: var(--color-teal);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-teal) 4%, transparent);
 }
 
 .lp-pedidos-select {
@@ -315,23 +315,23 @@
 }
 
 .lp-pedidos-btn-primary {
-  background: #2F4156;
-  color: white;
+  background: var(--color-enfasis);
+  color: var(--color-sobre-enfasis);
 }
 
 .lp-pedidos-btn-primary:hover {
-  background: #1a2a3a;
+  background: color-mix(in srgb, var(--color-enfasis) 85%, black 15%);
   transform: translateY(-1px);
 }
 
 .lp-pedidos-btn-secondary {
-  background: rgba(47, 65, 86, 0.02);
-  color: #2F4156;
-  border: 1px solid rgba(47, 65, 86, 0.04);
+  background: color-mix(in srgb, var(--color-navy) 2%, transparent);
+  color: var(--color-navy);
+  border: 1px solid color-mix(in srgb, var(--color-navy) 4%, transparent);
 }
 
 .lp-pedidos-btn-secondary:hover {
-  background: rgba(47, 65, 86, 0.04);
+  background: color-mix(in srgb, var(--color-navy) 4%, transparent);
 }
 
 /* ============================================================
@@ -361,8 +361,8 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  background: #ffffff;
-  border: 1px solid rgba(47, 65, 86, 0.04);
+  background: var(--color-white);
+  border: 1px solid color-mix(in srgb, var(--color-navy) 4%, transparent);
   border-radius: 12px;
   padding: 12px 18px;
   cursor: pointer;
@@ -373,7 +373,7 @@
 .lp-pedidos-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
-  border-color: rgba(86, 124, 141, 0.12);
+  border-color: color-mix(in srgb, var(--color-teal) 12%, transparent);
 }
 
 .lp-pedidos-card-left {
@@ -387,7 +387,7 @@
 .lp-pedidos-card-codigo {
   font-weight: 700;
   font-size: 0.9rem;
-  color: #2F4156;
+  color: var(--color-navy);
   white-space: nowrap;
 }
 
@@ -402,8 +402,8 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: rgba(86, 124, 141, 0.06);
-  color: #567C8D;
+  background: color-mix(in srgb, var(--color-teal) 6%, transparent);
+  color: var(--color-teal);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -415,7 +415,7 @@
 .lp-pedidos-card-nombre {
   font-weight: 500;
   font-size: 0.88rem;
-  color: #2F4156;
+  color: var(--color-navy);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -423,7 +423,7 @@
 
 .lp-pedidos-card-direccion {
   font-size: 0.72rem;
-  color: rgba(47, 65, 86, 0.3);
+  color: var(--color-text-secondary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -447,17 +447,17 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: rgba(47, 65, 86, 0.2);
+  color: var(--color-text-secondary);
 }
 
 .lp-pedidos-card-info-value {
   font-size: 0.78rem;
   font-weight: 500;
-  color: #2F4156;
+  color: var(--color-navy);
 }
 
 .lp-pedidos-card-sin-asignar {
-  color: rgba(47, 65, 86, 0.2);
+  color: var(--color-text-secondary);
   font-style: italic;
   font-size: 0.75rem;
 }
@@ -483,8 +483,8 @@
   align-items: center;
   gap: 6px;
   border: none;
-  background: rgba(86, 124, 141, 0.04);
-  color: #567C8D;
+  background: color-mix(in srgb, var(--color-teal) 4%, transparent);
+  color: var(--color-teal);
   font-weight: 600;
   font-size: 0.72rem;
   padding: 6px 12px;
@@ -495,7 +495,7 @@
 }
 
 .lp-pedidos-card-ver:hover {
-  background: rgba(86, 124, 141, 0.08);
+  background: color-mix(in srgb, var(--color-teal) 8%, transparent);
 }
 
 /* ============================================================
@@ -516,17 +516,17 @@
 }
 
 .lp-pedidos-detalle::-webkit-scrollbar-track {
-  background: rgba(47, 65, 86, 0.02);
+  background: color-mix(in srgb, var(--color-navy) 2%, transparent);
   border-radius: 10px;
 }
 
 .lp-pedidos-detalle::-webkit-scrollbar-thumb {
-  background: rgba(86, 124, 141, 0.12);
+  background: color-mix(in srgb, var(--color-teal) 12%, transparent);
   border-radius: 10px;
 }
 
 .lp-pedidos-detalle::-webkit-scrollbar-thumb:hover {
-  background: rgba(86, 124, 141, 0.2);
+  background: color-mix(in srgb, var(--color-teal) 20%, transparent);
 }
 
 /* Botón volver */
@@ -535,23 +535,23 @@
   align-items: center;
   gap: 6px;
   border: none;
-  background: rgba(47, 65, 86, 0.02);
+  background: color-mix(in srgb, var(--color-navy) 2%, transparent);
   padding: 8px 18px;
   border-radius: 10px;
-  color: #567C8D;
+  color: var(--color-teal);
   font-weight: 600;
   font-size: 0.85rem;
   cursor: pointer;
   font-family: 'Inter', sans-serif;
   transition: all 0.3s ease;
   width: fit-content;
-  border: 1px solid rgba(47, 65, 86, 0.04);
+  border: 1px solid color-mix(in srgb, var(--color-navy) 4%, transparent);
   flex-shrink: 0;
 }
 
 .lp-pedidos-detalle-volver:hover {
-  background: rgba(86, 124, 141, 0.08);
-  color: #2F4156;
+  background: color-mix(in srgb, var(--color-teal) 8%, transparent);
+  color: var(--color-navy);
   transform: translateX(-4px);
 }
 
@@ -561,8 +561,12 @@
   width: 100%;
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 15px 40px rgba(47, 65, 86, 0.15);
-  background: linear-gradient(135deg, #2F4156 0%, #4A6B83 100%);
+  box-shadow: 0 15px 40px color-mix(in srgb, var(--color-navy) 15%, transparent);
+  background: linear-gradient(
+    135deg,
+    var(--color-enfasis) 0%,
+    color-mix(in srgb, var(--color-enfasis) 75%, white 25%) 100%
+  );
 }
 
 .lp-pedidos-detalle-hero-content {
@@ -585,14 +589,14 @@
   font-family: 'Fraunces', serif;
   font-size: 2rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--color-sobre-enfasis);
   margin: 0;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .lp-pedidos-detalle-fecha {
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.8);
+  color: color-mix(in srgb, var(--color-sobre-enfasis) 80%, transparent);
   margin: 0;
 }
 
@@ -606,10 +610,10 @@
 /* >>> CORRECCIÓN SOFISTICADA: Estado y Alarma con glassmorphism <<< */
 .lp-pedidos-detalle-hero .lp-estado-pedido-pill,
 .lp-pedidos-detalle-hero .lp-alarma-demora {
-  background: rgba(255, 255, 255, 0.15); /* Cristal blanco translúcido */
+  background: color-mix(in srgb, var(--color-sobre-enfasis) 15%, transparent); /* Cristal blanco translúcido */
   backdrop-filter: blur(10px);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--color-sobre-enfasis);
+  border: 1px solid color-mix(in srgb, var(--color-sobre-enfasis) 30%, transparent);
   font-weight: 700;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
@@ -622,8 +626,8 @@
 .lp-pedidos-detalle-codigo {
   position: relative;
   z-index: 2;
-  background: rgba(255, 255, 255, 0.95);
-  border: 2px solid #567C8D; /* Azul corporativo suave */
+  background: color-mix(in srgb, var(--color-white) 95%, transparent);
+  border: 2px solid var(--color-teal); /* Azul corporativo suave */
   border-radius: 16px;
   padding: 12px 20px;
   display: flex;
@@ -632,14 +636,14 @@
   gap: 2px;
   margin: -30px 32px 0 32px;
   flex-shrink: 0;
-  box-shadow: 0 8px 24px rgba(86, 124, 141, 0.15); /* Sombra azul suave */
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--color-teal) 15%, transparent); /* Sombra azul suave */
 }
 
 .lp-pedidos-detalle-codigo-label {
   font-size: 0.6rem;
   font-weight: 800;
   letter-spacing: 0.1em;
-  color: rgba(47, 65, 86, 0.6);
+  color: var(--color-text-secondary);
   text-transform: uppercase;
 }
 
@@ -647,9 +651,9 @@
   font-size: 1.8rem;
   font-weight: 900;
   letter-spacing: 0.25em;
-  color: #2F4156; /* Azul corporativo principal */
+  color: var(--color-navy); /* Azul corporativo principal */
   font-family: 'Fraunces', serif;
-  text-shadow: 0 2px 6px rgba(47, 65, 86, 0.1);
+  text-shadow: 0 2px 6px color-mix(in srgb, var(--color-navy) 10%, transparent);
 }
 
 /* Grid asimétrico de tarjetas */
@@ -660,21 +664,21 @@
 }
 
 .lp-pedidos-detalle-card {
-  background: rgba(255, 255, 255, 0.7);
+  background: color-mix(in srgb, var(--color-white) 70%, transparent);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  border: 1px solid color-mix(in srgb, var(--color-white) 80%, transparent);
   border-radius: 16px;
   padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  box-shadow: 0 4px 20px rgba(47, 65, 86, 0.04);
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--color-navy) 4%, transparent);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.2, 1);
 }
 
 .lp-pedidos-detalle-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(47, 65, 86, 0.1);
+  box-shadow: 0 12px 32px color-mix(in srgb, var(--color-navy) 10%, transparent);
 }
 
 .lp-pedidos-detalle-card-titulo {
@@ -684,45 +688,45 @@
   font-family: 'Fraunces', serif;
   font-size: 1rem;
   font-weight: 700;
-  color: #2F4156;
+  color: var(--color-navy);
   margin: 0 0 6px 0;
 }
 
 .lp-pedidos-detalle-card-titulo svg {
   width: 18px;
   height: 18px;
-  color: #567C8D;
+  color: var(--color-teal);
 }
 
 .lp-pedidos-detalle-card-nombre {
   font-weight: 600;
   font-size: 0.95rem;
-  color: #2F4156;
+  color: var(--color-navy);
   margin: 0;
 }
 
 .lp-pedidos-detalle-card-correo {
   font-size: 0.8rem;
-  color: rgba(47, 65, 86, 0.5);
+  color: var(--color-text-secondary);
   margin: 0;
 }
 
 .lp-pedidos-detalle-card-telefono {
   font-size: 0.8rem;
-  color: rgba(47, 65, 86, 0.4);
+  color: var(--color-text-secondary);
   margin: 0;
 }
 
 .lp-pedidos-detalle-card-direccion,
 .lp-pedidos-detalle-card-farmacia {
   font-size: 0.8rem;
-  color: rgba(47, 65, 86, 0.5);
+  color: var(--color-text-secondary);
   margin: 0;
 }
 
 .lp-pedidos-detalle-card-sin {
   font-size: 0.85rem;
-  color: rgba(47, 65, 86, 0.3);
+  color: var(--color-text-secondary);
   font-style: italic;
   margin: 0;
 }
@@ -744,42 +748,42 @@
   display: flex;
   flex-direction: column;
   padding: 10px 14px;
-  background: rgba(86, 124, 141, 0.04);
+  background: color-mix(in srgb, var(--color-teal) 4%, transparent);
   border-radius: 10px;
-  border-left: 3px solid #567C8D;
+  border-left: 3px solid var(--color-teal);
   transition: all 0.2s ease;
 }
 
 .lp-pedidos-detalle-medicamento:hover {
-  background: rgba(86, 124, 141, 0.08);
+  background: color-mix(in srgb, var(--color-teal) 8%, transparent);
   transform: translateX(4px);
 }
 
 .lp-pedidos-detalle-medicamento-nombre {
   font-weight: 600;
-  color: #2F4156;
+  color: var(--color-navy);
   font-size: 0.9rem;
 }
 
 .lp-pedidos-detalle-medicamento-detalle {
   font-size: 0.78rem;
-  color: rgba(47, 65, 86, 0.5);
+  color: var(--color-text-secondary);
 }
 
 .lp-pedidos-detalle-medicamento-posologia {
   font-size: 0.75rem;
-  color: rgba(47, 65, 86, 0.35);
+  color: var(--color-text-secondary);
   font-style: italic;
 }
 
 /* Seguimiento */
 .lp-pedidos-detalle-seguimiento {
-  background: rgba(255, 255, 255, 0.7);
+  background: color-mix(in srgb, var(--color-white) 70%, transparent);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  border: 1px solid color-mix(in srgb, var(--color-white) 80%, transparent);
   border-radius: 16px;
   padding: 20px;
-  box-shadow: 0 4px 20px rgba(47, 65, 86, 0.04);
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--color-navy) 4%, transparent);
 }
 
 /* ============================================================
@@ -798,7 +802,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: rgba(47, 65, 86, 0.4);
+  color: var(--color-text-secondary);
   margin-bottom: 4px;
 }
 
@@ -807,25 +811,25 @@
   height: 64px;
   object-fit: cover;
   border-radius: 12px;
-  border: 1px solid rgba(47, 65, 86, 0.08);
+  border: 1px solid color-mix(in srgb, var(--color-navy) 8%, transparent);
   transition: all 0.2s ease;
 }
 
 .lp-pedidos-miniatura-img:hover {
   transform: scale(1.05);
-  border-color: #567C8D;
+  border-color: var(--color-teal);
 }
 
 .lp-pedidos-miniatura-empty {
   width: 64px;
   height: 64px;
   border-radius: 12px;
-  border: 1.5px dashed rgba(47, 65, 86, 0.1);
+  border: 1.5px dashed color-mix(in srgb, var(--color-navy) 10%, transparent);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 0.5rem;
-  color: rgba(47, 65, 86, 0.2);
+  color: var(--color-text-secondary);
   text-align: center;
 }
 
@@ -877,15 +881,15 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 14px;
-  background: rgba(47, 65, 86, 0.02);
-  border: 1px solid rgba(47, 65, 86, 0.04);
+  background: color-mix(in srgb, var(--color-navy) 2%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-navy) 4%, transparent);
   border-radius: 10px;
   transition: all 0.2s ease;
 }
 
 .lp-pedidos-asignar-item:hover {
-  background: rgba(86, 124, 141, 0.06);
-  border-color: rgba(86, 124, 141, 0.1);
+  background: color-mix(in srgb, var(--color-teal) 6%, transparent);
+  border-color: color-mix(in srgb, var(--color-teal) 10%, transparent);
 }
 
 .lp-pedidos-asignar-info {
@@ -897,13 +901,13 @@
 
 .lp-pedidos-asignar-nombre {
   font-weight: 600;
-  color: #2F4156;
+  color: var(--color-navy);
   font-size: 0.85rem;
 }
 
 .lp-pedidos-asignar-distancia {
   font-size: 0.75rem;
-  color: #567C8D;
+  color: var(--color-teal);
   font-weight: 500;
 }
 
@@ -917,14 +921,14 @@
   align-items: center;
   gap: 10px;
   padding: 40px 0;
-  color: rgba(47, 65, 86, 0.2);
+  color: var(--color-text-secondary);
 }
 
 .lp-pedidos-loading-spinner {
   width: 28px;
   height: 28px;
-  border: 3px solid rgba(86, 124, 141, 0.06);
-  border-top-color: #567C8D;
+  border: 3px solid color-mix(in srgb, var(--color-teal) 6%, transparent);
+  border-top-color: var(--color-teal);
   border-radius: 50%;
   animation: lp-spin 0.8s linear infinite;
 }
@@ -936,8 +940,8 @@
 .lp-pedidos-empty {
   text-align: center;
   padding: 40px 20px;
-  background: rgba(47, 65, 86, 0.01);
-  border: 1px solid rgba(47, 65, 86, 0.04);
+  background: color-mix(in srgb, var(--color-navy) 1%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-navy) 4%, transparent);
   border-radius: 12px;
 }
 
@@ -949,12 +953,12 @@
 
 .lp-pedidos-empty h3 {
   font-size: 1rem;
-  color: #2F4156;
+  color: var(--color-navy);
   margin: 0 0 2px 0;
 }
 
 .lp-pedidos-empty p {
-  color: rgba(47, 65, 86, 0.25);
+  color: var(--color-text-secondary);
   margin: 0;
   font-size: 0.85rem;
 }
@@ -969,9 +973,9 @@
   gap: 4px;
   padding: 2px 10px;
   border-radius: 60px;
-  border: 1.5px solid #2F4156;
-  background: rgba(47, 65, 86, 0.02);
-  color: #2F4156;
+  border: 1.5px solid var(--color-navy);
+  background: color-mix(in srgb, var(--color-navy) 2%, transparent);
+  color: var(--color-navy);
   font-size: 0.58rem;
   font-weight: 700;
 }

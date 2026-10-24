@@ -8,14 +8,17 @@ import {
   SettingsIcon,
   StoreIcon,
   UsersIcon,
+  WalletIcon,
 } from '../../shared/components/icons';
 import { useAuth } from '../usuarios/hooks/useAuth';
+import { TemaProvider } from '../../shared/hooks/TemaProvider';
 import './admin.css';
 import { Sidebar, type SidebarItem } from './components/Sidebar';
 import { ConfiguracionTab } from './tabs/ConfiguracionTab';
 import { DomiciliariosTab } from './tabs/DomiciliariosTab';
 import { FarmaciasAliadasTab } from './tabs/FarmaciasAliadasTab';
 import { NovedadesTab } from './tabs/NovedadesTab';
+import { PagosTab } from './tabs/PagosTab';
 import { PedidosTab } from './tabs/PedidosTab';
 import { PerfilTab } from './tabs/PerfilTab';
 import { UsuariosTab } from './tabs/UsuariosTab';
@@ -27,6 +30,7 @@ type TabKey =
   | 'usuarios'
   | 'configuracion'
   | 'farmaciasAliadas'
+  | 'pagos'
   | 'perfil';
 
 const ETIQUETAS_ROL: Record<string, string> = {
@@ -64,45 +68,51 @@ export function AdminShell() {
     { key: 'usuarios', label: 'Usuarios', icon: <UsersIcon /> },
     { key: 'configuracion', label: 'Configuración', icon: <SettingsIcon /> },
     { key: 'farmaciasAliadas', label: 'Farmacias aliadas', icon: <StoreIcon /> },
+    { key: 'pagos', label: 'Pagos y billeteras', icon: <WalletIcon /> },
     { key: 'perfil', label: 'Mi perfil', icon: <PersonIcon /> },
   ];
 
   return (
-    <div className="admin-shell">
-      <Sidebar
-        items={items}
-        activo={tab}
-        onSelect={irA}
-        correo={estado.usuario.correo}
-        rolPrincipal={rolPrincipal ? (ETIQUETAS_ROL[rolPrincipal] ?? rolPrincipal) : ''}
-        fotoPerfilUrl={fotoPerfilUrl} // >>> SE ENVÍA LA IMAGEN <<<
-        onLogout={onLogout}
-      />
-      <main className="admin-content">
-        <div className="admin-content-inner">
-          <div style={{ display: tab === 'pedidos' ? 'block' : 'none' }}>
-            {visited.has('pedidos') ? <PedidosTab /> : null}
+    <TemaProvider>
+      <div className="admin-shell">
+        <Sidebar
+          items={items}
+          activo={tab}
+          onSelect={irA}
+          correo={estado.usuario.correo}
+          rolPrincipal={rolPrincipal ? (ETIQUETAS_ROL[rolPrincipal] ?? rolPrincipal) : ''}
+          fotoPerfilUrl={fotoPerfilUrl} // >>> SE ENVÍA LA IMAGEN <<<
+          onLogout={onLogout}
+        />
+        <main className="admin-content">
+          <div className="admin-content-inner">
+            <div style={{ display: tab === 'pedidos' ? 'block' : 'none' }}>
+              {visited.has('pedidos') ? <PedidosTab /> : null}
+            </div>
+            <div style={{ display: tab === 'novedades' ? 'block' : 'none' }}>
+              {visited.has('novedades') ? <NovedadesTab /> : null}
+            </div>
+            <div style={{ display: tab === 'domiciliarios' ? 'block' : 'none' }}>
+              {visited.has('domiciliarios') ? <DomiciliariosTab /> : null}
+            </div>
+            <div style={{ display: tab === 'usuarios' ? 'block' : 'none' }}>
+              {visited.has('usuarios') ? <UsuariosTab /> : null}
+            </div>
+            <div style={{ display: tab === 'configuracion' ? 'block' : 'none' }}>
+              {visited.has('configuracion') ? <ConfiguracionTab /> : null}
+            </div>
+            <div style={{ display: tab === 'farmaciasAliadas' ? 'block' : 'none' }}>
+              {visited.has('farmaciasAliadas') ? <FarmaciasAliadasTab /> : null}
+            </div>
+            <div style={{ display: tab === 'pagos' ? 'block' : 'none' }}>
+              {visited.has('pagos') ? <PagosTab /> : null}
+            </div>
+            <div style={{ display: tab === 'perfil' ? 'block' : 'none' }}>
+              {visited.has('perfil') ? <PerfilTab /> : null}
+            </div>
           </div>
-          <div style={{ display: tab === 'novedades' ? 'block' : 'none' }}>
-            {visited.has('novedades') ? <NovedadesTab /> : null}
-          </div>
-          <div style={{ display: tab === 'domiciliarios' ? 'block' : 'none' }}>
-            {visited.has('domiciliarios') ? <DomiciliariosTab /> : null}
-          </div>
-          <div style={{ display: tab === 'usuarios' ? 'block' : 'none' }}>
-            {visited.has('usuarios') ? <UsuariosTab /> : null}
-          </div>
-          <div style={{ display: tab === 'configuracion' ? 'block' : 'none' }}>
-            {visited.has('configuracion') ? <ConfiguracionTab /> : null}
-          </div>
-          <div style={{ display: tab === 'farmaciasAliadas' ? 'block' : 'none' }}>
-            {visited.has('farmaciasAliadas') ? <FarmaciasAliadasTab /> : null}
-          </div>
-          <div style={{ display: tab === 'perfil' ? 'block' : 'none' }}>
-            {visited.has('perfil') ? <PerfilTab /> : null}
-          </div>
-        </div>
-      </main>
-    </div>
+        </main>
+      </div>
+    </TemaProvider>
   );
 }

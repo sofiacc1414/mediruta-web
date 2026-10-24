@@ -11,7 +11,7 @@
   width: 100%;
   padding: 0;
   margin: 0;
-  background: #ffffff;
+  background: var(--color-white);
 }
 
 /* ============================================================
@@ -40,7 +40,7 @@
   object-fit: contain;
   opacity: 0.85;
   display: block;
-  filter: drop-shadow(0 2px 8px rgba(47, 65, 86, 0.04));
+  filter: drop-shadow(0 2px 8px color-mix(in srgb, var(--color-navy) 4%, transparent));
   margin-top: 10px;
 }
 
@@ -57,7 +57,7 @@
   height: 100%;
   max-height: 100vh; 
   min-width: 0;
-  background: #ffffff;
+  background: var(--color-white);
   overflow-y: auto;
 }
 
@@ -85,12 +85,12 @@
   font-family: 'Fraunces', serif;
   font-size: 1.5rem;
   font-weight: 700;
-  color: #2F4156;
+  color: var(--color-navy);
   margin: 0;
 }
 
 .lp-novedades-subtitle {
-  color: rgba(47, 65, 86, 0.35);
+  color: var(--color-text-secondary);
   font-size: 0.85rem;
   margin: 0;
 }
@@ -107,8 +107,8 @@
 }
 
 .lp-novedades-stat {
-  background: rgba(47, 65, 86, 0.01);
-  border: 1px solid rgba(47, 65, 86, 0.04);
+  background: color-mix(in srgb, var(--color-navy) 1%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-navy) 4%, transparent);
   border-radius: 12px;
   padding: 12px 16px;
   text-align: center;
@@ -119,12 +119,12 @@
 }
 
 .lp-novedades-stat:hover {
-  background: rgba(86, 124, 141, 0.02);
+  background: color-mix(in srgb, var(--color-teal) 2%, transparent);
 }
 
 .lp-novedades-stat--activa {
   border-color: var(--color-navy);
-  background: rgba(200, 217, 230, 0.35);
+  background: color-mix(in srgb, var(--color-sky-blue) 35%, transparent);
 }
 
 .lp-novedades-stat-number {
@@ -132,7 +132,7 @@
   font-family: 'Fraunces', serif;
   font-size: 1.5rem;
   font-weight: 700;
-  color: #2F4156;
+  color: var(--color-navy);
   margin-bottom: 2px;
 }
 
@@ -141,7 +141,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #2F4156;
+  color: var(--color-navy);
 }
 
 @media (max-width: 768px) {
@@ -155,7 +155,7 @@
 .lp-novedades-fila-estado {
   font-size: 0.75rem;
   font-weight: 600;
-  color: #2F4156;
+  color: var(--color-navy);
   flex-shrink: 0;
   white-space: nowrap;
 }
@@ -165,8 +165,8 @@
    ============================================================ */
 
 .lp-novedades-card {
-  background: rgba(47, 65, 86, 0.01);
-  border: 1px solid rgba(47, 65, 86, 0.04);
+  background: color-mix(in srgb, var(--color-navy) 1%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-navy) 4%, transparent);
   border-radius: 12px;
   padding: 16px 18px;
   display: flex;
@@ -177,8 +177,8 @@
 }
 
 .lp-novedades-card:hover {
-  border-color: rgba(86, 124, 141, 0.15);
-  background: rgba(86, 124, 141, 0.02);
+  border-color: color-mix(in srgb, var(--color-teal) 15%, transparent);
+  background: color-mix(in srgb, var(--color-teal) 2%, transparent);
 }
 
 .lp-novedades-card-info {
@@ -191,17 +191,17 @@
 .lp-novedades-card-codigo {
   font-weight: 700;
   font-size: 0.95rem;
-  color: #2F4156;
+  color: var(--color-navy);
 }
 
 .lp-novedades-card-detalle {
   font-size: 0.85rem;
-  color: #2F4156;
+  color: var(--color-navy);
 }
 
 .lp-novedades-card-meta {
   font-size: 0.8rem;
-  color: rgba(47, 65, 86, 0.4);
+  color: var(--color-text-secondary);
 }
 
 /* ============================================================
@@ -219,16 +219,16 @@
 .lp-novedades-filtro-origen-label {
   font-size: 0.75rem;
   font-weight: 600;
-  color: rgba(47, 65, 86, 0.4);
+  color: var(--color-text-secondary);
   margin-right: 2px;
 }
 
 .lp-novedades-chip {
   padding: 5px 14px;
-  border: 1px solid rgba(47, 65, 86, 0.12);
+  border: 1px solid color-mix(in srgb, var(--color-navy) 12%, transparent);
   border-radius: var(--radius-pill, 999px);
-  background: #ffffff;
-  color: #2F4156;
+  background: var(--color-white);
+  color: var(--color-navy);
   font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
@@ -237,13 +237,13 @@
 }
 
 .lp-novedades-chip:hover {
-  border-color: rgba(86, 124, 141, 0.3);
+  border-color: color-mix(in srgb, var(--color-teal) 30%, transparent);
 }
 
 .lp-novedades-chip--activo {
-  background: #2F4156;
-  border-color: #2F4156;
-  color: #ffffff;
+  background: var(--color-enfasis);
+  border-color: var(--color-enfasis);
+  color: var(--color-sobre-enfasis);
 }
 
 /* ============================================================
@@ -252,8 +252,8 @@
 
 .lp-novedades-fila {
   width: 100%;
-  background: rgba(47, 65, 86, 0.01);
-  border: 1px solid rgba(47, 65, 86, 0.04);
+  background: color-mix(in srgb, var(--color-navy) 1%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-navy) 4%, transparent);
   border-radius: 10px;
   padding: 10px 16px;
   display: flex;
@@ -266,14 +266,14 @@
 }
 
 .lp-novedades-fila:hover {
-  border-color: rgba(86, 124, 141, 0.15);
-  background: rgba(86, 124, 141, 0.02);
+  border-color: color-mix(in srgb, var(--color-teal) 15%, transparent);
+  background: color-mix(in srgb, var(--color-teal) 2%, transparent);
 }
 
 .lp-novedades-fila-codigo {
   font-weight: 700;
   font-size: 0.85rem;
-  color: #2F4156;
+  color: var(--color-navy);
   flex-shrink: 0;
 }
 
@@ -281,7 +281,7 @@
  * detalle, en la lista no había forma de distinguirlo de un vistazo. */
 .lp-novedades-fila-origen {
   font-size: 0.75rem;
-  color: rgba(47, 65, 86, 0.5);
+  color: var(--color-text-secondary);
   flex-shrink: 0;
   white-space: nowrap;
 }
@@ -290,7 +290,7 @@
   flex: 1;
   min-width: 0;
   font-size: 0.85rem;
-  color: rgba(47, 65, 86, 0.6);
+  color: var(--color-text-secondary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -298,12 +298,12 @@
 
 .lp-novedades-fila-fecha {
   font-size: 0.75rem;
-  color: rgba(47, 65, 86, 0.35);
+  color: var(--color-text-secondary);
   flex-shrink: 0;
 }
 
 .lp-novedades-fila-chevron {
-  color: #567C8D;
+  color: var(--color-teal);
   font-size: 1.1rem;
   flex-shrink: 0;
 }
@@ -322,19 +322,19 @@
 .lp-novedades-vacio {
   text-align: center;
   padding: 40px 20px;
-  background: rgba(47, 65, 86, 0.01);
-  border: 1px solid rgba(47, 65, 86, 0.04);
+  background: color-mix(in srgb, var(--color-navy) 1%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-navy) 4%, transparent);
   border-radius: 12px;
 }
 
 .lp-novedades-vacio h3 {
   font-size: 1rem;
-  color: #2F4156;
+  color: var(--color-navy);
   margin: 0 0 2px 0;
 }
 
 .lp-novedades-vacio p {
-  color: rgba(47, 65, 86, 0.25);
+  color: var(--color-text-secondary);
   margin: 0;
   font-size: 0.85rem;
 }
@@ -357,22 +357,22 @@
 }
 
 .lp-novedades-btn-primary {
-  background: #2F4156;
-  color: white;
+  background: var(--color-enfasis);
+  color: var(--color-sobre-enfasis);
 }
 
 .lp-novedades-btn-primary:hover:not(:disabled) {
-  background: #1a2a3a;
+  background: color-mix(in srgb, var(--color-enfasis) 85%, black 15%);
 }
 
 .lp-novedades-btn-secondary {
-  background: rgba(47, 65, 86, 0.02);
-  color: #2F4156;
-  border: 1px solid rgba(47, 65, 86, 0.08);
+  background: color-mix(in srgb, var(--color-navy) 2%, transparent);
+  color: var(--color-navy);
+  border: 1px solid color-mix(in srgb, var(--color-navy) 8%, transparent);
 }
 
 .lp-novedades-btn-secondary:hover:not(:disabled) {
-  background: rgba(47, 65, 86, 0.04);
+  background: color-mix(in srgb, var(--color-navy) 4%, transparent);
 }
 
 .lp-novedades-btn:disabled {
@@ -467,11 +467,11 @@
   font-family: 'Fraunces', serif;
   font-size: 1rem;
   font-weight: 700;
-  color: #2F4156;
+  color: var(--color-navy);
   margin: 0;
   position: sticky;
   top: 0;
-  background: #ffffff;
+  background: var(--color-white);
   padding-bottom: 4px;
   z-index: 1;
 }
@@ -490,7 +490,7 @@
    completo (actual y propuesto) — con borde + fondo de la paleta
    oficial (--color-sky-blue), no un color nuevo. */
 .lp-resaltado {
-  background: rgba(200, 217, 230, 0.35);
+  background: color-mix(in srgb, var(--color-sky-blue) 35%, transparent);
   border-left: 3px solid var(--color-navy);
   padding: 6px 10px;
   border-radius: 6px;
@@ -510,7 +510,7 @@
 }
 
 .lp-resaltado-anterior {
-  background: rgba(245, 239, 235, 0.7);
+  background: color-mix(in srgb, var(--color-beige) 70%, transparent);
   border-left: 3px solid var(--color-teal);
 }
 
@@ -521,7 +521,7 @@
 }
 
 .lp-resaltado-nuevo {
-  background: rgba(200, 217, 230, 0.35);
+  background: color-mix(in srgb, var(--color-sky-blue) 35%, transparent);
   border-left: 3px solid var(--color-navy);
 }
 
@@ -561,8 +561,8 @@
 }
 
 .admin-tag--codigo {
-  background: var(--color-navy);
-  color: var(--color-white);
+  background: var(--color-enfasis);
+  color: var(--color-sobre-enfasis);
 }
 
 /* HU-07 (ronda 3) — diff "antes / propuesto" de una solicitud de edición. */

@@ -6,6 +6,7 @@ import {
   PackageIcon,
   PersonIcon,
   SettingsIcon,
+  ShieldIcon,
   StoreIcon,
   UsersIcon,
   WalletIcon,
@@ -14,6 +15,7 @@ import { useAuth } from '../usuarios/hooks/useAuth';
 import { TemaProvider } from '../../shared/hooks/TemaProvider';
 import './admin.css';
 import { Sidebar, type SidebarItem } from './components/Sidebar';
+import { ComportamientoDomiciliariosTab } from './tabs/ComportamientoDomiciliariosTab';
 import { ConfiguracionTab } from './tabs/ConfiguracionTab';
 import { DomiciliariosTab } from './tabs/DomiciliariosTab';
 import { FarmaciasAliadasTab } from './tabs/FarmaciasAliadasTab';
@@ -27,6 +29,7 @@ type TabKey =
   | 'pedidos'
   | 'novedades'
   | 'domiciliarios'
+  | 'comportamiento'
   | 'usuarios'
   | 'configuracion'
   | 'farmaciasAliadas'
@@ -65,6 +68,7 @@ export function AdminShell() {
     { key: 'pedidos', label: 'Pedidos', icon: <PackageIcon /> },
     { key: 'novedades', label: 'Novedades', icon: <AlertTriangleIcon /> },
     { key: 'domiciliarios', label: 'Domiciliarios', icon: <MopedIcon /> },
+    { key: 'comportamiento', label: 'Comportamiento', icon: <ShieldIcon /> },
     { key: 'usuarios', label: 'Usuarios', icon: <UsersIcon /> },
     { key: 'configuracion', label: 'Configuración', icon: <SettingsIcon /> },
     { key: 'farmaciasAliadas', label: 'Farmacias aliadas', icon: <StoreIcon /> },
@@ -94,6 +98,9 @@ export function AdminShell() {
             </div>
             <div style={{ display: tab === 'domiciliarios' ? 'block' : 'none' }}>
               {visited.has('domiciliarios') ? <DomiciliariosTab /> : null}
+            </div>
+            <div style={{ display: tab === 'comportamiento' ? 'block' : 'none' }}>
+              {visited.has('comportamiento') ? <ComportamientoDomiciliariosTab /> : null}
             </div>
             <div style={{ display: tab === 'usuarios' ? 'block' : 'none' }}>
               {visited.has('usuarios') ? <UsuariosTab /> : null}

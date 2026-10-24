@@ -1,0 +1,224 @@
+/* ============================================================
+   COMPORTAMIENTO DE DOMICILIARIOS — supervisión operativa (G01-G05).
+   Mismo lenguaje visual "glass" que PagosTab.css/ConfiguracionTab.css.
+   ============================================================ */
+
+.lp-comportamiento-page {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 32px;
+  max-width: 1100px;
+}
+
+.lp-comportamiento-card {
+  background: color-mix(in srgb, var(--color-white) 85%, transparent);
+  backdrop-filter: blur(16px);
+  border: 1px solid color-mix(in srgb, var(--color-white) 80%, transparent);
+  border-radius: 24px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 12px 40px color-mix(in srgb, var(--color-navy) 6%, transparent);
+}
+
+.lp-comportamiento-card-titulo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'Fraunces', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-navy);
+  margin: 0;
+}
+
+.lp-comportamiento-card-titulo svg {
+  width: 24px;
+  height: 24px;
+  color: var(--color-teal);
+  flex-shrink: 0;
+}
+
+.lp-comportamiento-card-ayuda {
+  margin: 0;
+  color: var(--color-teal);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.lp-comportamiento-cargando {
+  margin: 0;
+  color: var(--color-teal);
+  font-size: 0.875rem;
+}
+
+.lp-comportamiento-rango-fechas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.lp-comportamiento-rango-fechas label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: var(--color-teal);
+  font-weight: 600;
+}
+
+.lp-comportamiento-rango-fechas input[type='date'] {
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--color-teal) 20%, transparent);
+  background: var(--color-white);
+  color: var(--color-navy);
+  font-size: 0.875rem;
+}
+
+.lp-comportamiento-tabla {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.lp-comportamiento-tabla th {
+  text-align: left;
+  padding: 8px 10px;
+  font-size: 0.8rem;
+  color: var(--color-teal);
+  font-weight: 600;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-teal) 20%, transparent);
+}
+
+.lp-comportamiento-tabla td {
+  padding: 8px 10px;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-teal) 10%, transparent);
+  font-size: 0.875rem;
+  color: var(--color-navy);
+  vertical-align: top;
+}
+
+.lp-comportamiento-tabla tbody tr {
+  cursor: pointer;
+}
+
+.lp-comportamiento-tabla tbody tr:hover {
+  background: color-mix(in srgb, var(--color-teal) 6%, transparent);
+}
+
+.lp-comportamiento-correo {
+  font-size: 0.75rem;
+  color: var(--color-teal);
+  font-weight: 400;
+}
+
+.lp-comportamiento-no-disponible {
+  color: color-mix(in srgb, var(--color-navy) 45%, transparent);
+  font-style: italic;
+}
+
+.lp-comportamiento-badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.lp-comportamiento-badge-ok {
+  background: color-mix(in srgb, var(--color-teal) 12%, transparent);
+  color: var(--color-navy);
+}
+
+.lp-comportamiento-badge-alerta {
+  background: rgba(200, 80, 60, 0.12);
+  color: #a3432d;
+}
+
+.lp-comportamiento-btn {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+.lp-comportamiento-btn-secundario {
+  background: color-mix(in srgb, var(--color-teal) 12%, transparent);
+  color: var(--color-navy);
+}
+
+.lp-comportamiento-btn-secundario:hover {
+  background: color-mix(in srgb, var(--color-teal) 22%, transparent);
+}
+
+.lp-comportamiento-resumen-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.lp-comportamiento-resumen-celda {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--color-teal) 7%, transparent);
+}
+
+.lp-comportamiento-resumen-etiqueta {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-teal);
+}
+
+.lp-comportamiento-resumen-valor {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--color-navy);
+}
+
+.lp-comportamiento-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lp-comportamiento-timeline-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--color-teal) 6%, transparent);
+  font-size: 0.875rem;
+  color: var(--color-navy);
+}
+
+.lp-comportamiento-timeline-fecha {
+  font-size: 0.75rem;
+  color: var(--color-teal);
+  font-weight: 600;
+}
+
+@media (max-width: 720px) {
+  .lp-comportamiento-page {
+    padding: 16px;
+  }
+
+  .lp-comportamiento-tabla {
+    display: block;
+    overflow-x: auto;
+  }
+}

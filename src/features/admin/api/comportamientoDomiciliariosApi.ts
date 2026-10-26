@@ -51,7 +51,7 @@ export function listarComportamientoDomiciliarios(
   hasta: string,
 ) {
   return apiClient.get(
-    `/admin/domiciliarios/comportamiento?desde=${desde}&hasta=${hasta}`,
+    `/admin/comportamiento-domiciliarios?desde=${desde}&hasta=${hasta}`,
     { accessToken },
   ) as Promise<ResumenComportamientoDomiciliario[]>;
 }
@@ -65,7 +65,7 @@ export function obtenerDetalleComportamientoDomiciliario(
   hasta: string,
 ) {
   return apiClient.get(
-    `/admin/domiciliarios/comportamiento/${domiciliarioId}?desde=${desde}&hasta=${hasta}`,
+    `/admin/comportamiento-domiciliarios/${domiciliarioId}?desde=${desde}&hasta=${hasta}`,
     { accessToken },
   ) as Promise<DetalleComportamientoDomiciliario>;
 }
